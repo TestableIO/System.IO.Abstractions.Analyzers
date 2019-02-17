@@ -13,7 +13,7 @@ namespace Roslyn.Testing.CodeFix
 	{
 	#region To be implemented by Test classes
 
-		protected virtual IEnumerable<MetadataReference> GetAdditionnalReferences()
+		protected virtual IEnumerable<MetadataReference> GetAdditionalReferences()
 		{
 			return null;
 		}
@@ -60,7 +60,7 @@ namespace Roslyn.Testing.CodeFix
 				newSource,
 				codeFixIndex,
 				allowNewCompilerDiagnostics,
-				GetAdditionnalReferences());
+				GetAdditionalReferences());
 
 			if (result.Success)
 			{

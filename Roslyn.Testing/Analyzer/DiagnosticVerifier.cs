@@ -53,9 +53,9 @@ namespace Roslyn.Testing.Analyzer
 		/// </returns>
 		public static Diagnostic[] GetSortedDiagnostics(this DiagnosticAnalyzer analyzer,
 														string[] sources,
-														string language)
+														string language, IEnumerable<MetadataReference> references = null)
 		{
-			return GetSortedDiagnosticsFromDocuments(analyzer, GetDocuments(sources, language));
+			return GetSortedDiagnosticsFromDocuments(analyzer, GetDocuments(sources, language, references));
 		}
 
 		/// <summary>
@@ -138,14 +138,14 @@ namespace Roslyn.Testing.Analyzer
 		/// A Tuple containing the Documents produced from the sources and their TextSpans
 		/// if relevant
 		/// </returns>
-		private static Document[] GetDocuments(string[] sources, string language)
+		private static Document[] GetDocuments(string[] sources, string language, IEnumerable<MetadataReference> references = null)
 		{
 			if (language != LanguageNames.CSharp && language != LanguageNames.VisualBasic)
 			{
 				throw new ArgumentException("Unsupported Language");
 			}
 
-			var project = CreateProject(sources, language);
+			var project = CreateProject(sources, language, references);
 			var documents = project.Documents.ToArray();
 
 			if (sources.Length != documents.Length)
@@ -234,7 +234,7 @@ namespace Roslyn.Testing.Analyzer
 																			IEnumerable<Diagnostic> actualResults,
 																			DiagnosticResult[] expectedResults)
 		{
-			var expectedCount = expectedResults.Count();
+			var expectedCount = expectedResults.Length;
 			var actualCount = actualResults.Count();
 
 			if (expectedCount != actualCount)

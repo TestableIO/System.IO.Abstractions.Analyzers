@@ -69,9 +69,9 @@ namespace Roslyn.Testing.CodeFix
 															string newSource,
 															int? codeFixIndex,
 															bool allowNewCompilerDiagnostics,
-															IEnumerable<MetadataReference> additionnalReferences = null)
+															IEnumerable<MetadataReference> additionalReferences = null)
 		{
-			var document = DiagnosticAnalyzerTestExtensions.CreateDocument(oldSource, language, additionnalReferences);
+			var document = DiagnosticAnalyzerTestExtensions.CreateDocument(oldSource, language, additionalReferences);
 			var analyzerDiagnostics = analyzer.GetSortedDiagnosticsFromDocuments(new[] { document });
 			var compilerDiagnostics = document.GetCompilerDiagnostics();
 			var attempts = analyzerDiagnostics.Length;

@@ -1,13 +1,13 @@
 using System.Collections.Generic;
-using System.IO.Abstractions.Analyzers.Analyzers;
+using System.IO.Abstractions.Analyzers.Analyzers.FileSystemTypeAnalyzers;
 using Microsoft.CodeAnalysis;
 using Roslyn.Testing.Analyzer;
 using Roslyn.Testing.Model;
 using Xunit;
 
-namespace System.IO.Abstractions.Analyzers.Tests
+namespace System.IO.Abstractions.Analyzers.Tests.Analyzers
 {
-	public class FileServiceInterfaceInjectionAnalyzerTests : CSharpDiagnosticAnalyzerTest<FileServiceInterfaceInjectionAnalyzer>
+	public class FileAnalyzerTests : CSharpDiagnosticAnalyzerTest<FileAnalyzer>
 	{
 		[Theory]
 		[InlineData("Valid.txt")]
@@ -18,15 +18,15 @@ namespace System.IO.Abstractions.Analyzers.Tests
 		}
 
 		[Theory]
-		[InlineData("WithOutFileSystem.txt", 7, 3)]
+		[InlineData("WithOutFileSystem.txt", 15, 4)]
 		public void Analyzer_is_triggered(string filename, int diagnosticLine, int diagnosticColumn)
 		{
 			var source = ReadFile(filename);
 
 			var expectedDiagnostic = new DiagnosticResult
 			{
-				Id = FileServiceInterfaceInjectionAnalyzer.DiagnosticId,
-				Message = FileServiceInterfaceInjectionAnalyzer.MessageFormat,
+				Id = FileAnalyzer.DiagnosticId,
+				Message = FileAnalyzer.MessageFormat,
 				Severity = DiagnosticSeverity.Warning,
 				Locations = new[] { new DiagnosticResultLocation("Test0.cs", diagnosticLine, diagnosticColumn) }
 			};

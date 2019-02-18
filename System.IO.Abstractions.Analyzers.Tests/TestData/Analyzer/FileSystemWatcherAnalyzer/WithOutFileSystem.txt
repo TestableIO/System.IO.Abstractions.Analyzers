@@ -1,0 +1,18 @@
+using System.IO;
+
+namespace SomeNameSpace
+{
+	public class WithOutFileSystem
+	{
+		public WithOutFileSystem()
+		{
+		}
+
+		public void SomeMethod()
+		{
+			const string path = "C:\\temp.txt";
+
+			FileSystemWatcher fileSystemWatcher = new FileSystemWatcher();
+		}
+	}
+}

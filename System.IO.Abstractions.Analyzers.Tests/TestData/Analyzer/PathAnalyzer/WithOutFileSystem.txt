@@ -1,0 +1,18 @@
+using System.IO;
+
+namespace SomeNameSpace
+{
+	public class WithOutFileSystem
+	{
+		public WithOutFileSystem()
+		{
+		}
+
+		public void SomeMethod()
+		{
+			const string filePath = "C:\\temp";
+
+			Path.GetTempPath();
+		}
+	}
+}

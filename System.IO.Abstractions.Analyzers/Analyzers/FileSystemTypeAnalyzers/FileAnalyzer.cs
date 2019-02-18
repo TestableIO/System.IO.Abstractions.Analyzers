@@ -7,7 +7,7 @@ using Microsoft.CodeAnalysis.Diagnostics;
 namespace System.IO.Abstractions.Analyzers.Analyzers.FileSystemTypeAnalyzers
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public class FileAnalyzer : BaseFileSystemNodeAnalyzer
+    public class FileAnalyzer : BaseFileSystemNodeStaticCallAnalyzer
 	{
 		/// <summary>
 		/// Diagnostic Identifier

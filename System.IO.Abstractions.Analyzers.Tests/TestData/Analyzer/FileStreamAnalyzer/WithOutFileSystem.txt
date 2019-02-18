@@ -10,9 +10,11 @@ namespace SomeNameSpace
 
 		public void SomeMethod()
 		{
-			const string path = "C:\\temp.txt";
+			const string path = "C:\\temp";
 
-			FileInfo fileInf = new FileInfo(path);
+			using (FileStream fstream = new FileStream(@"D:\note.dat", FileMode.OpenOrCreate)){
+
+			}
 		}
 	}
 }

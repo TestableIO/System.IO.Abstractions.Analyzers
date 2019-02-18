@@ -7,18 +7,18 @@ using Microsoft.CodeAnalysis.Diagnostics;
 namespace System.IO.Abstractions.Analyzers.Analyzers.FileSystemTypeAnalyzers
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public class DirectoryAnalyzer : BaseFileSystemNodeStaticCallAnalyzer
+    public class FileStreamAnalyzer: BaseFileSystemNodeObjectCreationAnalyzer
 	{
 		/// <summary>
 		/// Diagnostic Identifier
 		/// </summary>
 		[UsedImplicitly]
-		public const string DiagnosticId = "IO0003";
+		public const string DiagnosticId = "IO0005";
 
 		/// <summary>
 		/// Diagnostic Title
 		/// </summary>
-		private const string Title = "Invocation Directory class shold be replaced with IFileSystem.Directory";
+		private const string Title = "Invocation FileStream class shold be replaced with IFileSystem.FileStream";
 
 		/// <summary>
 		/// Diagnostic Message Format
@@ -43,14 +43,14 @@ namespace System.IO.Abstractions.Analyzers.Analyzers.FileSystemTypeAnalyzers
 
 		public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rule);
 
-		protected override void Analyze(SyntaxNodeAnalysisContext context, InvocationExpressionSyntax invocation)
+		protected override void Analyze(SyntaxNodeAnalysisContext context, ObjectCreationExpressionSyntax syntax)
 		{
-			context.ReportDiagnostic(Diagnostic.Create(Rule, invocation.GetLocation()));
+			context.ReportDiagnostic(Diagnostic.Create(Rule, syntax.GetLocation()));
 		}
 
 		protected override Type GetFileSystemType()
 		{
-			return typeof(Directory);
+			return typeof(FileStream);
 		}
 	}
 }

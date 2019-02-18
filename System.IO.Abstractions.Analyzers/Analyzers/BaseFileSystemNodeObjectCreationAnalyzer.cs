@@ -5,7 +5,7 @@ using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace System.IO.Abstractions.Analyzers.Analyzers
 {
-	public abstract class BaseFileSystemNodeAnalyzer : BaseFileSystemAnalyzer
+	public abstract class BaseFileSystemNodeObjectCreationAnalyzer : BaseFileSystemAnalyzer
 	{
 		protected override void AnalyzeCompilation(CompilationStartAnalysisContext compilationStartContext,
 													FileSystemContext fileSystemContext)
@@ -17,17 +17,17 @@ namespace System.IO.Abstractions.Analyzers.Analyzers
 
 			compilationStartContext.RegisterSyntaxNodeAction(syntaxContext =>
 				{
-					var invocation = (InvocationExpressionSyntax) syntaxContext.Node;
+					var invocation = (ObjectCreationExpressionSyntax) syntaxContext.Node;
 
-					if (invocation.NormalizeWhitespace().ToFullString().StartsWith(GetFileSystemType().Name))
+					if (invocation.Type.NormalizeWhitespace().ToFullString().StartsWith(GetFileSystemType().Name))
 					{
 						Analyze(syntaxContext, invocation);
 					}
 				},
-				SyntaxKind.InvocationExpression);
+				SyntaxKind.ObjectCreationExpression);
 		}
 
-		protected abstract void Analyze(SyntaxNodeAnalysisContext context, InvocationExpressionSyntax invocation);
+		protected abstract void Analyze(SyntaxNodeAnalysisContext context, ObjectCreationExpressionSyntax syntax);
 
 		protected abstract Type GetFileSystemType();
 	}

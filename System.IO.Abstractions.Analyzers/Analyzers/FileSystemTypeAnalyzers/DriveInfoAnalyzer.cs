@@ -7,18 +7,18 @@ using Microsoft.CodeAnalysis.Diagnostics;
 namespace System.IO.Abstractions.Analyzers.Analyzers.FileSystemTypeAnalyzers
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public class DirectoryInfoAnalyzer: BaseFileSystemNodeObjectCreationAnalyzer
+    public class DriveInfoAnalyzer: BaseFileSystemNodeObjectCreationAnalyzer
 	{
 		/// <summary>
 		/// Diagnostic Identifier
 		/// </summary>
 		[UsedImplicitly]
-		public const string DiagnosticId = "IO0007";
+		public const string DiagnosticId = "IO0008";
 
 		/// <summary>
 		/// Diagnostic Title
 		/// </summary>
-		private const string Title = "Invocation DirectoryInfo class shold be replaced with IFileSystem.DirectoryInfo";
+		private const string Title = "Invocation DriveInfo class shold be replaced with IFileSystem.DriveInfo";
 
 		/// <summary>
 		/// Diagnostic Message Format
@@ -50,7 +50,7 @@ namespace System.IO.Abstractions.Analyzers.Analyzers.FileSystemTypeAnalyzers
 
 		protected override Type GetFileSystemType()
 		{
-			return typeof(DirectoryInfo);
+			return typeof(DriveInfo);
 		}
 	}
 }

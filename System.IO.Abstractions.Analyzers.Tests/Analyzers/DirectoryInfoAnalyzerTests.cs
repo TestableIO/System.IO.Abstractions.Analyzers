@@ -19,6 +19,7 @@ namespace System.IO.Abstractions.Analyzers.Tests.Analyzers
 
 		[Theory]
 		[InlineData("WithOutFileSystem.txt", 15, 28)]
+		[InlineData("StaticInvocation.txt", 15, 40)]
 		public void Analyzer_is_triggered(string filename, int diagnosticLine, int diagnosticColumn)
 		{
 			var source = ReadFile(filename);

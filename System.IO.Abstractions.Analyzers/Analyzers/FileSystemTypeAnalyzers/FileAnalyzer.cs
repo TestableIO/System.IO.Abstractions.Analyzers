@@ -7,7 +7,7 @@ using Microsoft.CodeAnalysis.Diagnostics;
 namespace System.IO.Abstractions.Analyzers.Analyzers.FileSystemTypeAnalyzers
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public class FileAnalyzer : BaseFileSystemNodeStaticCallAnalyzer
+    public class FileAnalyzer : BaseFileSystemNodeAnalyzer
 	{
 		/// <summary>
 		/// Diagnostic Identifier
@@ -43,7 +43,7 @@ namespace System.IO.Abstractions.Analyzers.Analyzers.FileSystemTypeAnalyzers
 
 		public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rule);
 
-		protected override void Analyze(SyntaxNodeAnalysisContext context, InvocationExpressionSyntax invocation)
+		protected override void Analyze(SyntaxNodeAnalysisContext context, ExpressionSyntax invocation)
 		{
 			context.ReportDiagnostic(Diagnostic.Create(Rule, invocation.GetLocation()));
 		}

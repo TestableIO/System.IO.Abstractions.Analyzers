@@ -18,7 +18,7 @@ namespace System.IO.Abstractions.Analyzers.Analyzers.FileSystemTypeAnalyzers
 		/// <summary>
 		/// Diagnostic Title
 		/// </summary>
-		private const string Title = "Invocation FileStream class shold be replaced with IFileSystem.FileStream";
+		private const string Title = "Replace FileStream class with IFileSystem.FileStream for improved testablity";
 
 		/// <summary>
 		/// Diagnostic Message Format

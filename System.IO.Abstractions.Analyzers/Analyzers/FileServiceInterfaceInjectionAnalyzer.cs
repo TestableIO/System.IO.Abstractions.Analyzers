@@ -22,17 +22,17 @@ namespace System.IO.Abstractions.Analyzers.Analyzers
 		/// <summary>
 		/// Diagnostic Title
 		/// </summary>
-		private const string Title = "For improved application testability, use the IFileSystem.";
+		private const string Title = "Use System.IO.Abstractions for improved application testability";
 
 		/// <summary>
 		/// Diagnostic Message Format
 		/// </summary>
-		public const string MessageFormat = "For improved application testability, use the IFileSystem.";
+		public const string MessageFormat = "Use System.IO.Abstractions for improved application testability";
 
 		/// <summary>
 		/// Diagnostic Description
 		/// </summary>
-		private const string Description = "For improved application testability, use the IFileSystem.";
+		private const string Description = "Use System.IO.Abstractions for improved application testability";
 
 		/// <summary>
 		/// Правило
@@ -52,7 +52,7 @@ namespace System.IO.Abstractions.Analyzers.Analyzers
 		{
 			compilationStartContext.RegisterSyntaxNodeAction(syntaxContext =>
 				{
-					var constructor = (ConstructorDeclarationSyntax) syntaxContext.Node;
+					var constructor = (ConstructorDeclarationSyntax)syntaxContext.Node;
 
 					var compilationUnitSyntax = GetCompilationUnit(constructor);
 

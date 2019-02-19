@@ -18,7 +18,7 @@ namespace System.IO.Abstractions.Analyzers.Analyzers.FileSystemTypeAnalyzers
 		/// <summary>
 		/// Diagnostic Title
 		/// </summary>
-		private const string Title = "Invocation File class shold be replaced with IFileSystem.File";
+		private const string Title = "Replace File class with IFileSystem.File for improved testablity";
 
 		/// <summary>
 		/// Diagnostic Message Format

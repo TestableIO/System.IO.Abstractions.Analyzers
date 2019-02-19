@@ -18,7 +18,7 @@ namespace System.IO.Abstractions.Analyzers.Analyzers.FileSystemTypeAnalyzers
 		/// <summary>
 		/// Diagnostic Title
 		/// </summary>
-		private const string Title = "Invocation DriveInfo class shold be replaced with IFileSystem.DriveInfo";
+		private const string Title = "Replace DriveInfo class with IFileSystem.DriveInfo for improved testablity";
 
 		/// <summary>
 		/// Diagnostic Message Format

@@ -18,7 +18,7 @@ namespace System.IO.Abstractions.Analyzers.Analyzers.FileSystemTypeAnalyzers
 		/// <summary>
 		/// Diagnostic Title
 		/// </summary>
-		private const string Title = "Invocation DirectoryInfo class shold be replaced with IFileSystem.DirectoryInfo";
+		private const string Title = "Replace DirectoryInfo class with IFileSystem.DirectoryInfo for improved testablity";
 
 		/// <summary>
 		/// Diagnostic Message Format

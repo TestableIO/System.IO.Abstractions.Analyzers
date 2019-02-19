@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -13,14 +14,20 @@ namespace Roslyn.Testing.CodeFix
 	{
 	#region To be implemented by Test classes
 
+		/// <inheritdoc />
+		public override string Filepath => _codeFixProvider.GetType().Name;
+
+		/// <inheritdoc />
+		public override string PathToTestData => "./TestData/CodeFix/";
+
 		protected virtual IEnumerable<MetadataReference> GetAdditionalReferences()
 		{
-			return null;
+			return Enumerable.Empty<MetadataReference>();
 		}
 
 	#endregion
 
-		private readonly CodeFixProvider _codeFixProvider;
+		private readonly TCodeFixProvider _codeFixProvider;
 
 		private readonly TDiagnosticAnalyzer _diagnosticAnalyzer;
 

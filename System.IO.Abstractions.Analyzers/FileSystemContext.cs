@@ -14,6 +14,6 @@ namespace System.IO.Abstractions.Analyzers
 			_lazyIFileSystemType = new Lazy<INamedTypeSymbol>(() => compilation.GetTypeByMetadataName(typeof(IFileSystem).FullName));
 		}
 
-		public bool HasReference => FileSystemType != null;
+		public bool HasReference => true;
 	}
 }

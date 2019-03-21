@@ -5,10 +5,19 @@
 		<PackageTargetFallback>portable-net45+win8+wp8+wpa81</PackageTargetFallback>
 		<IncludeBuildOutput>false</IncludeBuildOutput>
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+		<GenerateAssemblyDescriptionAttribute>false</GenerateAssemblyDescriptionAttribute>
+		<GenerateAssemblyFileVersionAttribute>false</GenerateAssemblyFileVersionAttribute>
+		<GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
+		<GenerateAssemblyCopyrightAttribute>false</GenerateAssemblyCopyrightAttribute>
+		<GenerateAssemblyInformationalVersionAttribute>false</GenerateAssemblyInformationalVersionAttribute>
+		<GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+		<GenerateAssemblyTitleAttribute>false</GenerateAssemblyTitleAttribute>
+		<GenerateAssemblyVersionAttribute>false</GenerateAssemblyVersionAttribute>
+		<DebugType>full</DebugType>
 	</PropertyGroup>
 	<PropertyGroup>
 		<PackageId>System.IO.Abstractions.Analyzers</PackageId>
-		<PackageVersion>1.0.0</PackageVersion>
+		<PackageVersion>1.0.8</PackageVersion>
 		<Authors>inyut</Authors>
 		<PackageLicenseUrl>http://LICENSE_URL_HERE_OR_DELETE_THIS_LINE</PackageLicenseUrl>
 		<PackageProjectUrl>https://h21res.visualstudio.com/H21Core/_git/H21Core.Analyzer/</PackageProjectUrl>
@@ -22,15 +31,17 @@
 		<NoPackageAnalysis>true</NoPackageAnalysis>
 		<LangVersion>latest</LangVersion>
 	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+	  <Optimize>false</Optimize>
+	</PropertyGroup>
 	<ItemGroup>
 		<PackageReference Include="JetBrains.Annotations" Version="2018.3.0" PrivateAssets="all" />
 		<PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="2.6.3" PrivateAssets="all" />
 		<PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="2.10.0" PrivateAssets="all" />
 		<PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="2.10.0" PrivateAssets="all" />
 		<PackageReference Update="NETStandard.Library" PrivateAssets="all" />
-		<PackageReference Include="Microsoft.CodeQuality.Analyzers" Version="2.6.3" PrivateAssets="all"  />
+		<PackageReference Include="Microsoft.CodeQuality.Analyzers" Version="2.6.3" PrivateAssets="all" />
 		<PackageReference Include="Roslyn.Diagnostics.Analyzers" Version="2.6.3" PrivateAssets="all" />
-		<PackageReference Include="System.IO.Abstractions" Version="3.1.1" />
 	</ItemGroup>
 	<ItemGroup>
 		<None Update="tools\*.ps1" CopyToOutputDirectory="Always" Pack="true" PackagePath="" />

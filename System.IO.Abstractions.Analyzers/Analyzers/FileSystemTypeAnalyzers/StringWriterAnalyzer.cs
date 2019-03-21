@@ -7,7 +7,7 @@ using Microsoft.CodeAnalysis.Diagnostics;
 namespace System.IO.Abstractions.Analyzers.Analyzers.FileSystemTypeAnalyzers
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public class DriveInfoAnalyzer: BaseFileSystemNodeAnalyzer
+    public class StringWriterAnalyzer: BaseFileSystemNodeAnalyzer
 	{
 		/// <summary>
 		/// Diagnostic Identifier
@@ -18,7 +18,7 @@ namespace System.IO.Abstractions.Analyzers.Analyzers.FileSystemTypeAnalyzers
 		/// <summary>
 		/// Diagnostic Title
 		/// </summary>
-		private const string Title = "Replace DriveInfo class with IFileSystem.DriveInfo for improved testablity";
+		private const string Title = "Replace StringWriter class with IFileSystem.StringWriter for improved testablity";
 
 		/// <summary>
 		/// Diagnostic Message Format
@@ -50,7 +50,7 @@ namespace System.IO.Abstractions.Analyzers.Analyzers.FileSystemTypeAnalyzers
 
 		protected override Type GetFileSystemType()
 		{
-			return typeof(DriveInfo);
+			return typeof(StringWriter);
 		}
 	}
 }

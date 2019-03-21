@@ -7,7 +7,7 @@ using Microsoft.CodeAnalysis.Diagnostics;
 namespace System.IO.Abstractions.Analyzers.Analyzers.FileSystemTypeAnalyzers
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public class FileSystemWatcherAnalyzer: BaseFileSystemNodeAnalyzer
+    public class StringReaderAnalyzer: BaseFileSystemNodeAnalyzer
 	{
 		/// <summary>
 		/// Diagnostic Identifier
@@ -18,7 +18,7 @@ namespace System.IO.Abstractions.Analyzers.Analyzers.FileSystemTypeAnalyzers
 		/// <summary>
 		/// Diagnostic Title
 		/// </summary>
-		private const string Title = "Replace FileSystemWatcher instances with IFileSystem.FileSystemWatcher factory for improved testablity";
+		private const string Title = "Replace StringReader instances with IFileSystem.StringReader factory for improved testablity";
 
 		/// <summary>
 		/// Diagnostic Message Format
@@ -50,7 +50,7 @@ namespace System.IO.Abstractions.Analyzers.Analyzers.FileSystemTypeAnalyzers
 
 		protected override Type GetFileSystemType()
 		{
-			return typeof(FileSystemWatcher);
+			return typeof(StringReader);
 		}
 	}
 }

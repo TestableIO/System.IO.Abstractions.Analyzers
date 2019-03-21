@@ -12,7 +12,7 @@ namespace SomeNameSpace
 		{
 			const string path = "C:\\temp.txt";
 
-			DriveInfo[] drives = DriveInfo.GetDrives();
+			StringReader fileSystemWatcher = new StringReader();
 		}
 	}
 }

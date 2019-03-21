@@ -19,7 +19,7 @@ namespace System.IO.Abstractions.Analyzers.Analyzers
 				{
 					var invocation = (InvocationExpressionSyntax) syntaxContext.Node;
 
-					if (invocation.NormalizeWhitespace().ToFullString().StartsWith(GetFileSystemType().Name))
+					if (invocation.Expression.NormalizeWhitespace().ToFullString().StartsWith(GetFileSystemType().Name + "."))
 					{
 						Analyze(syntaxContext, invocation);
 					}
@@ -30,7 +30,7 @@ namespace System.IO.Abstractions.Analyzers.Analyzers
 				{
 					var invocation = (ObjectCreationExpressionSyntax) syntaxContext.Node;
 
-					if (invocation.Type.NormalizeWhitespace().ToFullString().StartsWith(GetFileSystemType().Name))
+					if (invocation.Type.NormalizeWhitespace().ToFullString() == GetFileSystemType().Name)
 					{
 						Analyze(syntaxContext, invocation);
 					}

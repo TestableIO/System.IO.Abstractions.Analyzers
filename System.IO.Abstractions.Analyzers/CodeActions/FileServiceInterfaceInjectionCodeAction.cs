@@ -35,7 +35,7 @@ namespace System.IO.Abstractions.Analyzers.CodeActions
 			var editor = await DocumentEditor.CreateAsync(_document, cancellationToken).ConfigureAwait(false);
 
 			var parameter = SF.Parameter(SF.Identifier("fileSystem"))
-				.WithType(SF.ParseTypeName(nameof(IFileSystem)))
+				.WithType(SF.ParseTypeName(Constants.FileSystemName))
 				.WithAdditionalAnnotations(Formatter.Annotation, Simplifier.Annotation)
 				.NormalizeWhitespace();
 
@@ -48,14 +48,14 @@ namespace System.IO.Abstractions.Analyzers.CodeActions
 
 			var fileSystem = classDeclarationSyntax.Members
 				.OfType<FieldDeclarationSyntax>()
-				.FirstOrDefault(x => x.NormalizeWhitespace().ToFullString().Equals(nameof(IFileSystem)));
+				.FirstOrDefault(x => x.NormalizeWhitespace().ToFullString().Equals(Constants.FileSystemName));
 
 			if (fileSystem != null)
 			{
 				return editor.GetChangedDocument();
 			}
 
-			var fileSystemPropertyDeclaration = SF.FieldDeclaration(SF.VariableDeclaration(SF.IdentifierName(nameof(IFileSystem)))
+			var fileSystemPropertyDeclaration = SF.FieldDeclaration(SF.VariableDeclaration(SF.IdentifierName(Constants.FileSystemName))
 					.WithVariables(SF.SingletonSeparatedList(SF.VariableDeclarator(SF.Identifier("_fileSystem")))))
 				.WithModifiers(SF.TokenList(SF.Token(SyntaxKind.PrivateKeyword),
 					SF.Token(SyntaxKind.ReadOnlyKeyword)));

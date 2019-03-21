@@ -6,7 +6,7 @@ namespace System.IO.Abstractions.Analyzers.Analyzers
 	public abstract class BaseFileSystemAnalyzer : DiagnosticAnalyzer
 
 	{
-		protected static readonly string Category = typeof(IFileSystem).Namespace;
+		protected static readonly string Category = Constants.FileSystemNameSpace;
 
 		/// <inheritdoc />
 		public override void Initialize(AnalysisContext context)

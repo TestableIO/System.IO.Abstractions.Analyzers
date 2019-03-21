@@ -4,16 +4,15 @@ namespace System.IO.Abstractions.Analyzers
 {
 	public class FileSystemContext
 	{
-		private readonly Lazy<INamedTypeSymbol> _lazyIFileSystemType;
-
-		public INamedTypeSymbol FileSystemType
-			=> _lazyIFileSystemType?.Value;
+		private readonly INamedTypeSymbol fileSystemType;
 
 		public FileSystemContext(Compilation compilation)
 		{
-			_lazyIFileSystemType = new Lazy<INamedTypeSymbol>(() => compilation.GetTypeByMetadataName(typeof(IFileSystem).FullName));
+			fileSystemType = compilation.GetTypeByMetadataName(Constants.FileSystem);
 		}
 
-		public bool HasReference => true;
+		public bool HasReference => FileSystemType != null;
+
+		public INamedTypeSymbol FileSystemType => fileSystemType;
 	}
 }

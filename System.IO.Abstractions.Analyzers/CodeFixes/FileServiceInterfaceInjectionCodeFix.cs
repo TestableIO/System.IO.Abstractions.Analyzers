@@ -15,7 +15,7 @@ namespace System.IO.Abstractions.Analyzers.CodeFixes
 	{
 		private const string Title = "Use System.IO.Abstractions";
 
-		public sealed override ImmutableArray<string> FixableDiagnosticIds { get; } =
+		public sealed override ImmutableArray<string> FixableDiagnosticIds =>
 			ImmutableArray.Create(FileServiceInterfaceInjectionAnalyzer.DiagnosticId);
 
 		public sealed override FixAllProvider GetFixAllProvider() => WellKnownFixAllProviders.BatchFixer;

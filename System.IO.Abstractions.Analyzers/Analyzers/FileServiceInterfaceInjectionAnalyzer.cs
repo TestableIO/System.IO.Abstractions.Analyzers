@@ -52,7 +52,7 @@ namespace System.IO.Abstractions.Analyzers.Analyzers
 		{
 			compilationStartContext.RegisterSyntaxNodeAction(syntaxContext =>
 				{
-					var constructor = (ConstructorDeclarationSyntax)syntaxContext.Node;
+					var constructor = (ConstructorDeclarationSyntax) syntaxContext.Node;
 
 					var compilationUnitSyntax = GetCompilationUnit(constructor);
 
@@ -78,10 +78,13 @@ namespace System.IO.Abstractions.Analyzers.Analyzers
 			switch (node)
 			{
 				case null:
+
 					return null;
 				case CompilationUnitSyntax compilationUnitSyntax:
+
 					return compilationUnitSyntax;
 				default:
+
 					return GetCompilationUnit(node.Parent);
 			}
 		}

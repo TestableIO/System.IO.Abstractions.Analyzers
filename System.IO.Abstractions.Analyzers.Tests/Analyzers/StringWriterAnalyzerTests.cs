@@ -7,7 +7,7 @@ using Xunit;
 
 namespace System.IO.Abstractions.Analyzers.Tests.Analyzers
 {
-	public class FileSystemWatcherAnalyzerTests : CSharpDiagnosticAnalyzerTest<FileSystemWatcherAnalyzer>
+	public class StringWriterAnalyzerTests: CSharpDiagnosticAnalyzerTest<StringWriterAnalyzer>
 	{
 		[Theory]
 		[InlineData("Valid.txt")]
@@ -18,16 +18,15 @@ namespace System.IO.Abstractions.Analyzers.Tests.Analyzers
 		}
 
 		[Theory]
-		[InlineData("WithOutFileSystem.txt", 15, 42)]
-		[InlineData("StaticInvocation.txt", 15, 4)]
+		[InlineData("WithOutFileSystem.txt", 15, 24)]
 		public void Analyzer_is_triggered(string filename, int diagnosticLine, int diagnosticColumn)
 		{
 			var source = ReadFile(filename);
 
 			var expectedDiagnostic = new DiagnosticResult
 			{
-				Id = FileSystemWatcherAnalyzer.DiagnosticId,
-				Message = FileSystemWatcherAnalyzer.MessageFormat,
+				Id = StringWriterAnalyzer.DiagnosticId,
+				Message = StringWriterAnalyzer.MessageFormat,
 				Severity = DiagnosticSeverity.Warning,
 				Locations = new[] { new DiagnosticResultLocation("Test0.cs", diagnosticLine, diagnosticColumn) }
 			};

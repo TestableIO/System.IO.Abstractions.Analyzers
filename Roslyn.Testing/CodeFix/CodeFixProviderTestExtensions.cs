@@ -62,6 +62,7 @@ namespace Roslyn.Testing.CodeFix
 		/// A bool controlling whether or not the test will fail if the CodeFix introduces
 		/// other warnings after being applied
 		/// </param>
+		/// <param name="additionalReferences"></param>
 		public static VerifyCodeFixProviderResult VerifyFix(this CodeFixProvider codeFixProvider,
 															string language,
 															DiagnosticAnalyzer analyzer,

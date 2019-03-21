@@ -47,6 +47,7 @@ namespace Roslyn.Testing.Analyzer
 		/// <param name="sources"> Classes in the form of strings </param>
 		/// <param name="language"> The language the source classes are in </param>
 		/// <param name="analyzer"> The analyzer to be run on the sources </param>
+		/// <param name="references"></param>
 		/// <returns>
 		/// An IEnumerable of Diagnostics that surfaced in the source code, sorted by
 		/// Location
@@ -134,6 +135,7 @@ namespace Roslyn.Testing.Analyzer
 		/// </summary>
 		/// <param name="sources"> Classes in the form of strings </param>
 		/// <param name="language"> The language the source code is in </param>
+		/// <param name="references"></param>
 		/// <returns>
 		/// A Tuple containing the Documents produced from the sources and their TextSpans
 		/// if relevant
@@ -161,6 +163,7 @@ namespace Roslyn.Testing.Analyzer
 		/// </summary>
 		/// <param name="source"> Classes in the form of a string </param>
 		/// <param name="language"> The language the source code is in </param>
+		/// <param name="references"></param>
 		/// <returns> A Document created from the source string </returns>
 		public static Document CreateDocument(string source, string language, IEnumerable<MetadataReference> references = null)
 		{

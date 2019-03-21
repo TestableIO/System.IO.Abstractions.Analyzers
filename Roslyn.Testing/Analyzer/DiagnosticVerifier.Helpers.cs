@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Diagnostics;
 using System.Linq;
+using JetBrains.Annotations;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -46,11 +47,13 @@ namespace Roslyn.Testing.Analyzer
 		/// </summary>
 		/// <param name="sources"> Classes in the form of strings </param>
 		/// <param name="language"> The language the source classes are in </param>
-		/// <param name="analyzer"> The analyzer to be run on the sources </param>
+		/// <param name="analyzers"> The analyzer to be run on the sources </param>
+		/// <param name="references"></param>
 		/// <returns>
 		/// An IEnumerable of Diagnostics that surfaced in the source code, sorted by
 		/// Location
 		/// </returns>
+		[UsedImplicitly]
 		private static Diagnostic[] GetSortedDiagnostics(string[] sources, string language, ImmutableArray<DiagnosticAnalyzer> analyzers,
 														IEnumerable<MetadataReference> references = null)
 		{
@@ -62,7 +65,7 @@ namespace Roslyn.Testing.Analyzer
 		/// array of diagnostics found in it.
 		/// The returned diagnostics are then ordered by location in the source document.
 		/// </summary>
-		/// <param name="analyzer"> The analyzer to run on the documents </param>
+		/// <param name="analyzers"> The analyzer to run on the documents </param>
 		/// <param name="documents"> The Documents that the analyzer will be run on </param>
 		/// <returns>
 		/// An IEnumerable of Diagnostics that surfaced in the source code, sorted by
@@ -131,6 +134,7 @@ namespace Roslyn.Testing.Analyzer
 		/// </summary>
 		/// <param name="sources"> Classes in the form of strings </param>
 		/// <param name="language"> The language the source code is in </param>
+		/// <param name="references"></param>
 		/// <returns>
 		/// A Tuple containing the Documents produced from the sources and their TextSpans
 		/// if relevant
@@ -158,6 +162,7 @@ namespace Roslyn.Testing.Analyzer
 		/// </summary>
 		/// <param name="source"> Classes in the form of a string </param>
 		/// <param name="language"> The language the source code is in </param>
+		/// <param name="references"></param>
 		/// <returns> A Document created from the source string </returns>
 		protected static Document CreateDocument(string source, string language = LanguageNames.CSharp,
 												IEnumerable<MetadataReference> references = null)
@@ -170,6 +175,7 @@ namespace Roslyn.Testing.Analyzer
 		/// </summary>
 		/// <param name="sources"> Classes in the form of strings </param>
 		/// <param name="language"> The language the source code is in </param>
+		/// <param name="references"></param>
 		/// <returns>
 		/// A Project created out of the Documents created from the source
 		/// strings

@@ -76,7 +76,7 @@ namespace Roslyn.Testing.CodeFix
 
 			if (string.IsNullOrEmpty(result.ErrorMessage))
 			{
-				result.NewSource.ShouldBe(result.ActualSource);
+				result.NewSource.ShouldContainWithoutWhitespace(result.ActualSource);
 			} else
 			{
 				result.Success.ShouldBeTrue(result.ErrorMessage);

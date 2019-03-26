@@ -41,13 +41,16 @@ namespace System.IO.Abstractions.Analyzers.Analyzers.FileSystemTypeAnalyzers
 			true,
 			Description);
 
+		/// <inheritdoc />
 		public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rule);
 
+		/// <inheritdoc />
 		protected override void Analyze(SyntaxNodeAnalysisContext context, ExpressionSyntax syntax)
 		{
 			context.ReportDiagnostic(Diagnostic.Create(Rule, syntax.GetLocation()));
 		}
 
+		/// <inheritdoc />
 		protected override Type GetFileSystemType()
 		{
 			return typeof(DirectoryInfo);

@@ -4,9 +4,11 @@ namespace System.IO.Abstractions.Analyzers.Analyzers
 {
 	/// <inheritdoc />
 	public abstract class BaseFileSystemAnalyzer : DiagnosticAnalyzer
-
 	{
-		protected static readonly string Category = Constants.FileSystemNameSpace;
+		/// <summary>
+		/// Diagnostic Analyzer Category
+		/// </summary>
+		protected const string Category = Constants.FileSystemNameSpace;
 
 		/// <inheritdoc />
 		public override void Initialize(AnalysisContext context)
@@ -24,6 +26,11 @@ namespace System.IO.Abstractions.Analyzers.Analyzers
 			});
 		}
 
+		/// <summary>
+		/// Analysis
+		/// </summary>
+		/// <param name="compilationStartContext">Compilation Start Analysis Context</param>
+		/// <param name="fileSystemContext">FileSystem Context</param>
 		protected abstract void AnalyzeCompilation(CompilationStartAnalysisContext compilationStartContext,
 													FileSystemContext fileSystemContext);
 

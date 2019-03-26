@@ -10,7 +10,7 @@ namespace System.IO.Abstractions.Analyzers.Analyzers
 		protected override void AnalyzeCompilation(CompilationStartAnalysisContext compilationStartContext,
 													FileSystemContext fileSystemContext)
 		{
-			if (typeof(Path).Namespace != GetFileSystemType().Namespace)
+			if (IsNotUsedSystemIo())
 			{
 				return;
 			}
@@ -19,7 +19,7 @@ namespace System.IO.Abstractions.Analyzers.Analyzers
 				{
 					var invocation = (InvocationExpressionSyntax) syntaxContext.Node;
 
-					if (invocation.Expression.NormalizeWhitespace().ToFullString().StartsWith(GetFileSystemType().Name + "."))
+					if (IsStaticInvocationStartWith(invocation))
 					{
 						Analyze(syntaxContext, invocation);
 					}
@@ -28,11 +28,11 @@ namespace System.IO.Abstractions.Analyzers.Analyzers
 
 			compilationStartContext.RegisterSyntaxNodeAction(syntaxContext =>
 				{
-					var invocation = (ObjectCreationExpressionSyntax) syntaxContext.Node;
+					var creationExpressionSyntax = (ObjectCreationExpressionSyntax) syntaxContext.Node;
 
-					if (invocation.Type.NormalizeWhitespace().ToFullString() == GetFileSystemType().Name)
+					if (IsTypesEquals(creationExpressionSyntax.Type))
 					{
-						Analyze(syntaxContext, invocation);
+						Analyze(syntaxContext, creationExpressionSyntax);
 					}
 				},
 				SyntaxKind.ObjectCreationExpression);
@@ -41,5 +41,13 @@ namespace System.IO.Abstractions.Analyzers.Analyzers
 		protected abstract void Analyze(SyntaxNodeAnalysisContext context, ExpressionSyntax invocation);
 
 		protected abstract Type GetFileSystemType();
+
+		private bool IsNotUsedSystemIo() => typeof(Path).Namespace != GetFileSystemType().Namespace;
+
+		private bool IsTypesEquals(TypeSyntax type) => type.NormalizeWhitespace().ToFullString() == GetFileSystemType().Name;
+
+		private bool IsStaticInvocationStartWith(InvocationExpressionSyntax invocation) => invocation.Expression.NormalizeWhitespace()
+			.ToFullString()
+			.StartsWith(GetFileSystemType().Name + ".");
 	}
 }

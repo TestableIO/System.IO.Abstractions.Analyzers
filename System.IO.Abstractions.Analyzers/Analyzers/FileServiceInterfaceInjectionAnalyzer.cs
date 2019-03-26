@@ -52,25 +52,25 @@ namespace System.IO.Abstractions.Analyzers.Analyzers
 		{
 			compilationStartContext.RegisterSyntaxNodeAction(syntaxContext =>
 				{
-					var constructor = (ConstructorDeclarationSyntax) syntaxContext.Node;
+					var classDeclarationSyntax = (ClassDeclarationSyntax) syntaxContext.Node;
 
-					var compilationUnitSyntax = GetCompilationUnit(constructor);
+					var compilationUnitSyntax = GetCompilationUnit(classDeclarationSyntax);
 
 					if (compilationUnitSyntax.Usings.All(x => x.Name.NormalizeWhitespace().ToFullString() != typeof(Path).Namespace))
 					{
 						return;
 					}
 
-					var fileSystem = constructor.ParameterList.Parameters.FirstOrDefault(x =>
-						x.Type.NormalizeWhitespace().ToFullString() == fileSystemContext.FileSystemType.Name);
+					var fileSystem = classDeclarationSyntax.Members.OfType<FieldDeclarationSyntax>().FirstOrDefault(x =>
+						x.NormalizeWhitespace().ToFullString() == fileSystemContext.FileSystemType.Name);
 
 					if (fileSystem == null)
 					{
 						syntaxContext.ReportDiagnostic(Diagnostic.Create(Rule,
-							constructor.Identifier.GetLocation()));
+							classDeclarationSyntax.Identifier.GetLocation()));
 					}
 				},
-				SyntaxKind.ConstructorDeclaration);
+				SyntaxKind.ClassDeclaration);
 		}
 
 		private CompilationUnitSyntax GetCompilationUnit(SyntaxNode node)

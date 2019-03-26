@@ -10,7 +10,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 namespace System.IO.Abstractions.Analyzers.CodeFixes
 {
 	[Shared]
-	[ExportCodeFixProvider(LanguageNames.CSharp)]
+	[ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(FileServiceInterfaceInjectionCodeFix))]
 	public class FileServiceInterfaceInjectionCodeFix : CodeFixProvider
 	{
 		private const string Title = "Use System.IO.Abstractions";

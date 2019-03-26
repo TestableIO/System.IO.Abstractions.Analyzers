@@ -23,11 +23,11 @@ namespace System.IO.Abstractions.Analyzers.CodeFixes
 		public sealed override async Task RegisterCodeFixesAsync(CodeFixContext context)
 		{
 			var root = await context.Document.GetSyntaxRootAsync(context.CancellationToken).ConfigureAwait(false);
-			var constructorDeclarationSyntax = root.FindNode(context.Span).FirstAncestorOrSelf<ConstructorDeclarationSyntax>();
+			var classDeclarationSyntax = root.FindNode(context.Span).FirstAncestorOrSelf<ClassDeclarationSyntax>();
 
 			context.RegisterCodeFix(new FileServiceInterfaceInjectionCodeAction(Title,
 					context.Document,
-					constructorDeclarationSyntax),
+					classDeclarationSyntax),
 				context.Diagnostics);
 		}
 	}

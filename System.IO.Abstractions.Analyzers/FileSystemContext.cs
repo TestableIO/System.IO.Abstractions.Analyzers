@@ -4,15 +4,13 @@ namespace System.IO.Abstractions.Analyzers
 {
 	public class FileSystemContext
 	{
-		private readonly INamedTypeSymbol fileSystemType;
-
 		public FileSystemContext(Compilation compilation)
 		{
-			fileSystemType = compilation.GetTypeByMetadataName(Constants.FileSystem);
+			FileSystemType = compilation.GetTypeByMetadataName(Constants.FileSystem);
 		}
 
 		public bool HasReference => FileSystemType != null;
 
-		public INamedTypeSymbol FileSystemType => fileSystemType;
+		public INamedTypeSymbol FileSystemType { get; }
 	}
 }

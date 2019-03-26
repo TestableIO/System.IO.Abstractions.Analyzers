@@ -18,7 +18,7 @@ namespace System.IO.Abstractions.Analyzers.Tests.Analyzers
 		}
 
 		[Theory]
-		[InlineData("WithOutFileSystem.txt", 7, 3)]
+		[InlineData("WithOutFileSystem.txt", 7, 10)]
 		public void Analyzer_is_triggered(string filename, int diagnosticLine, int diagnosticColumn)
 		{
 			var source = ReadFile(filename);

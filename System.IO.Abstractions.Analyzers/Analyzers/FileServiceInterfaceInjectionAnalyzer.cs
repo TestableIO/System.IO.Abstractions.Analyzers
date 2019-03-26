@@ -67,7 +67,7 @@ namespace System.IO.Abstractions.Analyzers.Analyzers
 					if (fileSystem == null)
 					{
 						syntaxContext.ReportDiagnostic(Diagnostic.Create(Rule,
-							constructor.GetLocation()));
+							constructor.Identifier.GetLocation()));
 					}
 				},
 				SyntaxKind.ConstructorDeclaration);

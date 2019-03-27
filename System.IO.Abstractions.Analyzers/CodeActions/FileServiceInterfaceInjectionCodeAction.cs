@@ -51,12 +51,10 @@ namespace System.IO.Abstractions.Analyzers.CodeActions
 			ConstructorAddParameter(_class, editor);
 
 			var compilationUnitSyntax = GetCompilationUnit(_class);
-			var fileSystemUsing = GetFileSystemUsing();
 
 			if (compilationUnitSyntax.Usings.Any())
 			{
-				editor.ReplaceNode(GetSystemIoUsing(compilationUnitSyntax),
-					fileSystemUsing);
+				editor.ReplaceNode(GetSystemIoUsing(compilationUnitSyntax), GetFileSystemUsing());
 			}
 
 			return editor.GetChangedDocument();

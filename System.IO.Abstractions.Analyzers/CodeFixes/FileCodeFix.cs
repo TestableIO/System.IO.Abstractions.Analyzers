@@ -23,6 +23,7 @@ namespace System.IO.Abstractions.Analyzers.CodeFixes
 			var root = await context.Document.GetSyntaxRootAsync(context.CancellationToken).ConfigureAwait(false);
 			var invocation = root.FindNode(context.Span).FirstAncestorOrSelf<InvocationExpressionSyntax>();
 
+			// TODO: Add check contains private property with Type IFileSystem
 			context.RegisterCodeFix(new FileSystemInvokeCodeAction(Title,
 					context.Document,
 					invocation),

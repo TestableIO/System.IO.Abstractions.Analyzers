@@ -25,7 +25,7 @@ namespace System.IO.Abstractions.Analyzers.Tests.Analyzers
 
 			var expectedDiagnostic = new DiagnosticResult
 			{
-				Id = FileAnalyzer.DiagnosticId,
+				Id = Constants.Io0002,
 				Message = FileAnalyzer.MessageFormat,
 				Severity = DiagnosticSeverity.Warning,
 				Locations = new[] { new DiagnosticResultLocation("Test0.cs", diagnosticLine, diagnosticColumn) }

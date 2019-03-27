@@ -17,7 +17,7 @@ namespace System.IO.Abstractions.Analyzers.Analyzers
 		/// Diagnostic Identifier
 		/// </summary>
 		[UsedImplicitly]
-		public const string DiagnosticId = "IO0001";
+		public const string DiagnosticId = Constants.Io0001;
 
 		/// <summary>
 		/// Diagnostic Title
@@ -61,8 +61,9 @@ namespace System.IO.Abstractions.Analyzers.Analyzers
 						return;
 					}
 
-					var fileSystem = classDeclarationSyntax.Members.OfType<FieldDeclarationSyntax>().FirstOrDefault(x =>
-						x.NormalizeWhitespace().ToFullString() == fileSystemContext.FileSystemType.Name);
+					var fileSystem = classDeclarationSyntax.Members.OfType<FieldDeclarationSyntax>()
+						.FirstOrDefault(x =>
+							x.NormalizeWhitespace().ToFullString() == fileSystemContext.FileSystemType.Name);
 
 					if (fileSystem == null)
 					{

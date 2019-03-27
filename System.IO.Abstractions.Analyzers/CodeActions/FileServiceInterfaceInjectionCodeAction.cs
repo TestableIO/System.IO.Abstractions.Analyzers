@@ -40,24 +40,37 @@ namespace System.IO.Abstractions.Analyzers.CodeActions
 
 			if (!HasFileSystemProperty(_class))
 			{
-				var fileSystemPropertyDeclaration = CreateFileSystemPropertyDeclaration();
-
 				editor.InsertMembers(_class,
 					0,
 					new SyntaxNode[]
 					{
-						fileSystemPropertyDeclaration
+						CreateFileSystemPropertyDeclaration()
 					});
 			}
 
 			ConstructorAddParameter(_class, editor);
 
 			var compilationUnitSyntax = GetCompilationUnit(_class);
+			var fileSystemUsing = GetFileSystemUsing();
 
-			editor.ReplaceNode(compilationUnitSyntax.Usings.FirstOrDefault(),
-				SF.UsingDirective(SF.ParseName(Constants.FileSystemNameSpace)));
+			if (compilationUnitSyntax.Usings.Any())
+			{
+				editor.ReplaceNode(GetSystemIoUsing(compilationUnitSyntax),
+					fileSystemUsing);
+			}
 
 			return editor.GetChangedDocument();
+		}
+
+		private static UsingDirectiveSyntax GetFileSystemUsing()
+		{
+			return SF.UsingDirective(SF.ParseName(Constants.FileSystemNameSpace));
+		}
+
+		private static UsingDirectiveSyntax GetSystemIoUsing(CompilationUnitSyntax unit)
+		{
+			return unit.Usings.FirstOrDefault(x =>
+				x.Name.NormalizeWhitespace().ToFullString().Equals(typeof(Path).Namespace));
 		}
 
 		private static FieldDeclarationSyntax CreateFileSystemPropertyDeclaration()
@@ -123,6 +136,11 @@ namespace System.IO.Abstractions.Analyzers.CodeActions
 
 		private static bool ConstructorHasAssignmentExpression(BaseMethodDeclarationSyntax constructor)
 		{
+			if (constructor.Body == null)
+			{
+				return false;
+			}
+
 			return constructor.Body.Statements.OfType<ExpressionStatementSyntax>()
 				.Any(x => x.IsKind(SyntaxKind.SimpleAssignmentExpression)
 						&& x.Expression.Contains(SF.IdentifierName(FieldFileSystemName))
@@ -134,15 +152,20 @@ namespace System.IO.Abstractions.Analyzers.CodeActions
 			return classDeclaration.ChildNodes().OfType<ConstructorDeclarationSyntax>().Any();
 		}
 
-		private static void ConstructorAddParameter(ClassDeclarationSyntax classDeclaration, DocumentEditor editor)
+		private static void ConstructorAddParameter(ClassDeclarationSyntax classDeclaration, SyntaxEditor editor)
 		{
 			var constructor = HasConstructor(classDeclaration)
 				? GetConstructor(classDeclaration)
-				: SF.ConstructorDeclaration(classDeclaration.Identifier);
+				: SF.ConstructorDeclaration(classDeclaration.Identifier)
+					.WithModifiers(SyntaxTokenList.Create(SyntaxFactory.Token(SyntaxKind.PublicKeyword)));
 
-			var newConstructor = constructor.WithBody(constructor.Body?.AddStatements(CreateAssignmentExpression()))
-				.WithAdditionalAnnotations(Formatter.Annotation, Simplifier.Annotation)
+			var newConstructor = constructor.WithAdditionalAnnotations(Formatter.Annotation, Simplifier.Annotation)
 				.NormalizeWhitespace();
+
+			if (!ConstructorHasAssignmentExpression(newConstructor))
+			{
+				newConstructor = newConstructor.AddBodyStatements(CreateAssignmentExpression());
+			}
 
 			if (!ConstructorHasFileSystemParameter(newConstructor))
 			{
@@ -155,13 +178,13 @@ namespace System.IO.Abstractions.Analyzers.CodeActions
 				editor.ReplaceNode(constructor, newConstructor);
 			} else
 			{
-				editor.InsertMembers(classDeclaration,
-					0,
-					new SyntaxNode[]
-					{
-						newConstructor
-					});
+				editor.InsertBefore(GetMethod(classDeclaration), newConstructor);
 			}
+		}
+
+		private static MethodDeclarationSyntax GetMethod(ClassDeclarationSyntax classDeclaration)
+		{
+			return classDeclaration.ChildNodes().OfType<MethodDeclarationSyntax>().FirstOrDefault();
 		}
 	}
 }

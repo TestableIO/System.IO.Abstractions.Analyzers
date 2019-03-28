@@ -13,7 +13,7 @@ namespace System.IO.Abstractions.Analyzers.Analyzers.FileSystemTypeAnalyzers
 		/// Diagnostic Identifier
 		/// </summary>
 		[UsedImplicitly]
-		public const string DiagnosticId = "IO0006";
+		public const string DiagnosticId = Constants.Io0006;
 
 		/// <summary>
 		/// Diagnostic Title

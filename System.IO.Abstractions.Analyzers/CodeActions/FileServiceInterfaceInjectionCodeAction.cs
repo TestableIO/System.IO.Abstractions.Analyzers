@@ -34,24 +34,24 @@ namespace System.IO.Abstractions.Analyzers.CodeActions
 		{
 			var editor = await DocumentEditor.CreateAsync(_document, cancellationToken).ConfigureAwait(false);
 
-			if (!RoslynClassFyleSystem.HasFileSystemProperty(_class))
+			if (!RoslynClassFileSystem.HasFileSystemField(_class))
 			{
 				editor.InsertMembers(_class,
 					0,
 					new SyntaxNode[]
 					{
-						RoslynClassFyleSystem.CreateFileSystemPropertyDeclaration()
+						RoslynClassFileSystem.CreateFileSystemFieldDeclaration()
 					});
 			}
 
 			ConstructorAddParameter(_class, editor);
 
-			var compilationUnitSyntax = RoslynClassFyleSystem.GetCompilationUnit(_class);
+			var compilationUnitSyntax = RoslynClassFileSystem.GetCompilationUnit(_class);
 
 			if (compilationUnitSyntax.Usings.Any())
 			{
-				editor.ReplaceNode(RoslynClassFyleSystem.GetSystemIoUsing(compilationUnitSyntax),
-					RoslynClassFyleSystem.GetFileSystemUsing());
+				editor.ReplaceNode(RoslynClassFileSystem.GetSystemIoUsing(compilationUnitSyntax),
+					RoslynClassFileSystem.GetFileSystemUsing());
 			}
 
 			return editor.GetChangedDocument();
@@ -66,31 +66,31 @@ namespace System.IO.Abstractions.Analyzers.CodeActions
 
 		private static void ConstructorAddParameter(ClassDeclarationSyntax classDeclaration, SyntaxEditor editor)
 		{
-			var constructor = RoslynClassFyleSystem.HasConstructor(classDeclaration)
-				? RoslynClassFyleSystem.GetConstructor(classDeclaration)
+			var constructor = RoslynClassFileSystem.HasConstructor(classDeclaration)
+				? RoslynClassFileSystem.GetConstructor(classDeclaration)
 				: SF.ConstructorDeclaration(classDeclaration.Identifier)
 					.WithModifiers(SyntaxTokenList.Create(SyntaxFactory.Token(SyntaxKind.PublicKeyword)));
 
 			var newConstructor = constructor.WithAdditionalAnnotations(Formatter.Annotation, Simplifier.Annotation)
 				.NormalizeWhitespace();
 
-			if (!RoslynClassFyleSystem.ConstructorHasAssignmentExpression(newConstructor))
+			if (!RoslynClassFileSystem.ConstructorHasAssignmentExpression(newConstructor))
 			{
 				newConstructor = newConstructor.AddBodyStatements(CreateAssignmentExpression());
 			}
 
-			if (!RoslynClassFyleSystem.ConstructorHasFileSystemParameter(newConstructor))
+			if (!RoslynClassFileSystem.ConstructorHasFileSystemParameter(newConstructor))
 			{
-				var parameter = RoslynClassFyleSystem.CreateFileSystemParameterDeclaration();
+				var parameter = RoslynClassFileSystem.CreateFileSystemParameterDeclaration();
 				newConstructor = newConstructor.AddParameterListParameters(parameter);
 			}
 
-			if (RoslynClassFyleSystem.HasConstructor(classDeclaration))
+			if (RoslynClassFileSystem.HasConstructor(classDeclaration))
 			{
 				editor.ReplaceNode(constructor, newConstructor);
 			} else
 			{
-				editor.InsertBefore(RoslynClassFyleSystem.GetMethod(classDeclaration), newConstructor);
+				editor.InsertBefore(RoslynClassFileSystem.GetMethod(classDeclaration), newConstructor);
 			}
 		}
 	}

@@ -8,7 +8,7 @@ using SF = Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
 
 namespace System.IO.Abstractions.Analyzers.RoslynToken
 {
-	public class RoslynClassFyleSystem
+	public static class RoslynClassFileSystem
 	{
 		public static bool HasConstructor(SyntaxNode classDeclaration)
 		{
@@ -25,10 +25,10 @@ namespace System.IO.Abstractions.Analyzers.RoslynToken
 			return classDeclaration.ChildNodes().OfType<MethodDeclarationSyntax>().FirstOrDefault();
 		}
 
-		public static bool HasFileSystemProperty(TypeDeclarationSyntax classDeclaration)
+		public static bool HasFileSystemField(TypeDeclarationSyntax classDeclaration)
 		{
-			return classDeclaration.Members.OfType<PropertyDeclarationSyntax>()
-				.Any(x => x.Identifier.Text == Constants.FieldFileSystemName && x.Type == GetFileSystemType());
+			return classDeclaration.Members.OfType<FieldDeclarationSyntax>()
+				.Any(x => x.Declaration.Type.NormalizeWhitespace().ToFullString() == GetFileSystemType().ToFullString());
 		}
 
 		private static TypeSyntax GetFileSystemType()
@@ -47,7 +47,7 @@ namespace System.IO.Abstractions.Analyzers.RoslynToken
 				x.Name.NormalizeWhitespace().ToFullString().Equals(typeof(Path).Namespace));
 		}
 
-		public static FieldDeclarationSyntax CreateFileSystemPropertyDeclaration()
+		public static FieldDeclarationSyntax CreateFileSystemFieldDeclaration()
 		{
 			return SF.FieldDeclaration(SF.VariableDeclaration(GetFileSystemType())
 					.WithVariables(SF.SingletonSeparatedList(SF.VariableDeclarator(SF.Identifier(Constants.FieldFileSystemName)))))

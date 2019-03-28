@@ -1,0 +1,21 @@
+using System.IO.Abstractions;
+
+namespace SomeNameSpace
+{
+	public class WithOutFileSystem
+	{
+		private readonly IFileSystem _fileSystem;
+
+		public WithOutFileSystem(IFileSystem fileSystem)
+		{
+			_fileSystem = fileSystem;
+		}
+
+		public void SomeMethod()
+		{
+			const string filePath = "C:\\temp";
+
+			_fileSystem.Directory.Exists(filePath);
+		}
+	}
+}

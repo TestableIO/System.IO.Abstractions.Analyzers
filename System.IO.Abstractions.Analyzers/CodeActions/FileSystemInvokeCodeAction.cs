@@ -10,8 +10,6 @@ namespace System.IO.Abstractions.Analyzers.CodeActions
 {
 	public class FileSystemInvokeCodeAction : CodeAction
 	{
-		private const string FieldFileSystemName = "_fileSystem";
-
 		private readonly Document _document;
 
 		private readonly InvocationExpressionSyntax _invocation;
@@ -31,7 +29,8 @@ namespace System.IO.Abstractions.Analyzers.CodeActions
 		{
 			var editor = await DocumentEditor.CreateAsync(_document, cancellationToken).ConfigureAwait(false);
 
-			editor.ReplaceNode(_invocation, SF.ParseExpression($"{FieldFileSystemName}.{_invocation.NormalizeWhitespace().ToFullString()}"));
+			editor.ReplaceNode(_invocation,
+				SF.ParseExpression($"{Constants.FieldFileSystemName}.{_invocation.NormalizeWhitespace().ToFullString()}"));
 
 			return editor.GetChangedDocument();
 		}

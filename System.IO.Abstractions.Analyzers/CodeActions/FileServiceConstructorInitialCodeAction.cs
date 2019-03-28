@@ -8,18 +8,18 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Editing;
 using Microsoft.CodeAnalysis.Formatting;
 using Microsoft.CodeAnalysis.Simplification;
+using SyntaxNode = Microsoft.CodeAnalysis.SyntaxNode;
 using SF = Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
 
 namespace System.IO.Abstractions.Analyzers.CodeActions
 {
-	/// <inheritdoc />
-	public class FileServiceInterfaceInjectionCodeAction : CodeAction
+	public class FileServiceConstructorInitialCodeAction : CodeAction
 	{
 		private readonly ClassDeclarationSyntax _class;
 
 		private readonly Document _document;
 
-		public FileServiceInterfaceInjectionCodeAction(string title, Document document, ClassDeclarationSyntax @class)
+		public FileServiceConstructorInitialCodeAction(string title, Document document, ClassDeclarationSyntax @class)
 		{
 			_class = @class;
 			_document = document;
@@ -90,9 +90,10 @@ namespace System.IO.Abstractions.Analyzers.CodeActions
 
 		private static ExpressionStatementSyntax CreateAssignmentExpression()
 		{
-			return SF.ExpressionStatement(SF.AssignmentExpression(SyntaxKind.SimpleAssignmentExpression,
-				SF.IdentifierName(Constants.FieldFileSystemName),
-				SF.IdentifierName(Constants.ParameterFileSystemName)));
+			return SyntaxFactory.ExpressionStatement(SyntaxFactory.AssignmentExpression(SyntaxKind.SimpleAssignmentExpression,
+				SyntaxFactory.IdentifierName("_fileSystem"),
+				SyntaxFactory.ObjectCreationExpression(SyntaxFactory.IdentifierName(Constants.FileSystemClassName))
+					.WithArgumentList(SyntaxFactory.ArgumentList())));
 		}
 
 		private static CompilationUnitSyntax GetCompilationUnit(SyntaxNode node)
@@ -159,12 +160,6 @@ namespace System.IO.Abstractions.Analyzers.CodeActions
 			if (!ConstructorHasAssignmentExpression(newConstructor))
 			{
 				newConstructor = newConstructor.AddBodyStatements(CreateAssignmentExpression());
-			}
-
-			if (!ConstructorHasFileSystemParameter(newConstructor))
-			{
-				var parameter = CreateFileSystemParameterDeclaration();
-				newConstructor = newConstructor.AddParameterListParameters(parameter);
 			}
 
 			if (HasConstructor(classDeclaration))

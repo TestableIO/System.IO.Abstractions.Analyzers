@@ -9,10 +9,10 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 namespace System.IO.Abstractions.Analyzers.CodeFixes
 {
 	[Shared]
-	[ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(FileServiceInterfaceInjectionCodeFix))]
-	public class FileServiceInterfaceInjectionCodeFix : CodeFixProvider
+	[ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(FileServiceConstructorInitialCodeFix))]
+	public class FileServiceConstructorInitialCodeFix : CodeFixProvider
 	{
-		private const string Title = "Inject IFileSystem and using System.IO.Abstractions";
+		private const string Title = "Create FileSystem in constructor and using System.IO.Abstractions";
 
 		public sealed override ImmutableArray<string> FixableDiagnosticIds =>
 			ImmutableArray.Create(Constants.Io0001);
@@ -24,7 +24,7 @@ namespace System.IO.Abstractions.Analyzers.CodeFixes
 			var root = await context.Document.GetSyntaxRootAsync(context.CancellationToken).ConfigureAwait(false);
 			var classDeclarationSyntax = root.FindNode(context.Span).FirstAncestorOrSelf<ClassDeclarationSyntax>();
 
-			context.RegisterCodeFix(new FileServiceInterfaceInjectionCodeAction(Title,
+			context.RegisterCodeFix(new FileServiceConstructorInitialCodeAction(Title,
 					context.Document,
 					classDeclarationSyntax),
 				context.Diagnostics);

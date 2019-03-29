@@ -31,7 +31,7 @@ namespace System.IO.Abstractions.Analyzers.RoslynToken
 				.Any(x => x.Declaration.Type.NormalizeWhitespace().ToFullString() == GetFileSystemType().ToFullString());
 		}
 
-		private static TypeSyntax GetFileSystemType()
+		public static TypeSyntax GetFileSystemType()
 		{
 			return SF.ParseTypeName(Constants.FileSystemInterfaceName);
 		}

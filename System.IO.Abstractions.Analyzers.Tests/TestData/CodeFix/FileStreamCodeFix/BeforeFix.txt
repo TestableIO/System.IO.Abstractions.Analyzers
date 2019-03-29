@@ -1,0 +1,28 @@
+using System.IO.Abstractions;
+
+namespace SomeNameSpace
+{
+	public class WithOutFileSystem
+	{
+		private readonly IFileSystem _fileSystem;
+
+		public WithOutFileSystem(IFileSystem fileSystem)
+		{
+			_fileSystem = fileSystem;
+		}
+
+		public void SomeMethod()
+		{
+			const string filePath = "C:\\temp.txt";
+
+			using (FileStream fstream = new FileStream(filePath, FileMode.OpenOrCreate))
+            {
+                // преобразуем строку в байты
+                byte[] array = System.Text.Encoding.Default.GetBytes(text);
+                // запись массива байтов в файл
+                fstream.Write(array, 0, array.Length);
+                Console.WriteLine("Текст записан в файл");
+            }
+		}
+	}
+}

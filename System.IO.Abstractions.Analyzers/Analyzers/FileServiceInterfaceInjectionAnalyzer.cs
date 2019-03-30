@@ -34,6 +34,8 @@ namespace System.IO.Abstractions.Analyzers.Analyzers
 		/// </summary>
 		private const string Description = "Use System.IO.Abstractions for improved application testability";
 
+		private const string Link = "http://bit.ly/2OyHRbq";
+
 		/// <summary>
 		/// Правило
 		/// </summary>
@@ -43,7 +45,8 @@ namespace System.IO.Abstractions.Analyzers.Analyzers
 			Category,
 			DiagnosticSeverity.Warning,
 			true,
-			Description);
+			Description,
+			Link);
 
 		public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rule);
 

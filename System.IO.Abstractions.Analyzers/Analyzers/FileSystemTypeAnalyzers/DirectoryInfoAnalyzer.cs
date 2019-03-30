@@ -30,6 +30,8 @@ namespace System.IO.Abstractions.Analyzers.Analyzers.FileSystemTypeAnalyzers
 		/// </summary>
 		private const string Description = Title;
 
+		private const string Link = "http://bit.ly/2OCAmQF";
+
 		/// <summary>
 		/// Правило
 		/// </summary>
@@ -39,7 +41,8 @@ namespace System.IO.Abstractions.Analyzers.Analyzers.FileSystemTypeAnalyzers
 			Category,
 			DiagnosticSeverity.Warning,
 			true,
-			Description);
+			Description,
+			Link);
 
 		/// <inheritdoc />
 		public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rule);

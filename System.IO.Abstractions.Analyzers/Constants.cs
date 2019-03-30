@@ -23,5 +23,6 @@ namespace System.IO.Abstractions.Analyzers
 		public const string Io0004 = "IO0004";
 		public const string Io0005 = "IO0005";
 		public const string Io0006 = "IO0006";
+		public const string Io0007 = "IO0007";
 	}
 }

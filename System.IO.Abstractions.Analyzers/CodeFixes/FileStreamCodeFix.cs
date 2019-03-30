@@ -14,7 +14,7 @@ namespace System.IO.Abstractions.Analyzers.CodeFixes
 	[ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(FileStreamCodeFix))]
 	public class FileStreamCodeFix : CodeFixProvider
 	{
-		private const string Title = "Use IFileStreamFactory instead creation FileStream for improved testablity";
+		private const string Title = "Use IFileStreamFactory instead creation FileStream for improved testability";
 
 		public override ImmutableArray<string> FixableDiagnosticIds =>
 			ImmutableArray.Create(Constants.Io0005);

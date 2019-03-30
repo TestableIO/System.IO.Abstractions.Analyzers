@@ -18,7 +18,7 @@ namespace System.IO.Abstractions.Analyzers.Analyzers.FileSystemTypeAnalyzers
 		/// <summary>
 		/// Diagnostic Title
 		/// </summary>
-		private const string Title = "Replace FileInfo class with IFileSystem.FileInfo for improved testablity";
+		private const string Title = "Replace FileInfo class with IFileSystem.FileInfo for improved testability";
 
 		/// <summary>
 		/// Diagnostic Message Format

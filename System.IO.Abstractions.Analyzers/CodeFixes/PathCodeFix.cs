@@ -10,6 +10,6 @@ namespace System.IO.Abstractions.Analyzers.CodeFixes
 	{
 		protected override string DiagnosticId => Constants.Io0006;
 
-		protected override string Title => "Use IFileSystem.Path for improved testablity";
+		protected override string Title => "Use IFileSystem.Path for improved testability";
 	}
 }

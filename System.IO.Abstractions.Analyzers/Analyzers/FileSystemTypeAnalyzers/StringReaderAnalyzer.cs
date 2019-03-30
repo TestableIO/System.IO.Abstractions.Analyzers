@@ -18,7 +18,7 @@ namespace System.IO.Abstractions.Analyzers.Analyzers.FileSystemTypeAnalyzers
 		/// <summary>
 		/// Diagnostic Title
 		/// </summary>
-		private const string Title = "Replace StringReader instances with IFileSystem.StringReader factory for improved testablity";
+		private const string Title = "Replace StringReader instances with IFileSystem.StringReader factory for improved testability";
 
 		/// <summary>
 		/// Diagnostic Message Format

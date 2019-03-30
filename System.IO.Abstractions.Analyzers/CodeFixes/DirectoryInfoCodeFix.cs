@@ -14,7 +14,7 @@ namespace System.IO.Abstractions.Analyzers.CodeFixes
 	[ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(DirectoryInfoCodeFix))]
 	public class DirectoryInfoCodeFix : CodeFixProvider
 	{
-		private const string Title = "Use IDirectoryInfoFactory instead creation DirectoryInfo for improved testablity";
+		private const string Title = "Use IDirectoryInfoFactory instead creation DirectoryInfo for improved testability";
 
 		public override ImmutableArray<string> FixableDiagnosticIds =>
 			ImmutableArray.Create(Constants.Io0007);

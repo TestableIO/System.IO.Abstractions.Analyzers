@@ -66,7 +66,7 @@ namespace System.IO.Abstractions.Analyzers.Analyzers
 
 					var fileSystem = classDeclarationSyntax.Members.OfType<FieldDeclarationSyntax>()
 						.FirstOrDefault(x =>
-							x.NormalizeWhitespace().ToFullString() == fileSystemContext.FileSystemType.Name);
+							x.Declaration.Type.NormalizeWhitespace().ToFullString() == fileSystemContext.FileSystemType.Name);
 
 					if (fileSystem == null)
 					{

@@ -1,0 +1,15 @@
+using System.IO;
+using System.IO.Abstractions;
+
+namespace SomeNameSpace
+{
+	public class Valid
+	{
+		private readonly IFileSystem _fileSystem;
+
+		public Valid(IFileSystem fileSystem)
+		{
+			_fileSystem = fileSystem;
+		}
+	}
+}

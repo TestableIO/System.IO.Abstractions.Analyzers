@@ -43,8 +43,13 @@ namespace System.IO.Abstractions.Analyzers.RoslynToken
 
 		public static UsingDirectiveSyntax GetSystemIoUsing(CompilationUnitSyntax unit)
 		{
+			return GetUsing(unit, typeof(Path).Namespace);
+		}
+
+		public static UsingDirectiveSyntax GetUsing(CompilationUnitSyntax unit, string usingName)
+		{
 			return unit.Usings.FirstOrDefault(x =>
-				x.Name.NormalizeWhitespace().ToFullString().Equals(typeof(Path).Namespace));
+				x.Name.NormalizeWhitespace().ToFullString().Equals(usingName));
 		}
 
 		public static FieldDeclarationSyntax CreateFileSystemFieldDeclaration()

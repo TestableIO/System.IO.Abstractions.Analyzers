@@ -13,6 +13,7 @@ namespace System.IO.Abstractions.Analyzers.Tests.CodeFixes
 		[Theory]
 		[InlineData("BeforeFix.txt", "AfterFix.txt")]
 		[InlineData("BeforeFixWithoutConstructor.txt", "AfterFix.txt")]
+		[InlineData("BeforeFixExistsAbstractionsUsing.txt", "AfterFix.txt")]
 		public void CodeFix(string sourceBefore, string sourceAfter)
 		{
 			var sourceBeforeFix = ReadFile(sourceBefore);

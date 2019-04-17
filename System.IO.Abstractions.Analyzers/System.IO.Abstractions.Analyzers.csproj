@@ -16,18 +16,18 @@
 		<DebugType>full</DebugType>
 	</PropertyGroup>
 	<PropertyGroup>
-		<PackageId>System.IO.Abstractions.Analyzers</PackageId>
-		<PackageVersion>1.0.8</PackageVersion>
-		<Authors>inyut</Authors>
-		<PackageLicenseUrl>http://LICENSE_URL_HERE_OR_DELETE_THIS_LINE</PackageLicenseUrl>
-		<PackageProjectUrl>https://h21res.visualstudio.com/H21Core/_git/H21Core.Analyzer/</PackageProjectUrl>
-		<PackageIconUrl>http://ICON_URL_HERE_OR_DELETE_THIS_LINE</PackageIconUrl>
-		<RepositoryUrl>https://h21res.visualstudio.com/H21Core/_git/H21Core.Analyzer</RepositoryUrl>
+		<PackageId>Roslyn.System.IO.Abstractions.Analyzers</PackageId>
+		<PackageVersion>4.0.0</PackageVersion>
+		<Authors>inyutin_maxim</Authors>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<PackageProjectUrl>https://github.com/System-IO-Abstractions/System.IO.Abstractions.Analyzers/</PackageProjectUrl>
+		<PackageIconUrl>https://avatars1.githubusercontent.com/u/40829877</PackageIconUrl>
+		<RepositoryUrl>https://github.com/System-IO-Abstractions/System.IO.Abstractions.Analyzers.git</RepositoryUrl>
 		<PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
-		<Description>System.IO.Abstractions.Analyzers</Description>
-		<PackageReleaseNotes>Summary of changes made in this release of the package.</PackageReleaseNotes>
-		<Copyright>Copyright</Copyright>
-		<PackageTags>System.IO.Abstractions.Analyzers, analyzers</PackageTags>
+		<Description>Roslyn.System.IO.Abstractions.Analyzers</Description>
+		<PackageReleaseNotes>Analyzer for helping using package System.IO.Abstractions.</PackageReleaseNotes>
+		<Copyright>Copyright © System-IO-Abstractions</Copyright>
+		<PackageTags>Roslyn.System.IO.Abstractions.Analyzers, analyzers, System.IO.Abstractions, Roslyn</PackageTags>
 		<NoPackageAnalysis>true</NoPackageAnalysis>
 		<LangVersion>latest</LangVersion>
 	</PropertyGroup>
@@ -35,13 +35,13 @@
 	  <Optimize>false</Optimize>
 	</PropertyGroup>
 	<ItemGroup>
-		<PackageReference Include="JetBrains.Annotations" Version="2018.3.0" PrivateAssets="all" />
-		<PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="2.6.3" PrivateAssets="all" />
+		<PackageReference Include="JetBrains.Annotations" Version="2019.1.1" PrivateAssets="all" />
+		<PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="2.9.1" PrivateAssets="all" />
 		<PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="2.10.0" PrivateAssets="all" />
 		<PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="2.10.0" PrivateAssets="all" />
 		<PackageReference Update="NETStandard.Library" PrivateAssets="all" />
-		<PackageReference Include="Microsoft.CodeQuality.Analyzers" Version="2.6.3" PrivateAssets="all" />
-		<PackageReference Include="Roslyn.Diagnostics.Analyzers" Version="2.6.3" PrivateAssets="all" />
+		<PackageReference Include="Microsoft.CodeQuality.Analyzers" Version="2.9.1" PrivateAssets="all" />
+		<PackageReference Include="Roslyn.Diagnostics.Analyzers" Version="2.9.1" PrivateAssets="all" />
 	</ItemGroup>
 	<ItemGroup>
 		<None Update="tools\*.ps1" CopyToOutputDirectory="Always" Pack="true" PackagePath="" />

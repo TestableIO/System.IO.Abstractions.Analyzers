@@ -48,6 +48,6 @@ namespace System.IO.Abstractions.Analyzers.Analyzers
 
 		private bool IsStaticInvocationStartWith(InvocationExpressionSyntax invocation) => invocation.Expression.NormalizeWhitespace()
 			.ToFullString()
-			.StartsWith(GetFileSystemType().Name + ".");
+			.StartsWith(GetFileSystemType().Name + ".", StringComparison.InvariantCultureIgnoreCase);
 	}
 }

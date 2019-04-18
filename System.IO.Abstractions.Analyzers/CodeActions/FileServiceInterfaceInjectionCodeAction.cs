@@ -48,9 +48,27 @@ namespace System.IO.Abstractions.Analyzers.CodeActions
 
 			var compilationUnitSyntax = RoslynClassFileSystem.GetCompilationUnit(_class);
 
-			if (compilationUnitSyntax.Usings.Any())
+			if (!compilationUnitSyntax.Usings.Any())
 			{
-				editor.ReplaceNode(RoslynClassFileSystem.GetSystemIoUsing(compilationUnitSyntax),
+				return editor.GetChangedDocument();
+			}
+
+			var fileSystem = RoslynClassFileSystem.GetUsing(compilationUnitSyntax, Constants.FileSystemNameSpace);
+
+			if (fileSystem != default(UsingDirectiveSyntax))
+			{
+				return editor.GetChangedDocument();
+			}
+
+			var systemIo = RoslynClassFileSystem.GetSystemIoUsing(compilationUnitSyntax);
+
+			if (systemIo == default(UsingDirectiveSyntax))
+			{
+				editor.InsertBefore(compilationUnitSyntax.Usings.FirstOrDefault(),
+					RoslynClassFileSystem.GetFileSystemUsing());
+			} else
+			{
+				editor.InsertAfter(compilationUnitSyntax.Usings.FirstOrDefault(),
 					RoslynClassFileSystem.GetFileSystemUsing());
 			}
 

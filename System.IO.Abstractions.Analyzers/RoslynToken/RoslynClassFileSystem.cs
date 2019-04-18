@@ -63,7 +63,14 @@ namespace System.IO.Abstractions.Analyzers.RoslynToken
 		public static bool ConstructorHasFileSystemParameter(BaseMethodDeclarationSyntax constructor)
 		{
 			return constructor.ParameterList.Parameters
-				.Any(x => x.Identifier.Text == Constants.ParameterFileSystemName && x.Type == GetFileSystemType());
+				.Any(x => x.Type.NormalizeWhitespace().ToFullString() == GetFileSystemType().NormalizeWhitespace().ToFullString());
+		}
+
+		public static ParameterSyntax GetFileSystemParameterFromConstructor(BaseMethodDeclarationSyntax constructor)
+		{
+			return constructor.ParameterList.Parameters
+				.FirstOrDefault(x =>
+					x.Type.NormalizeWhitespace().ToFullString() == GetFileSystemType().NormalizeWhitespace().ToFullString());
 		}
 
 		public static ParameterSyntax CreateFileSystemParameterDeclaration()
@@ -99,8 +106,7 @@ namespace System.IO.Abstractions.Analyzers.RoslynToken
 
 			return constructor.Body.Statements.OfType<ExpressionStatementSyntax>()
 				.Any(x => x.IsKind(SyntaxKind.SimpleAssignmentExpression)
-						&& x.Expression.Contains(SF.IdentifierName(Constants.FieldFileSystemName))
-						&& x.Expression.Contains(SF.IdentifierName(Constants.ParameterFileSystemName)));
+						&& x.Expression.Contains(SF.IdentifierName(Constants.FieldFileSystemName)));
 		}
 	}
 }

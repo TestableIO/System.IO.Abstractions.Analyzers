@@ -74,11 +74,11 @@ namespace System.IO.Abstractions.Analyzers.CodeActions
 			return editor.GetChangedDocument();
 		}
 
-		private static ExpressionStatementSyntax CreateAssignmentExpression()
+		private static ExpressionStatementSyntax CreateAssignmentExpression(string parameter)
 		{
 			return SF.ExpressionStatement(SF.AssignmentExpression(SyntaxKind.SimpleAssignmentExpression,
 				SF.IdentifierName(Constants.FieldFileSystemName),
-				SF.IdentifierName(Constants.ParameterFileSystemName)));
+				SF.IdentifierName(parameter)));
 		}
 
 		private static void ConstructorAddParameter(ClassDeclarationSyntax classDeclaration, SyntaxEditor editor)
@@ -91,15 +91,22 @@ namespace System.IO.Abstractions.Analyzers.CodeActions
 			var newConstructor = constructor.WithAdditionalAnnotations(Formatter.Annotation, Simplifier.Annotation)
 				.NormalizeWhitespace();
 
-			if (!RoslynClassFileSystem.ConstructorHasAssignmentExpression(newConstructor))
-			{
-				newConstructor = newConstructor.AddBodyStatements(CreateAssignmentExpression());
-			}
-
 			if (!RoslynClassFileSystem.ConstructorHasFileSystemParameter(newConstructor))
 			{
 				var parameter = RoslynClassFileSystem.CreateFileSystemParameterDeclaration();
 				newConstructor = newConstructor.AddParameterListParameters(parameter);
+			}
+
+			if (!RoslynClassFileSystem.ConstructorHasAssignmentExpression(newConstructor))
+			{
+				var parameterSyntax = RoslynClassFileSystem.GetFileSystemParameterFromConstructor(newConstructor);
+
+				newConstructor =
+					newConstructor.AddBodyStatements(CreateAssignmentExpression(parameterSyntax.Identifier.Text));
+			} else
+			{
+				newConstructor =
+					newConstructor.AddBodyStatements(CreateAssignmentExpression(Constants.ParameterFileSystemName));
 			}
 
 			if (RoslynClassFileSystem.HasConstructor(classDeclaration))

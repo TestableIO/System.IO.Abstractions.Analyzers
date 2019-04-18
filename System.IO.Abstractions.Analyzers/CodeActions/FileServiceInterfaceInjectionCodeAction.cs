@@ -68,8 +68,7 @@ namespace System.IO.Abstractions.Analyzers.CodeActions
 					RoslynClassFileSystem.GetFileSystemUsing());
 			} else
 			{
-				editor.InsertAfter(compilationUnitSyntax.Usings.FirstOrDefault(),
-					RoslynClassFileSystem.GetFileSystemUsing());
+				editor.InsertAfter(systemIo, RoslynClassFileSystem.GetFileSystemUsing());
 			}
 
 			return editor.GetChangedDocument();

@@ -103,10 +103,6 @@ namespace System.IO.Abstractions.Analyzers.CodeActions
 
 				newConstructor =
 					newConstructor.AddBodyStatements(CreateAssignmentExpression(parameterSyntax.Identifier.Text));
-			} else
-			{
-				newConstructor =
-					newConstructor.AddBodyStatements(CreateAssignmentExpression(Constants.ParameterFileSystemName));
 			}
 
 			if (RoslynClassFileSystem.HasConstructor(classDeclaration))

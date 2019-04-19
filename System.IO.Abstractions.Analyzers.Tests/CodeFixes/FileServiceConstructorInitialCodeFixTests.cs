@@ -12,6 +12,7 @@ namespace System.IO.Abstractions.Analyzers.Tests.CodeFixes
 	{
 		[Theory]
 		[InlineData("BeforeFix.txt", "AfterFix.txt")]
+		[InlineData("BeforeFixWithCustomField.txt", "AfterFixWithCustomField.txt")]
 		public void CodeFix(string sourceBefore, string sourceAfter)
 		{
 			var sourceBeforeFix = ReadFile(sourceBefore);

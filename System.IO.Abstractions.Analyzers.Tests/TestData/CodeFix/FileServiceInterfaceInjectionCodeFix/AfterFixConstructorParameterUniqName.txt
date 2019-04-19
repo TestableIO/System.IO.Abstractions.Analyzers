@@ -5,11 +5,11 @@ namespace SomeNameSpace
 {
 	public class WithOutFileSystem
 	{
-		private readonly IFileSystem _fileSystem;
+		private readonly IFileSystem _fSystem;
 
 		public WithOutFileSystem(IFileSystem fSystem)
 		{
-			_fileSystem = fSystem;
+			_fSystem = fSystem;
 		}
 
 		public void SomeMethod()

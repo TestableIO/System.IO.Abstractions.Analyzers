@@ -1,4 +1,5 @@
 using System.Collections.Immutable;
+using System.IO.Abstractions.Analyzers.RoslynToken;
 using System.Linq;
 using JetBrains.Annotations;
 using Microsoft.CodeAnalysis;
@@ -64,11 +65,18 @@ namespace System.IO.Abstractions.Analyzers.Analyzers
 						return;
 					}
 
-					var fileSystem = classDeclarationSyntax.Members.OfType<FieldDeclarationSyntax>()
-						.FirstOrDefault(x =>
-							x.Declaration.Type.NormalizeWhitespace().ToFullString() == fileSystemContext.FileSystemType.Name);
+					if (RoslynClassFileSystem.HasFileSystemField(classDeclarationSyntax)
+						&& RoslynClassFileSystem.HasConstructor(classDeclarationSyntax))
+					{
+						var ctor = RoslynClassFileSystem.GetConstructor(classDeclarationSyntax);
+						var field = RoslynClassFileSystem.GetFileSystemFieldFromClass(classDeclarationSyntax);
 
-					if (fileSystem == null)
+						if (!RoslynClassFileSystem.ConstructorHasAssignmentExpression(ctor, field.Declaration.Variables.ToFullString()))
+						{
+							syntaxContext.ReportDiagnostic(Diagnostic.Create(Rule,
+								classDeclarationSyntax.Identifier.GetLocation()));
+						}
+					} else
 					{
 						syntaxContext.ReportDiagnostic(Diagnostic.Create(Rule,
 							classDeclarationSyntax.Identifier.GetLocation()));

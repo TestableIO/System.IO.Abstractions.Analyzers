@@ -66,11 +66,18 @@ namespace System.IO.Abstractions.Analyzers.RoslynToken
 				.Any(x => x.Type.NormalizeWhitespace().ToFullString() == GetFileSystemType().NormalizeWhitespace().ToFullString());
 		}
 
-		public static ParameterSyntax GetFileSystemParameterFromConstructor(BaseMethodDeclarationSyntax constructor)
+		public static ParameterSyntax GetFileSystemParameterFromConstructor(ConstructorDeclarationSyntax constructor)
 		{
 			return constructor.ParameterList.Parameters
 				.FirstOrDefault(x =>
 					x.Type.NormalizeWhitespace().ToFullString() == GetFileSystemType().NormalizeWhitespace().ToFullString());
+		}
+
+		public static FieldDeclarationSyntax GetFileSystemFieldFromClass(ClassDeclarationSyntax @class)
+		{
+			return @class.Members.OfType<FieldDeclarationSyntax>()
+				.FirstOrDefault(x =>
+					x.Declaration.Type.NormalizeWhitespace().ToFullString() == GetFileSystemType().ToFullString());
 		}
 
 		public static ParameterSyntax CreateFileSystemParameterDeclaration()
@@ -97,7 +104,8 @@ namespace System.IO.Abstractions.Analyzers.RoslynToken
 			}
 		}
 
-		public static bool ConstructorHasAssignmentExpression(BaseMethodDeclarationSyntax constructor)
+		public static bool ConstructorHasAssignmentExpression(BaseMethodDeclarationSyntax constructor,
+															string field = Constants.FieldFileSystemName)
 		{
 			if (constructor.Body == null)
 			{
@@ -105,8 +113,8 @@ namespace System.IO.Abstractions.Analyzers.RoslynToken
 			}
 
 			return constructor.Body.Statements.OfType<ExpressionStatementSyntax>()
-				.Any(x => x.IsKind(SyntaxKind.SimpleAssignmentExpression)
-						&& x.Expression.Contains(SF.IdentifierName(Constants.FieldFileSystemName)));
+				.Any(x => x.Expression.IsKind(SyntaxKind.SimpleAssignmentExpression)
+						&& x.Expression.ChildNodes().OfType<IdentifierNameSyntax>().Any(a => a.Identifier.Text == field));
 		}
 	}
 }

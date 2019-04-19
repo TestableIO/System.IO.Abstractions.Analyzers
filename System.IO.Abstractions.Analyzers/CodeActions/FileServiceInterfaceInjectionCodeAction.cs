@@ -74,10 +74,10 @@ namespace System.IO.Abstractions.Analyzers.CodeActions
 			return editor.GetChangedDocument();
 		}
 
-		private static ExpressionStatementSyntax CreateAssignmentExpression(string parameter)
+		private static ExpressionStatementSyntax CreateAssignmentExpression(string field, string parameter)
 		{
 			return SF.ExpressionStatement(SF.AssignmentExpression(SyntaxKind.SimpleAssignmentExpression,
-				SF.IdentifierName(Constants.FieldFileSystemName),
+				SF.IdentifierName(field),
 				SF.IdentifierName(parameter)));
 		}
 
@@ -101,8 +101,18 @@ namespace System.IO.Abstractions.Analyzers.CodeActions
 			{
 				var parameterSyntax = RoslynClassFileSystem.GetFileSystemParameterFromConstructor(newConstructor);
 
-				newConstructor =
-					newConstructor.AddBodyStatements(CreateAssignmentExpression(parameterSyntax.Identifier.Text));
+				if (RoslynClassFileSystem.HasFileSystemField(classDeclaration))
+				{
+					var fileSystem = RoslynClassFileSystem.GetFileSystemFieldFromClass(classDeclaration);
+
+					newConstructor = newConstructor.AddBodyStatements(CreateAssignmentExpression(fileSystem.Declaration.Variables.ToFullString(),
+						parameterSyntax.Identifier.Text));
+				} else
+				{
+					newConstructor =
+						newConstructor.AddBodyStatements(CreateAssignmentExpression(Constants.FieldFileSystemName,
+							parameterSyntax.Identifier.Text));
+				}
 			}
 
 			if (RoslynClassFileSystem.HasConstructor(classDeclaration))

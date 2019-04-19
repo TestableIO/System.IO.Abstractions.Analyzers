@@ -4,6 +4,8 @@ namespace SomeNameSpace
 {
 	public class WithOutFileSystem
 	{
+		private readonly IFileSystem _fSystem;
+
 		public WithOutFileSystem(IFileSystem fSystem)
 		{
 		}

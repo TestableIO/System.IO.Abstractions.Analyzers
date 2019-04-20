@@ -8,7 +8,7 @@
 	</PropertyGroup>
 	<PropertyGroup>
 		<PackageId>Roslyn.System.IO.Abstractions.Analyzers</PackageId>
-		<PackageVersion>4.0.7</PackageVersion>
+		<PackageVersion>4.0.1</PackageVersion>
 		<Authors>inyutin_maxim</Authors>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<PackageProjectUrl>https://github.com/System-IO-Abstractions/System.IO.Abstractions.Analyzers/</PackageProjectUrl>

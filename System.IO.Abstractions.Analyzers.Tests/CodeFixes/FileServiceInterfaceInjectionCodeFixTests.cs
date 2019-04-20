@@ -16,6 +16,7 @@ namespace System.IO.Abstractions.Analyzers.Tests.CodeFixes
 		[InlineData("BeforeFixExistsAbstractionsUsing.txt", "AfterFix.txt")]
 		[InlineData("BeforeFixExistingConstructorParameter.txt", "AfterFix.txt")]
 		[InlineData("BeforeFixExistingConstructorParameterUniqName.txt", "AfterFixConstructorParameterUniqName.txt")]
+		[InlineData("BeforeFixContainsAssignment.txt", "AfterFixContainsAssignment.txt")]
 		public void CodeFix(string sourceBefore, string sourceAfter)
 		{
 			var sourceBeforeFix = ReadFile(sourceBefore);

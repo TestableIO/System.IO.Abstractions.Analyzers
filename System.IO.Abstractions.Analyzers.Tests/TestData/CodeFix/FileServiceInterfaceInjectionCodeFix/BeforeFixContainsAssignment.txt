@@ -1,0 +1,22 @@
+using System.IO;
+
+namespace SomeNameSpace
+{
+	public class WithOutFileSystem
+	{
+		public WithOutFileSystem(IFileSystem fileSystem)
+		{
+			_fileSystem = fileSystem;
+		}
+
+		public void SomeMethod()
+		{
+			const string filePath = "C:\\temp.txt";
+
+			if (File.Exists(filePath))
+			{
+				File.Delete(filePath);
+			}
+		}
+	}
+}

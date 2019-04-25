@@ -17,7 +17,7 @@ namespace System.IO.Abstractions.Analyzers.CodeFixes
 		private const string Title = "Use IFileInfoFactory instead creation FileInfo for improved testability";
 
 		public override ImmutableArray<string> FixableDiagnosticIds =>
-			ImmutableArray.Create(Constants.Io0007);
+			ImmutableArray.Create(Constants.Io0004);
 
 		public sealed override FixAllProvider GetFixAllProvider() => WellKnownFixAllProviders.BatchFixer;
 

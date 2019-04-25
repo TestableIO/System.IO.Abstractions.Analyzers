@@ -4,11 +4,11 @@ namespace SomeNameSpace
 {
 	public class WithOutFileSystem
 	{
-		private readonly IFileSystem _fileSystem;
+		private readonly IFileSystem _fSystem;
 
 		public WithOutFileSystem(IFileSystem fileSystem)
 		{
-			_fileSystem = fileSystem;
+			_fSystem = fileSystem;
 		}
 
 		public void SomeMethod()

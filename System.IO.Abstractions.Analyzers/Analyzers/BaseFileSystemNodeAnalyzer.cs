@@ -46,8 +46,10 @@ namespace System.IO.Abstractions.Analyzers.Analyzers
 
 		private bool IsTypesEquals(TypeSyntax type) => type.NormalizeWhitespace().ToFullString() == GetFileSystemType().Name;
 
-		private bool IsStaticInvocationStartWith(InvocationExpressionSyntax invocation) => invocation.Expression.NormalizeWhitespace()
-			.ToFullString()
-			.StartsWith(GetFileSystemType().Name + ".", StringComparison.CurrentCultureIgnoreCase);
+		private bool IsStaticInvocationStartWith(InvocationExpressionSyntax invocation) =>
+			invocation.IsKind(SyntaxKind.InvocationExpression)
+			&& invocation.Expression.NormalizeWhitespace()
+				.ToFullString()
+				.StartsWith(GetFileSystemType().Name + ".", StringComparison.CurrentCultureIgnoreCase);
 	}
 }

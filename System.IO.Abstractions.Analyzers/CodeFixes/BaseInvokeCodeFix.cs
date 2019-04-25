@@ -22,14 +22,16 @@ namespace System.IO.Abstractions.Analyzers.CodeFixes
 		{
 			var root = await context.Document.GetSyntaxRootAsync(context.CancellationToken).ConfigureAwait(false);
 
-			if (root.FindNode(context.Span).Ancestors().OfType<ClassDeclarationSyntax>().Any(RoslynClassFileSystem.HasFileSystemField))
+			var classDeclaration = root.FindNode(context.Span).FirstAncestorOrSelf<ClassDeclarationSyntax>();
+
+			if (RoslynClassFileSystem.HasFileSystemField(classDeclaration))
 			{
-				var invocation = root.FindNode(context.Span).FirstAncestorOrSelf<InvocationExpressionSyntax>();
+				var invocation = root.FindNode(context.Span)
+					.DescendantNodesAndSelf()
+					.OfType<InvocationExpressionSyntax>()
+					.FirstOrDefault();
 
-				var @class = root.FindNode(context.Span)
-					.FirstAncestorOrSelf<ClassDeclarationSyntax>();
-
-				var field = RoslynClassFileSystem.GetFileSystemFieldFromClass(@class);
+				var field = RoslynClassFileSystem.GetFileSystemFieldFromClass(classDeclaration);
 
 				context.RegisterCodeFix(new FileSystemInvokeCodeAction(Title,
 						context.Document,

@@ -15,7 +15,7 @@ namespace SomeNameSpace
 		{
 			const string filePath = "C:\\temp";
 
-			Directory.Exists(filePath);
+			new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory());
 		}
 	}
 }

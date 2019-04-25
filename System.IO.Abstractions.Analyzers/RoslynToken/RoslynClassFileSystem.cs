@@ -2,8 +2,6 @@ using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Microsoft.CodeAnalysis.Formatting;
-using Microsoft.CodeAnalysis.Simplification;
 using SF = Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
 
 namespace System.IO.Abstractions.Analyzers.RoslynToken
@@ -84,7 +82,6 @@ namespace System.IO.Abstractions.Analyzers.RoslynToken
 		{
 			return SF.Parameter(SF.Identifier(Constants.ParameterFileSystemName))
 				.WithType(GetFileSystemType())
-				.WithAdditionalAnnotations(Formatter.Annotation, Simplifier.SpecialTypeAnnotation)
 				.NormalizeWhitespace();
 		}
 

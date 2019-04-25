@@ -8,6 +8,8 @@
 	</PropertyGroup>
 	<PropertyGroup>
 		<PackageId>Roslyn.System.IO.Abstractions.Analyzers</PackageId>
+		<Title>$(PackageId)</Title>
+		<DevelopmentDependency>True</DevelopmentDependency>
 		<PackageVersion>4.0.1</PackageVersion>
 		<Authors>inyutin_maxim</Authors>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>

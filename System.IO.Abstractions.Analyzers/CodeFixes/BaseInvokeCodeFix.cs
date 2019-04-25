@@ -3,6 +3,7 @@ using System.IO.Abstractions.Analyzers.CodeActions;
 using System.IO.Abstractions.Analyzers.RoslynToken;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
@@ -26,9 +27,15 @@ namespace System.IO.Abstractions.Analyzers.CodeFixes
 			{
 				var invocation = root.FindNode(context.Span).FirstAncestorOrSelf<InvocationExpressionSyntax>();
 
+				var @class = root.FindNode(context.Span)
+					.FirstAncestorOrSelf<ClassDeclarationSyntax>();
+
+				var field = RoslynClassFileSystem.GetFileSystemFieldFromClass(@class);
+
 				context.RegisterCodeFix(new FileSystemInvokeCodeAction(Title,
 						context.Document,
-						invocation),
+						invocation,
+						field),
 					context.Diagnostics);
 			}
 		}

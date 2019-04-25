@@ -14,15 +14,19 @@ namespace System.IO.Abstractions.Analyzers.CodeActions
 
 		private readonly InvocationExpressionSyntax _invocation;
 
+		private readonly FieldDeclarationSyntax _field;
+
 		public override string Title { get; }
 
 		public override string EquivalenceKey => Title;
 
-		public FileSystemInvokeCodeAction(string title, Document document, InvocationExpressionSyntax invocation)
+		public FileSystemInvokeCodeAction(string title, Document document, InvocationExpressionSyntax invocation,
+										FieldDeclarationSyntax field)
 		{
 			Title = title;
 			_document = document;
 			_invocation = invocation;
+			_field = field;
 		}
 
 		protected override async Task<Document> GetChangedDocumentAsync(CancellationToken cancellationToken)
@@ -30,7 +34,8 @@ namespace System.IO.Abstractions.Analyzers.CodeActions
 			var editor = await DocumentEditor.CreateAsync(_document, cancellationToken).ConfigureAwait(false);
 
 			editor.ReplaceNode(_invocation,
-				SF.ParseExpression($"{Constants.FieldFileSystemName}.{_invocation.NormalizeWhitespace().ToFullString()}"));
+				SF.ParseExpression(
+					$"{_field.Declaration.Variables.FirstOrDefault().Identifier.Text}.{_invocation.NormalizeWhitespace().ToFullString()}"));
 
 			return editor.GetChangedDocument();
 		}

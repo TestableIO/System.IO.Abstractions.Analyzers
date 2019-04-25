@@ -4,18 +4,18 @@ namespace SomeNameSpace
 {
 	public class WithOutFileSystem
 	{
-		private readonly IFileSystem _fileSystem;
+		private readonly IFileSystem _fSystem;
 
 		public WithOutFileSystem(IFileSystem fileSystem)
 		{
-			_fileSystem = fileSystem;
+			_fSystem = fileSystem;
 		}
 
 		public void SomeMethod()
 		{
 			const string filePath = "C:\\temp.txt";
 
-			_fileSystem.File.Delete(filePath);
+			_fSystem.File.Delete(filePath);
 		}
 	}
 }

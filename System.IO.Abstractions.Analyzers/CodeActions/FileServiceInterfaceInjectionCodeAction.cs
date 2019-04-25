@@ -71,7 +71,7 @@ namespace System.IO.Abstractions.Analyzers.CodeActions
 				editor.InsertAfter(systemIo, RoslynClassFileSystem.GetFileSystemUsing());
 			}
 
-			return editor.GetChangedDocument();
+			return await Formatter.FormatAsync(editor.GetChangedDocument(), cancellationToken: cancellationToken).ConfigureAwait(false);
 		}
 
 		private static ExpressionStatementSyntax CreateAssignmentExpression(string field, string parameter)
@@ -105,7 +105,8 @@ namespace System.IO.Abstractions.Analyzers.CodeActions
 				{
 					var fileSystem = RoslynClassFileSystem.GetFileSystemFieldFromClass(classDeclaration);
 
-					newConstructor = newConstructor.AddBodyStatements(CreateAssignmentExpression(fileSystem.Declaration.Variables.ToFullString(),
+					newConstructor = newConstructor.AddBodyStatements(CreateAssignmentExpression(
+						fileSystem.Declaration.Variables.ToFullString(),
 						parameterSyntax.Identifier.Text));
 				} else
 				{

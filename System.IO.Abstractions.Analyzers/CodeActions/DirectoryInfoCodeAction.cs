@@ -5,6 +5,7 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeActions;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Editing;
+using Microsoft.CodeAnalysis.Formatting;
 using SF = Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
 
 namespace System.IO.Abstractions.Analyzers.CodeActions
@@ -22,7 +23,7 @@ namespace System.IO.Abstractions.Analyzers.CodeActions
 		public override string EquivalenceKey => Title;
 
 		public DirectoryInfoCodeAction(string title, Document document, ObjectCreationExpressionSyntax creationExpressionSyntax,
-									FieldDeclarationSyntax field)
+										FieldDeclarationSyntax field)
 		{
 			Title = title;
 			_document = document;
@@ -36,9 +37,10 @@ namespace System.IO.Abstractions.Analyzers.CodeActions
 			var arguments = _creationExpressionSyntax.ArgumentList.Arguments.Select(x => x.ToFullString());
 
 			editor.ReplaceNode(_creationExpressionSyntax,
-				SF.ParseExpression($"{_field.Declaration.Variables.ToFullString()}.DirectoryInfo.FromDirectoryName({string.Join(",", arguments)})"));
+				SF.ParseExpression(
+					$"{_field.Declaration.Variables.ToFullString()}.DirectoryInfo.FromDirectoryName({string.Join(",", arguments)})"));
 
-			return editor.GetChangedDocument();
+			return await Formatter.FormatAsync(editor.GetChangedDocument(), cancellationToken: cancellationToken).ConfigureAwait(false);
 		}
 	}
 }

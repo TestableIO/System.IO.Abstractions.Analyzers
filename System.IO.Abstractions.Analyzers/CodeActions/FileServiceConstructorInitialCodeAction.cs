@@ -71,7 +71,7 @@ namespace System.IO.Abstractions.Analyzers.CodeActions
 				editor.InsertAfter(systemIo, RoslynClassFileSystem.GetFileSystemUsing());
 			}
 
-			return editor.GetChangedDocument();
+			return await Formatter.FormatAsync(editor.GetChangedDocument(), cancellationToken: cancellationToken).ConfigureAwait(false);
 		}
 
 		private static ExpressionStatementSyntax CreateAssignmentExpression(string field = Constants.FieldFileSystemName)

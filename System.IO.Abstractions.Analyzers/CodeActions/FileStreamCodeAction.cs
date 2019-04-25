@@ -5,6 +5,7 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeActions;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Editing;
+using Microsoft.CodeAnalysis.Formatting;
 using SF = Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
 
 namespace System.IO.Abstractions.Analyzers.CodeActions
@@ -38,7 +39,7 @@ namespace System.IO.Abstractions.Analyzers.CodeActions
 			editor.ReplaceNode(_creationExpressionSyntax,
 				SF.ParseExpression($"{_field.Declaration.Variables.ToFullString()}.FileStream.Create({string.Join(",", arguments)})"));
 
-			return editor.GetChangedDocument();
+			return await Formatter.FormatAsync(editor.GetChangedDocument(), cancellationToken: cancellationToken).ConfigureAwait(false);
 		}
 	}
 }

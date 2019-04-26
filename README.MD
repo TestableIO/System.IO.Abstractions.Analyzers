@@ -17,4 +17,4 @@
 - <a href="https://money.alfabank.ru/p2p/web/transfer/minyutin" target="_blank">![Donate_To_Card](https://img.shields.io/badge/Donate_To_Card-donate-red.svg)</a>
 - <a href="https://www.paypal.me/InyutinMaxim" target="_blank">![PayPal](https://img.shields.io/badge/PayPal-donate-red.svg)</a>
 - Send your `Pull Request`
-- Add new [issue](https://github.com/System-IO-Abstractions/System.IO.Abstractions.Analyzers/issues/new)
+- Add new <a href="https://github.com/System-IO-Abstractions/System.IO.Abstractions.Analyzers/issues/new" target="_blank">issue</a>

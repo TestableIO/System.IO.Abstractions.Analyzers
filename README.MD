@@ -7,6 +7,14 @@
 ``` bash
 > dotnet add package Roslyn.System.IO.Abstractions.Analyzers
 ```
-#Contacts
 
-[![Telegram Chat](https://img.shields.io/badge/Chat-Telegram-0F80C1.svg)](https://t.me/System_IO_Abstractions_Analyzer)
+# Contacts
+
+- [![Telegram Chat](https://img.shields.io/badge/Chat-Telegram-0F80C1.svg)](https://t.me/System_IO_Abstractions_Analyzer)
+
+
+# Sponsors
+- [![Donate_To_Card](https://img.shields.io/badge/Donate_To_Card-donate-red.svg)](https://money.alfabank.ru/p2p/web/transfer/minyutin)
+- [![PayPal](https://img.shields.io/badge/PayPal-donate-red.svg)](https://www.paypal.me/InyutinMaxim)
+- Send your `Pull Request`
+- Add new [issue](https://github.com/System-IO-Abstractions/System.IO.Abstractions.Analyzers/issues/new)

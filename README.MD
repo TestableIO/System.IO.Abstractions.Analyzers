@@ -7,3 +7,6 @@
 ``` bash
 > dotnet add package Roslyn.System.IO.Abstractions.Analyzers
 ```
+#Contacts
+
+[![Telegram Chat](https://img.shields.io/badge/Chat-Telegram-0F80C1.svg)](https://t.me/System_IO_Abstractions_Analyzer)

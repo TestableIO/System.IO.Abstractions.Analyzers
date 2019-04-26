@@ -29,11 +29,14 @@ namespace System.IO.Abstractions.Analyzers.Analyzers
 		/// <summary>
 		/// Analysis
 		/// </summary>
-		/// <param name="compilationStartContext">Compilation Start Analysis Context</param>
-		/// <param name="fileSystemContext">FileSystem Context</param>
+		/// <param name="compilationStartContext"> Compilation Start Analysis Context </param>
+		/// <param name="fileSystemContext"> FileSystem Context </param>
 		protected abstract void AnalyzeCompilation(CompilationStartAnalysisContext compilationStartContext,
 													FileSystemContext fileSystemContext);
 
-		private static bool ShouldAnalyze(FileSystemContext fileSystemContext) => fileSystemContext.HasReference;
+		private static bool ShouldAnalyze(FileSystemContext fileSystemContext)
+		{
+			return fileSystemContext.HasReference;
+		}
 	}
 }

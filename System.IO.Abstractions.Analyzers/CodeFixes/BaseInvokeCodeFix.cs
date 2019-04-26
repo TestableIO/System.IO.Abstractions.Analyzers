@@ -16,7 +16,10 @@ namespace System.IO.Abstractions.Analyzers.CodeFixes
 
 		public override ImmutableArray<string> FixableDiagnosticIds => ImmutableArray.Create(DiagnosticId);
 
-		public sealed override FixAllProvider GetFixAllProvider() => WellKnownFixAllProviders.BatchFixer;
+		public sealed override FixAllProvider GetFixAllProvider()
+		{
+			return WellKnownFixAllProviders.BatchFixer;
+		}
 
 		public sealed override async Task RegisterCodeFixesAsync(CodeFixContext context)
 		{

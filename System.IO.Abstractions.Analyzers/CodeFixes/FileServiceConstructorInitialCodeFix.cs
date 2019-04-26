@@ -23,7 +23,10 @@ namespace System.IO.Abstractions.Analyzers.CodeFixes
 				Constants.Io0006,
 				Constants.Io0007);
 
-		public sealed override FixAllProvider GetFixAllProvider() => WellKnownFixAllProviders.BatchFixer;
+		public sealed override FixAllProvider GetFixAllProvider()
+		{
+			return WellKnownFixAllProviders.BatchFixer;
+		}
 
 		public sealed override async Task RegisterCodeFixesAsync(CodeFixContext context)
 		{

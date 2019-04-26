@@ -13,13 +13,9 @@ namespace System.IO.Abstractions.Analyzers.CodeActions
 	{
 		private readonly Document _document;
 
-		private readonly InvocationExpressionSyntax _invocation;
-
 		private readonly FieldDeclarationSyntax _field;
 
-		public override string Title { get; }
-
-		public override string EquivalenceKey => Title;
+		private readonly InvocationExpressionSyntax _invocation;
 
 		public FileSystemInvokeCodeAction(string title, Document document, InvocationExpressionSyntax invocation,
 										FieldDeclarationSyntax field)
@@ -29,6 +25,10 @@ namespace System.IO.Abstractions.Analyzers.CodeActions
 			_invocation = invocation;
 			_field = field;
 		}
+
+		public override string Title { get; }
+
+		public override string EquivalenceKey => Title;
 
 		protected override async Task<Document> GetChangedDocumentAsync(CancellationToken cancellationToken)
 		{

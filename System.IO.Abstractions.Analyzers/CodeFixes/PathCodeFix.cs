@@ -6,7 +6,7 @@ namespace System.IO.Abstractions.Analyzers.CodeFixes
 {
 	[Shared]
 	[ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(PathCodeFix))]
-	public class PathCodeFix: BaseInvokeCodeFix
+	public class PathCodeFix : BaseInvokeCodeFix
 	{
 		protected override string DiagnosticId => Constants.Io0006;
 

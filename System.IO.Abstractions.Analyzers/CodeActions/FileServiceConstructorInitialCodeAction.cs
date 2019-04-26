@@ -8,7 +8,6 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Editing;
 using Microsoft.CodeAnalysis.Formatting;
 using Microsoft.CodeAnalysis.Simplification;
-using SyntaxNode = Microsoft.CodeAnalysis.SyntaxNode;
 using SF = Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
 
 namespace System.IO.Abstractions.Analyzers.CodeActions
@@ -76,10 +75,10 @@ namespace System.IO.Abstractions.Analyzers.CodeActions
 
 		private static ExpressionStatementSyntax CreateAssignmentExpression(string field = Constants.FieldFileSystemName)
 		{
-			return SyntaxFactory.ExpressionStatement(SyntaxFactory.AssignmentExpression(SyntaxKind.SimpleAssignmentExpression,
-				SyntaxFactory.IdentifierName(field),
-				SyntaxFactory.ObjectCreationExpression(SyntaxFactory.IdentifierName(Constants.FileSystemClassName))
-					.WithArgumentList(SyntaxFactory.ArgumentList())));
+			return SF.ExpressionStatement(SF.AssignmentExpression(SyntaxKind.SimpleAssignmentExpression,
+				SF.IdentifierName(field),
+				SF.ObjectCreationExpression(SF.IdentifierName(Constants.FileSystemClassName))
+					.WithArgumentList(SF.ArgumentList())));
 		}
 
 		private static void ConstructorAddParameter(ClassDeclarationSyntax classDeclaration, SyntaxEditor editor)
@@ -87,24 +86,23 @@ namespace System.IO.Abstractions.Analyzers.CodeActions
 			var constructor = RoslynClassFileSystem.HasConstructor(classDeclaration)
 				? RoslynClassFileSystem.GetConstructor(classDeclaration)
 				: SF.ConstructorDeclaration(classDeclaration.Identifier)
-					.WithModifiers(SyntaxTokenList.Create(SyntaxFactory.Token(SyntaxKind.PublicKeyword)));
+					.WithModifiers(SyntaxTokenList.Create(SF.Token(SyntaxKind.PublicKeyword)));
 
 			var newConstructor = constructor.WithAdditionalAnnotations(Formatter.Annotation, Simplifier.Annotation)
 				.NormalizeWhitespace();
 
 			if (!RoslynClassFileSystem.ConstructorHasAssignmentExpression(newConstructor))
 			{
+				var statementSyntax = CreateAssignmentExpression();
+
 				if (RoslynClassFileSystem.HasFileSystemField(classDeclaration))
 				{
 					var fileSystem = RoslynClassFileSystem.GetFileSystemFieldFromClass(classDeclaration);
-
-					newConstructor =
-						newConstructor.AddBodyStatements(CreateAssignmentExpression(fileSystem.Declaration.Variables.ToFullString()));
-				} else
-				{
-					newConstructor =
-						newConstructor.AddBodyStatements(CreateAssignmentExpression());
+					statementSyntax = CreateAssignmentExpression(fileSystem.Declaration.Variables.ToFullString());
 				}
+
+				newConstructor =
+					newConstructor.AddBodyStatements(statementSyntax);
 			}
 
 			if (RoslynClassFileSystem.HasConstructor(classDeclaration))

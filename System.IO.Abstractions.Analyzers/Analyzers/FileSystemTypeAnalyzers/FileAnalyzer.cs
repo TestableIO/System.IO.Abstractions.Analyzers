@@ -6,8 +6,8 @@ using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace System.IO.Abstractions.Analyzers.Analyzers.FileSystemTypeAnalyzers
 {
-    [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public class FileAnalyzer : BaseFileSystemNodeAnalyzer
+	[DiagnosticAnalyzer(LanguageNames.CSharp)]
+	public class FileAnalyzer : BaseFileSystemNodeAnalyzer
 	{
 		/// <summary>
 		/// Diagnostic Identifier

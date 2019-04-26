@@ -12,15 +12,11 @@ namespace System.IO.Abstractions.Analyzers.CodeActions
 {
 	public class DirectoryInfoCodeAction : CodeAction
 	{
-		private readonly Document _document;
-
 		private readonly ObjectCreationExpressionSyntax _creationExpressionSyntax;
 
+		private readonly Document _document;
+
 		private readonly FieldDeclarationSyntax _field;
-
-		public override string Title { get; }
-
-		public override string EquivalenceKey => Title;
 
 		public DirectoryInfoCodeAction(string title, Document document, ObjectCreationExpressionSyntax creationExpressionSyntax,
 										FieldDeclarationSyntax field)
@@ -30,6 +26,10 @@ namespace System.IO.Abstractions.Analyzers.CodeActions
 			_creationExpressionSyntax = creationExpressionSyntax;
 			_field = field;
 		}
+
+		public override string Title { get; }
+
+		public override string EquivalenceKey => Title;
 
 		protected override async Task<Document> GetChangedDocumentAsync(CancellationToken cancellationToken)
 		{

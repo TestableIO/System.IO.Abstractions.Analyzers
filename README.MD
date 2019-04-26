@@ -1,9 +1,10 @@
 # Usage
-1. Add to project nuget package `System.IO.Abstractions`
+
+1. Add to project nuget package `System.IO.Abstractions` [![](https://img.shields.io/nuget/v/System.IO.Abstractions.svg)](https://www.nuget.org/packages/System.IO.Abstractions)
 ``` bash
 > dotnet add package System.IO.Abstractions
 ```
-2. Add to project nuget package `Roslyn.System.IO.Abstractions.Analyzers`
+2. Add to project nuget package `Roslyn.System.IO.Abstractions.Analyzers` [![](https://img.shields.io/nuget/v/Roslyn.System.IO.Abstractions.Analyzers.svg)](https://www.nuget.org/packages/Roslyn.System.IO.Abstractions.Analyzers)
 ``` bash
 > dotnet add package Roslyn.System.IO.Abstractions.Analyzers
 ```

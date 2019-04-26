@@ -1,6 +1,7 @@
 using System.Collections.Immutable;
 using System.Composition;
 using System.IO.Abstractions.Analyzers.CodeActions;
+using System.IO.Abstractions.Analyzers.RoslynToken;
 using System.Threading.Tasks;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
@@ -15,7 +16,12 @@ namespace System.IO.Abstractions.Analyzers.CodeFixes
 		private const string Title = "Create FileSystem in constructor and using System.IO.Abstractions";
 
 		public sealed override ImmutableArray<string> FixableDiagnosticIds =>
-			ImmutableArray.Create(Constants.Io0001);
+			ImmutableArray.Create(Constants.Io0002,
+				Constants.Io0003,
+				Constants.Io0004,
+				Constants.Io0005,
+				Constants.Io0006,
+				Constants.Io0007);
 
 		public sealed override FixAllProvider GetFixAllProvider() => WellKnownFixAllProviders.BatchFixer;
 
@@ -23,11 +29,16 @@ namespace System.IO.Abstractions.Analyzers.CodeFixes
 		{
 			var root = await context.Document.GetSyntaxRootAsync(context.CancellationToken).ConfigureAwait(false);
 			var classDeclarationSyntax = root.FindNode(context.Span).FirstAncestorOrSelf<ClassDeclarationSyntax>();
+			var constructor = RoslynClassFileSystem.GetConstructor(classDeclarationSyntax);
 
-			context.RegisterCodeFix(new FileServiceConstructorInitialCodeAction(Title,
-					context.Document,
-					classDeclarationSyntax),
-				context.Diagnostics);
+			if (!RoslynClassFileSystem.HasFileSystemField(classDeclarationSyntax)
+				|| constructor != null && !RoslynClassFileSystem.ConstructorHasFileSystemParameter(constructor))
+			{
+				context.RegisterCodeFix(new FileServiceConstructorInitialCodeAction(Title,
+						context.Document,
+						classDeclarationSyntax),
+					context.Diagnostics);
+			}
 		}
 	}
 }

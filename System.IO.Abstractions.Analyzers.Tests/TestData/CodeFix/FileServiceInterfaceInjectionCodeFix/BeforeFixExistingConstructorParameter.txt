@@ -10,12 +10,7 @@ namespace SomeNameSpace
 
 		public void SomeMethod()
 		{
-			const string filePath = "C:\\temp.txt";
-
-			if (File.Exists(filePath))
-			{
-				File.Delete(filePath);
-			}
+			var newPath = Path.Combine("C:\\", "temp.txt");
 		}
 	}
 }

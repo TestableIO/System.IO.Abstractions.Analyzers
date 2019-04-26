@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using System.IO.Abstractions.Analyzers.Analyzers;
+using System.IO.Abstractions.Analyzers.Analyzers.FileSystemTypeAnalyzers;
 using System.IO.Abstractions.Analyzers.CodeFixes;
 using Microsoft.CodeAnalysis;
 using Roslyn.Testing.CodeFix;
@@ -8,7 +8,7 @@ using Xunit;
 namespace System.IO.Abstractions.Analyzers.Tests.CodeFixes
 {
 	public class FileServiceInterfaceInjectionCodeFixTests :
-		CSharpCodeFixProviderTest<FileServiceInterfaceInjectionAnalyzer, FileServiceInterfaceInjectionCodeFix>
+		CSharpCodeFixProviderTest<PathAnalyzer, FileServiceInterfaceInjectionCodeFix>
 	{
 		[Theory]
 		[InlineData("BeforeFix.txt", "AfterFix.txt")]

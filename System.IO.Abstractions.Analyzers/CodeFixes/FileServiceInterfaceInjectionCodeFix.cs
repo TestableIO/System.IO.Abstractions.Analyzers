@@ -35,7 +35,8 @@ namespace System.IO.Abstractions.Analyzers.CodeFixes
 			var constructor = RoslynClassFileSystem.GetConstructor(classDeclarationSyntax);
 
 			if (!RoslynClassFileSystem.HasFileSystemField(classDeclarationSyntax)
-				|| constructor != null && !RoslynClassFileSystem.ConstructorHasFileSystemParameter(constructor))
+				|| constructor != null && !RoslynClassFileSystem.ConstructorHasFileSystemParameter(constructor)
+				|| constructor != null && !RoslynClassFileSystem.ConstructorHasAssignmentExpression(constructor))
 			{
 				context.RegisterCodeFix(new FileServiceInterfaceInjectionCodeAction(Title,
 						context.Document,

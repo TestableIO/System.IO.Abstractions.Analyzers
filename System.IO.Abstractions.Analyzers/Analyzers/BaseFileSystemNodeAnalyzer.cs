@@ -57,7 +57,7 @@ namespace System.IO.Abstractions.Analyzers.Analyzers
 			return invocation.IsKind(SyntaxKind.InvocationExpression)
 					&& invocation.Expression.NormalizeWhitespace()
 						.ToFullString()
-						.StartsWith(GetFileSystemType().Name + ".", StringComparison.CurrentCultureIgnoreCase);
+						.StartsWith(GetFileSystemType().Name + ".", StringComparison.Ordinal);
 		}
 	}
 }

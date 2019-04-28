@@ -47,7 +47,7 @@ namespace System.IO.Abstractions.Analyzers.RoslynToken
 		public static UsingDirectiveSyntax GetUsing(CompilationUnitSyntax unit, string usingName)
 		{
 			return unit.Usings.FirstOrDefault(x =>
-				x.Name.NormalizeWhitespace().ToFullString().Equals(usingName, StringComparison.CurrentCultureIgnoreCase));
+				x.Name.NormalizeWhitespace().ToFullString().Equals(usingName, StringComparison.Ordinal));
 		}
 
 		public static FieldDeclarationSyntax CreateFileSystemFieldDeclaration()

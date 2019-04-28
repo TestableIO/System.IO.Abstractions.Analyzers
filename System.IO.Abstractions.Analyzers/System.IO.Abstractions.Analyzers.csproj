@@ -18,7 +18,7 @@
 		<RepositoryUrl>https://github.com/System-IO-Abstractions/System.IO.Abstractions.Analyzers.git</RepositoryUrl>
 		<PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
 		<Description>Roslyn.System.IO.Abstractions.Analyzers</Description>
-		<PackageReleaseNotes>Analyzer for helping using package System.IO.Abstractions.</PackageReleaseNotes>
+		<PackageReleaseNotes>http://bit.ly/2PyZ8lr</PackageReleaseNotes>
 		<Copyright>Copyright © System-IO-Abstractions</Copyright>
 		<PackageTags>Roslyn.System.IO.Abstractions.Analyzers, analyzers, System.IO.Abstractions, Roslyn</PackageTags>
 		<NoPackageAnalysis>true</NoPackageAnalysis>

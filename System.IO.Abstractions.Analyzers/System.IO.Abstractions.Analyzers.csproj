@@ -10,7 +10,7 @@
 		<PackageId>Roslyn.System.IO.Abstractions.Analyzers</PackageId>
 		<Title>$(PackageId)</Title>
 		<DevelopmentDependency>True</DevelopmentDependency>
-		<PackageVersion>4.0.2</PackageVersion>
+		<PackageVersion>4.0.3</PackageVersion>
 		<Authors>inyutin_maxim</Authors>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<PackageProjectUrl>https://github.com/System-IO-Abstractions/System.IO.Abstractions.Analyzers/</PackageProjectUrl>

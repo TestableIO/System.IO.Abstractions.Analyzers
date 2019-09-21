@@ -12,6 +12,7 @@ namespace System.IO.Abstractions.Analyzers.Tests.Analyzers
 		[Theory]
 		[InlineData("Valid.txt")]
 		[InlineData("FalsePositive.txt")]
+		[InlineData("FalsePositive2.txt")]
 		public void Analyzer_is_not_triggered(string filename)
 		{
 			var source = ReadFile(filename);

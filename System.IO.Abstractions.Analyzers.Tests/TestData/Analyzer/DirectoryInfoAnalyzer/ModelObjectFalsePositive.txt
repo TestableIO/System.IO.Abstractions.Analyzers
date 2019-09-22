@@ -1,0 +1,18 @@
+namespace Foobar
+{
+	internal class DirectoryInfo
+	{
+		public string Name { get; set; }
+
+		public string Path { get; set; }
+	}
+
+    internal class Progam
+    {
+        public int Main(string[] args)
+		{
+			var directory = new DirectoryInfo() { Path = "c:\Somewhere", Name = "Somewhere" };
+			retun 0;
+		}
+    }
+}

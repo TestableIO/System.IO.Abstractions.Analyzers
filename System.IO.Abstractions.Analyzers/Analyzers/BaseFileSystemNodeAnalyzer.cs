@@ -29,8 +29,9 @@ namespace System.IO.Abstractions.Analyzers.Analyzers
 			compilationStartContext.RegisterSyntaxNodeAction(syntaxContext =>
 				{
 					var creationExpressionSyntax = (ObjectCreationExpressionSyntax) syntaxContext.Node;
+					var typeInfo = syntaxContext.SemanticModel.GetTypeInfo(creationExpressionSyntax);
 
-					if (IsTypesEquals(creationExpressionSyntax.Type))
+					if (IsTypesEquals(typeInfo))
 					{
 						Analyze(syntaxContext, creationExpressionSyntax);
 					}
@@ -47,9 +48,14 @@ namespace System.IO.Abstractions.Analyzers.Analyzers
 			return typeof(Path).Namespace != GetFileSystemType().Namespace;
 		}
 
-		private bool IsTypesEquals(TypeSyntax type)
+		private bool IsTypesEquals(TypeInfo typeInfo)
 		{
-			return type.NormalizeWhitespace().ToFullString() == GetFileSystemType().Name;
+			var fileSystemType = GetFileSystemType();
+			var namespaceSymbol = typeInfo.Type.ContainingNamespace;
+
+			return typeInfo.Type.Name == fileSystemType.Name
+					&& (namespaceSymbol.IsGlobalNamespace ||
+										namespaceSymbol.ToString() == fileSystemType.Namespace);
 		}
 
 		private bool IsStaticInvocationStartWith(InvocationExpressionSyntax invocation)

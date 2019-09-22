@@ -10,7 +10,7 @@
 		<PackageId>Roslyn.System.IO.Abstractions.Analyzers</PackageId>
 		<Title>$(PackageId)</Title>
 		<DevelopmentDependency>True</DevelopmentDependency>
-		<PackageVersion>4.0.3</PackageVersion>
+		<PackageVersion>6.0.32</PackageVersion>
 		<Authors>inyutin_maxim</Authors>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<PackageProjectUrl>https://github.com/System-IO-Abstractions/System.IO.Abstractions.Analyzers/</PackageProjectUrl>
@@ -18,7 +18,7 @@
 		<RepositoryUrl>https://github.com/System-IO-Abstractions/System.IO.Abstractions.Analyzers.git</RepositoryUrl>
 		<PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
 		<Description>Roslyn.System.IO.Abstractions.Analyzers</Description>
-		<PackageReleaseNotes>http://bit.ly/2PyZ8lr</PackageReleaseNotes>
+		<PackageReleaseNotes>http://bit.ly/31F0wZ2</PackageReleaseNotes>
 		<Copyright>Copyright © System-IO-Abstractions</Copyright>
 		<PackageTags>Roslyn.System.IO.Abstractions.Analyzers, analyzers, System.IO.Abstractions, Roslyn</PackageTags>
 		<NoPackageAnalysis>true</NoPackageAnalysis>

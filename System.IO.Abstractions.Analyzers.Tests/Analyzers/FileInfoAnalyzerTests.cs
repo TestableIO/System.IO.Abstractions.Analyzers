@@ -7,10 +7,11 @@ using Xunit;
 
 namespace System.IO.Abstractions.Analyzers.Tests.Analyzers
 {
-	public class FileInfoAnalyzerTests: CSharpDiagnosticAnalyzerTest<FileInfoAnalyzer>
+	public class FileInfoAnalyzerTests : CSharpDiagnosticAnalyzerTest<FileInfoAnalyzer>
 	{
 		[Theory]
 		[InlineData("Valid.txt")]
+		[InlineData("UsingStaticFalsePositive.txt")]
 		public void Analyzer_is_not_triggered(string filename)
 		{
 			var source = ReadFile(filename);

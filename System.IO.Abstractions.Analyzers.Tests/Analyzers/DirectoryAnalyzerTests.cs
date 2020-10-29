@@ -7,12 +7,13 @@ using Xunit;
 
 namespace System.IO.Abstractions.Analyzers.Tests.Analyzers
 {
-	public class DirectoryAnalyzerTests: CSharpDiagnosticAnalyzerTest<DirectoryAnalyzer>
+	public class DirectoryAnalyzerTests : CSharpDiagnosticAnalyzerTest<DirectoryAnalyzer>
 	{
 		[Theory]
 		[InlineData("Valid.txt")]
 		[InlineData("FalsePositive.txt")]
 		[InlineData("ModelObjectFalsePositive.txt")]
+		[InlineData("UsingStaticFalsePositive.txt")]
 		public void Analyzer_is_not_triggered(string filename)
 		{
 			var source = ReadFile(filename);

@@ -1,10 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFramework>netstandard1.4</TargetFramework>
+		<TargetFramework>netstandard2.0</TargetFramework>
 		<PackageTargetFallback>portable-net45+win8+wp8+wpa81</PackageTargetFallback>
 		<IncludeBuildOutput>false</IncludeBuildOutput>
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+		<LangVersion>latest</LangVersion>
 	</PropertyGroup>
 	<PropertyGroup>
 		<PackageId>Roslyn.System.IO.Abstractions.Analyzers</PackageId>
@@ -32,9 +33,9 @@
 		<PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="3.3.1" PrivateAssets="all" />
 		<PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="3.7.0" PrivateAssets="all" />
 		<PackageReference Update="NETStandard.Library" PrivateAssets="all" />
-		<PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="3.3.0" PrivateAssets="all" />
-		<PackageReference Include="Microsoft.CodeQuality.Analyzers" Version="3.3.0" PrivateAssets="all" />
-		<PackageReference Include="Roslyn.Diagnostics.Analyzers" Version="3.3.0" PrivateAssets="all" />
+		<PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="3.3.1" PrivateAssets="all" />
+		<PackageReference Include="Microsoft.CodeQuality.Analyzers" Version="3.3.1" PrivateAssets="all" />
+		<PackageReference Include="Roslyn.Diagnostics.Analyzers" Version="3.3.1" PrivateAssets="all" />
 	</ItemGroup>
 	<ItemGroup>
 		<None Update="tools\*.ps1" CopyToOutputDirectory="Always" Pack="true" PackagePath="" />

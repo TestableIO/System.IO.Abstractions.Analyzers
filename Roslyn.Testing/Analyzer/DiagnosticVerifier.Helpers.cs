@@ -84,8 +84,8 @@ namespace Roslyn.Testing.Analyzer
 
 			foreach (var project in projects)
 			{
-				var compilationWithAnalyzers = project.GetCompilationAsync().Result.WithAnalyzers(analyzers);
-				var diags = compilationWithAnalyzers.GetAnalyzerDiagnosticsAsync().Result;
+				var compilationWithAnalyzers = project.GetCompilationAsync().GetAwaiter().GetResult().WithAnalyzers(analyzers);
+				var diags = compilationWithAnalyzers.GetAnalyzerDiagnosticsAsync().GetAwaiter().GetResult();
 
 				foreach (var diag in diags)
 				{
@@ -97,7 +97,7 @@ namespace Roslyn.Testing.Analyzer
 						for (var i = 0; i < documents.Length; i++)
 						{
 							var document = documents[i];
-							var tree = document.GetSyntaxTreeAsync().Result;
+							var tree = document.GetSyntaxTreeAsync().GetAwaiter().GetResult();
 
 							if (tree == diag.Location.SourceTree)
 							{

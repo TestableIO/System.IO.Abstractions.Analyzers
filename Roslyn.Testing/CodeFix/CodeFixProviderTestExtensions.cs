@@ -23,7 +23,7 @@ namespace Roslyn.Testing.CodeFix
 		/// <returns> A Document with the changes from the CodeAction </returns>
 		public static Document ApplyFix(this Document document, CodeAction codeAction)
 		{
-			var operations = codeAction.GetOperationsAsync(CancellationToken.None).Result;
+			var operations = codeAction.GetOperationsAsync(CancellationToken.None).GetAwaiter().GetResult();
 			var solution = operations.OfType<ApplyChangesOperation>().Single().ChangedSolution;
 
 			return solution.GetDocument(document.Id);
@@ -81,7 +81,7 @@ namespace Roslyn.Testing.CodeFix
 			{
 				var actions = new List<CodeAction>();
 				var context = new CodeFixContext(document, analyzerDiagnostics[0], (a, d) => actions.Add(a), CancellationToken.None);
-				codeFixProvider.RegisterCodeFixesAsync(context).Wait();
+				codeFixProvider.RegisterCodeFixesAsync(context).GetAwaiter().GetResult();
 
 				if (!actions.Any())
 				{
@@ -104,12 +104,12 @@ namespace Roslyn.Testing.CodeFix
 				if (!allowNewCompilerDiagnostics && newCompilerDiagnostics.Any())
 				{
 					// Format and get the compiler diagnostics again so that the locations make sense in the output
-					document = document.WithSyntaxRoot(Formatter.Format(document.GetSyntaxRootAsync().Result,
+					document = document.WithSyntaxRoot(Formatter.Format(document.GetSyntaxRootAsync().GetAwaiter().GetResult(),
 						Formatter.Annotation,
 						document.Project.Solution.Workspace));
 
 					newCompilerDiagnostics = GetNewDiagnostics(compilerDiagnostics, document.GetCompilerDiagnostics());
-					var msg = GetNewComilerDiagnosticsIntroducedMessage(document, newCompilerDiagnostics);
+					var msg = GetNewCompilerDiagnosticsIntroducedMessage(document, newCompilerDiagnostics);
 
 					return VerifyCodeFixProviderResult.Fail(msg);
 				}
@@ -129,10 +129,10 @@ namespace Roslyn.Testing.CodeFix
 				: VerifyCodeFixProviderResult.Fail(newSource, actual);
 		}
 
-		private static string GetNewComilerDiagnosticsIntroducedMessage(Document document, IEnumerable<Diagnostic> newCompilerDiagnostics)
+		private static string GetNewCompilerDiagnosticsIntroducedMessage(Document document, IEnumerable<Diagnostic> newCompilerDiagnostics)
 		{
 			return
-				$"Fix introduced new compiler diagnostics:{Environment.NewLine}{string.Join("{Environment.NewLine}", newCompilerDiagnostics.Select(d => d.ToString()))}{Environment.NewLine}{Environment.NewLine}New document:{Environment.NewLine}{document.GetSyntaxRootAsync().Result.ToFullString()}{Environment.NewLine}";
+				$"Fix introduced new compiler diagnostics:{Environment.NewLine}{string.Join("{Environment.NewLine}", newCompilerDiagnostics.Select(d => d.ToString()))}{Environment.NewLine}{Environment.NewLine}New document:{Environment.NewLine}{document.GetSyntaxRootAsync().GetAwaiter().GetResult().ToFullString()}{Environment.NewLine}";
 		}
 
 		/// <summary>
@@ -145,7 +145,7 @@ namespace Roslyn.Testing.CodeFix
 		/// <returns> The compiler diagnostics that were found in the code </returns>
 		private static IEnumerable<Diagnostic> GetCompilerDiagnostics(this Document document)
 		{
-			return document.GetSemanticModelAsync().Result.GetDiagnostics();
+			return document.GetSemanticModelAsync().GetAwaiter().GetResult().GetDiagnostics();
 		}
 
 		/// <summary>
@@ -155,8 +155,8 @@ namespace Roslyn.Testing.CodeFix
 		/// <returns> A string containing the syntax of the Document after formatting </returns>
 		public static string GetStringFromDocument(this Document document)
 		{
-			var simplifiedDoc = Simplifier.ReduceAsync(document, Simplifier.Annotation).Result;
-			var root = simplifiedDoc.GetSyntaxRootAsync().Result;
+			var simplifiedDoc = Simplifier.ReduceAsync(document, Simplifier.Annotation).GetAwaiter().GetResult();
+			var root = simplifiedDoc.GetSyntaxRootAsync().GetAwaiter().GetResult();
 			root = Formatter.Format(root, Formatter.Annotation, simplifiedDoc.Project.Solution.Workspace);
 
 			return root.GetText().ToString();

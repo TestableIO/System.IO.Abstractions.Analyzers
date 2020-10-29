@@ -1,0 +1,26 @@
+namespace SomeNameSpace.Mocking
+{
+	using System.IO.Abstractions;
+	public static class FileSystemProxy
+	{
+		internal static IDirectoryInfo DirectoryInfo { get; }
+	}
+}
+
+namespace SomeNameSpace
+{
+	using System.IO.Abstractions;
+	using static SomeNameSpace.Mocking.FileSystemProxy;
+	public class UsingStaticFalsePositive
+	{
+		public UsingStaticFalsePositive()
+		{
+		}
+
+		public void SomeMethod()
+		{
+			const string path = "C:\\temp.txt";
+			IDirectoryInfo dirInfo = DirectoryInfo.FromDirectoryName(path);
+		}
+	}
+}

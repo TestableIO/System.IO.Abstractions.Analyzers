@@ -1,0 +1,26 @@
+namespace SomeNameSpace.Mocking
+{
+	using System.IO.Abstractions;
+	public static class FileSystemProxy
+	{
+		internal static IPath Path { get; }
+	}
+}
+
+namespace SomeNameSpace
+{
+	using static SomeNameSpace.Mocking.FileSystemProxy;
+	public class UsingStaticFalsePositive
+	{
+		public UsingStaticFalsePositive()
+		{
+		}
+
+		public void SomeMethod()
+		{
+			const string filePath = "C:\\temp";
+
+			Path.GetTempPath();
+		}
+	}
+}

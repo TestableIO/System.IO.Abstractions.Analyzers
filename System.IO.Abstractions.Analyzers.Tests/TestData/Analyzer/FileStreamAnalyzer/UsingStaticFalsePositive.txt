@@ -1,0 +1,28 @@
+namespace SomeNameSpace.Mocking
+{
+	using System.IO.Abstractions;
+	public static class FileSystemProxy
+	{
+		internal static IFileStreamFactory FileStream { get; }
+	}
+}
+
+namespace SomeNameSpace
+{
+	using static SomeNameSpace.Mocking.FileSystemProxy;
+	public class WithOutFileSystem
+	{
+		public UsingStaticFalsePositive()
+		{
+		}
+
+		public void UsingStaticFalsePositive()
+		{
+			const string path = "C:\\temp.txt";
+
+			using (System.IO.Stream fstream = FileStream.Create(@"D:\note.dat", FileMode.OpenOrCreate)){
+
+			}
+		}
+	}
+}

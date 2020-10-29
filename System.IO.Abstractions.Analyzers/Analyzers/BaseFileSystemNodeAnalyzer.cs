@@ -19,7 +19,7 @@ namespace System.IO.Abstractions.Analyzers.Analyzers
 				{
 					var invocation = (InvocationExpressionSyntax) syntaxContext.Node;
 
-					if (IsStaticInvocationStartWith(invocation))
+					if (IsStaticInvocationStartWith(invocation) && !IsInvocationFromAbstractions(syntaxContext, invocation))
 					{
 						Analyze(syntaxContext, invocation);
 					}
@@ -64,6 +64,15 @@ namespace System.IO.Abstractions.Analyzers.Analyzers
 					&& invocation.Expression.NormalizeWhitespace()
 						.ToFullString()
 						.StartsWith(GetFileSystemType().Name + ".", StringComparison.Ordinal);
+		}
+
+		private static bool IsInvocationFromAbstractions(SyntaxNodeAnalysisContext context, InvocationExpressionSyntax invocation)
+		{
+			return (invocation?.Expression as MemberAccessExpressionSyntax)?.Expression is ExpressionSyntax invokedMember
+					&& context.SemanticModel.GetSymbolInfo(invokedMember).Symbol is ISymbol symbol
+					&& ((symbol as IPropertySymbol)?.Type ?? (symbol as IFieldSymbol)?.Type) is ITypeSymbol type
+					&& !type.ContainingNamespace.IsGlobalNamespace
+					&& type.ContainingNamespace.ToString().StartsWith(Constants.FileSystemNameSpace, StringComparison.Ordinal);
 		}
 	}
 }

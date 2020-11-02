@@ -1,0 +1,31 @@
+using System.IO;
+using System.IO.Abstractions;
+using System.Text;
+
+namespace SomeNameSpace
+{
+	public class UsingStream
+	{
+		private readonly IFileSystem _fileSystem;
+
+		public UsingStream(IFileSystem fileSystem)
+		{
+			_fileSystem = fileSystem;
+		}
+
+		public void SomeMethod()
+		{
+			const string path = "C:\\temp.txt";
+			var stream = _fileSystem.FileStream.Create(path, FileMode.Open);
+			using (var writer = new StreamWriter(stream))
+			{
+				;
+			}
+
+			using (var writer = new StreamWriter(stream, true, Encoding.UTF8))
+			{
+				;
+			}
+		}
+	}
+}

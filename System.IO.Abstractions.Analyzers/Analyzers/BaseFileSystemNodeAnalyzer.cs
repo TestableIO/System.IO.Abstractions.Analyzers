@@ -1,3 +1,4 @@
+using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -69,10 +70,29 @@ namespace System.IO.Abstractions.Analyzers.Analyzers
 		private static bool IsInvocationFromAbstractions(SyntaxNodeAnalysisContext context, InvocationExpressionSyntax invocation)
 		{
 			return (invocation?.Expression as MemberAccessExpressionSyntax)?.Expression is ExpressionSyntax invokedMember
-					&& context.SemanticModel.GetSymbolInfo(invokedMember).Symbol is ISymbol symbol
-					&& ((symbol as IPropertySymbol)?.Type ?? (symbol as IFieldSymbol)?.Type) is ITypeSymbol type
-					&& !type.ContainingNamespace.IsGlobalNamespace
-					&& type.ContainingNamespace.ToString().StartsWith(Constants.FileSystemNameSpace, StringComparison.Ordinal);
+					&& IsSymbolFromAbstractions(context.SemanticModel.GetSymbolInfo(invokedMember));
+		}
+
+		private static bool IsSymbolFromAbstractions(SymbolInfo symbolInfo)
+		{
+			if (symbolInfo.Symbol is ISymbol symbol)
+			{
+				return IsSymbolFromAbstractions(symbol);
+			} else if (symbolInfo.CandidateSymbols.Length > 0)
+			{
+				return symbolInfo.CandidateSymbols.All(IsSymbolFromAbstractions);
+			}
+			return false;
+		}
+
+		private static bool IsSymbolFromAbstractions(ISymbol symbol)
+		{
+			INamespaceSymbol namespaceSymbol
+				= ((symbol as IPropertySymbol)?.Type ?? (symbol as IFieldSymbol)?.Type)?.ContainingNamespace
+					?? (symbol as IMethodSymbol)?.ContainingNamespace;
+
+			return !namespaceSymbol.IsGlobalNamespace
+				&& namespaceSymbol.ToString().StartsWith(Constants.FileSystemNameSpace, StringComparison.Ordinal);
 		}
 	}
 }

@@ -91,7 +91,8 @@ namespace System.IO.Abstractions.Analyzers.Analyzers
 				= ((symbol as IPropertySymbol)?.Type ?? (symbol as IFieldSymbol)?.Type)?.ContainingNamespace
 					?? (symbol as IMethodSymbol)?.ContainingNamespace;
 
-			return !namespaceSymbol.IsGlobalNamespace
+			return namespaceSymbol != null
+				&& !namespaceSymbol.IsGlobalNamespace
 				&& namespaceSymbol.ToString().StartsWith(Constants.FileSystemNameSpace, StringComparison.Ordinal);
 		}
 	}

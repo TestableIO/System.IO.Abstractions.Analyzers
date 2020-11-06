@@ -1,0 +1,29 @@
+namespace SomeNameSpace.Mocking
+{
+	using System.IO.Abstractions;
+	public static class FileSystemProxy
+	{
+		internal static IPath Path { get; }
+	}
+}
+
+namespace SomeNameSpace
+{
+	using System.Collections.Generic;
+	using System.Linq;
+	using static SomeNameSpace.Mocking.FileSystemProxy;
+	public class UsingStaticFalsePositive
+	{
+		private IList<string> files;
+		public UsingStaticFalsePositive()
+		{
+		}
+
+		public void SomeMethod()
+		{
+			var x = files
+				.First(item => Path.GetFileName(item)
+					.Equals("Pattern.txt", StringComparison.OrdinalIgnoreCase));
+		}
+	}
+}

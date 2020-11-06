@@ -95,5 +95,13 @@ namespace System.IO.Abstractions.Analyzers.Analyzers
 				&& !namespaceSymbol.IsGlobalNamespace
 				&& namespaceSymbol.ToString().StartsWith(Constants.FileSystemNameSpace, StringComparison.Ordinal);
 		}
+
+		protected static bool IsFirstConstructorParameterOfType<T>(SyntaxNodeAnalysisContext context, ExpressionSyntax syntax)
+		{
+			return (syntax as ObjectCreationExpressionSyntax)?.ArgumentList?.Arguments.FirstOrDefault() is ArgumentSyntax firstArgument
+				&& (context.SemanticModel.GetSymbolInfo(firstArgument.Expression).Symbol as ILocalSymbol)?.Type is ITypeSymbol argumentType
+				&& argumentType.ContainingNamespace.Name == typeof(T).Namespace
+				&& argumentType.Name == typeof(T).Name;
+		}
 	}
 }

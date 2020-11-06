@@ -1,0 +1,21 @@
+using System.IO;
+
+namespace SomeNameSpace
+{
+	public class UsingFilename
+	{
+		public UsingFilename()
+		{
+		}
+
+		public void SomeMethod()
+		{
+			const string path = "C:\\temp.txt";
+
+			using (var x = new StreamReader(path))
+			{
+				;
+			}
+		}
+	}
+}

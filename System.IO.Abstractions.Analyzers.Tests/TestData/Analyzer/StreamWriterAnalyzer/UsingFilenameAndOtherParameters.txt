@@ -1,0 +1,22 @@
+using System.IO;
+using System.Text;
+
+namespace SomeNameSpace
+{
+	public class UsingFilenameAndOtherParameters
+	{
+		public UsingFilenameAndOtherParameters()
+		{
+		}
+
+		public void SomeMethod()
+		{
+			const string path = "C:\\temp.txt";
+
+			using (var x = new StreamWriter(path, true, Encoding.UTF8))
+			{
+				;
+			}
+		}
+	}
+}

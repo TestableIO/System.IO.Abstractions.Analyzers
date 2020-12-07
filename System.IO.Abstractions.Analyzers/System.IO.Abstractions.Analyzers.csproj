@@ -5,7 +5,8 @@
 		<PackageTargetFallback>portable-net45+win8+wp8+wpa81</PackageTargetFallback>
 		<IncludeBuildOutput>false</IncludeBuildOutput>
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-		<LangVersion>latest</LangVersion>
+		<LangVersion>latest</LangVersion>		
+		<DevelopmentDependency>true</DevelopmentDependency>
 	</PropertyGroup>
 	<PropertyGroup>
 		<PackageId>Roslyn.System.IO.Abstractions.Analyzers</PackageId>

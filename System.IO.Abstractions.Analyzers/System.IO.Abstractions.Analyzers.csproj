@@ -32,7 +32,7 @@
 	<ItemGroup>
 		<PackageReference Include="JetBrains.Annotations" Version="2021.2.0" PrivateAssets="all" />
 		<PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="3.3.2" PrivateAssets="all" />
-		<PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="3.9.0" PrivateAssets="all" />
+		<PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="3.11.0" PrivateAssets="all" />
 		<PackageReference Update="NETStandard.Library" PrivateAssets="all" />
 		<PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="3.3.2" PrivateAssets="all" />
 		<PackageReference Include="Microsoft.CodeQuality.Analyzers" Version="3.3.2" PrivateAssets="all" />

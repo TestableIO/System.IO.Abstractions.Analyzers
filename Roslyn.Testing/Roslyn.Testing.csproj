@@ -7,7 +7,7 @@
 
     <ItemGroup>
       <PackageReference Include="JetBrains.Annotations" Version="2021.3.0" />
-      <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="4.0.1" />
+      <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="4.1.0" />
       <PackageReference Include="Shouldly" Version="4.0.3" />
     </ItemGroup>
 

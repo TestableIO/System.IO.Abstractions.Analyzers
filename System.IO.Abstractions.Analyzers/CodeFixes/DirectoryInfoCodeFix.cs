@@ -8,44 +8,43 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-namespace System.IO.Abstractions.Analyzers.CodeFixes
+namespace System.IO.Abstractions.Analyzers.CodeFixes;
+
+[Shared]
+[ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(DirectoryInfoCodeFix))]
+public class DirectoryInfoCodeFix : CodeFixProvider
 {
-	[Shared]
-	[ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(DirectoryInfoCodeFix))]
-	public class DirectoryInfoCodeFix : CodeFixProvider
+	private const string Title = "Use IDirectoryInfoFactory instead creation DirectoryInfo for improved testability";
+
+	public override ImmutableArray<string> FixableDiagnosticIds =>
+		ImmutableArray.Create(Constants.Io0007);
+
+	public sealed override FixAllProvider GetFixAllProvider()
 	{
-		private const string Title = "Use IDirectoryInfoFactory instead creation DirectoryInfo for improved testability";
+		return WellKnownFixAllProviders.BatchFixer;
+	}
 
-		public override ImmutableArray<string> FixableDiagnosticIds =>
-			ImmutableArray.Create(Constants.Io0007);
+	public override async Task RegisterCodeFixesAsync(CodeFixContext context)
+	{
+		var root = await context.Document.GetSyntaxRootAsync(context.CancellationToken).ConfigureAwait(false);
+		var classDeclarationSyntax = root.FindNode(context.Span).FirstAncestorOrSelf<ClassDeclarationSyntax>();
 
-		public sealed override FixAllProvider GetFixAllProvider()
+		if (RoslynClassFileSystem.HasFileSystemField(classDeclarationSyntax))
 		{
-			return WellKnownFixAllProviders.BatchFixer;
-		}
+			var creationExpressionSyntax = root.FindNode(context.Span).FirstAncestorOrSelf<ObjectCreationExpressionSyntax>();
 
-		public override async Task RegisterCodeFixesAsync(CodeFixContext context)
-		{
-			var root = await context.Document.GetSyntaxRootAsync(context.CancellationToken).ConfigureAwait(false);
-			var classDeclarationSyntax = root.FindNode(context.Span).FirstAncestorOrSelf<ClassDeclarationSyntax>();
+			var fieldDeclarationSyntax = classDeclarationSyntax
+				.Members
+				.OfType<FieldDeclarationSyntax>()
+				.FirstOrDefault(x =>
+					x.Declaration.Type.NormalizeWhitespace().ToFullString()
+					== RoslynClassFileSystem.GetFileSystemType().ToFullString());
 
-			if (RoslynClassFileSystem.HasFileSystemField(classDeclarationSyntax))
-			{
-				var creationExpressionSyntax = root.FindNode(context.Span).FirstAncestorOrSelf<ObjectCreationExpressionSyntax>();
-
-				var fieldDeclarationSyntax = classDeclarationSyntax
-					.Members
-					.OfType<FieldDeclarationSyntax>()
-					.FirstOrDefault(x =>
-						x.Declaration.Type.NormalizeWhitespace().ToFullString()
-						== RoslynClassFileSystem.GetFileSystemType().ToFullString());
-
-				context.RegisterCodeFix(new DirectoryInfoCodeAction(Title,
-						context.Document,
-						creationExpressionSyntax,
-						fieldDeclarationSyntax),
-					context.Diagnostics);
-			}
+			context.RegisterCodeFix(new DirectoryInfoCodeAction(Title,
+					context.Document,
+					creationExpressionSyntax,
+					fieldDeclarationSyntax),
+				context.Diagnostics);
 		}
 	}
 }

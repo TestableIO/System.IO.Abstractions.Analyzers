@@ -5,23 +5,22 @@ using Microsoft.CodeAnalysis;
 using Roslyn.Testing.CodeFix;
 using Xunit;
 
-namespace System.IO.Abstractions.Analyzers.Tests.CodeFixes
-{
-	public class DirectoryCodeFixTests :
-		CSharpCodeFixProviderTest<DirectoryAnalyzer, DirectoryCodeFix>
-	{
-		[Theory]
-		[InlineData("BeforeFix.txt", "AfterFix.txt")]
-		public void CodeFix(string sourceBefore, string sourceAfter)
-		{
-			var sourceBeforeFix = ReadFile(sourceBefore);
-			var sourceAfterFix = ReadFile(sourceAfter);
-			VerifyFix(sourceBeforeFix, sourceAfterFix, 0, true);
-		}
+namespace System.IO.Abstractions.Analyzers.Tests.CodeFixes;
 
-		protected override IEnumerable<MetadataReference> GetAdditionalReferences() => new[]
-		{
-			MetadataReference.CreateFromFile(typeof(IFileSystem).Assembly.Location)
-		};
+public class DirectoryCodeFixTests :
+	CSharpCodeFixProviderTest<DirectoryAnalyzer, DirectoryCodeFix>
+{
+	[Theory]
+	[InlineData("BeforeFix.txt", "AfterFix.txt")]
+	public void CodeFix(string sourceBefore, string sourceAfter)
+	{
+		var sourceBeforeFix = ReadFile(sourceBefore);
+		var sourceAfterFix = ReadFile(sourceAfter);
+		VerifyFix(sourceBeforeFix, sourceAfterFix, 0, true);
 	}
+
+	protected override IEnumerable<MetadataReference> GetAdditionalReferences() => new[]
+	{
+		MetadataReference.CreateFromFile(typeof(IFileSystem).Assembly.Location)
+	};
 }

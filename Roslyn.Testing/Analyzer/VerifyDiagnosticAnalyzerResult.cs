@@ -1,23 +1,22 @@
-﻿namespace Roslyn.Testing.Analyzer
+﻿namespace Roslyn.Testing.Analyzer;
+
+internal struct VerifyDiagnosticAnalyzerResult
 {
-	internal struct VerifyDiagnosticAnalyzerResult
+	public bool Success { get; private set; }
+
+	public string ErrorMessage { get; private set; }
+
+	public static VerifyDiagnosticAnalyzerResult Ok()
 	{
-		public bool Success { get; private set; }
+		return new VerifyDiagnosticAnalyzerResult { Success = true };
+	}
 
-		public string ErrorMessage { get; private set; }
-
-		public static VerifyDiagnosticAnalyzerResult Ok()
+	public static VerifyDiagnosticAnalyzerResult Fail(string message)
+	{
+		return new VerifyDiagnosticAnalyzerResult
 		{
-			return new VerifyDiagnosticAnalyzerResult { Success = true };
-		}
-
-		public static VerifyDiagnosticAnalyzerResult Fail(string message)
-		{
-			return new VerifyDiagnosticAnalyzerResult
-			{
-				Success = false,
-				ErrorMessage = message
-			};
-		}
+			Success = false,
+			ErrorMessage = message
+		};
 	}
 }

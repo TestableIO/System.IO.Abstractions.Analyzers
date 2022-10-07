@@ -1,40 +1,39 @@
-﻿namespace Roslyn.Testing.CodeFix
+﻿namespace Roslyn.Testing.CodeFix;
+
+internal struct VerifyCodeFixProviderResult
 {
-	internal struct VerifyCodeFixProviderResult
+	public bool Success { get; private set; }
+
+	public string ErrorMessage { get; private set; }
+
+	public string ActualSource { get; private set; }
+
+	public string NewSource { get; private set; }
+
+	public static VerifyCodeFixProviderResult Ok()
 	{
-		public bool Success { get; private set; }
-
-		public string ErrorMessage { get; private set; }
-
-		public string ActualSource { get; private set; }
-
-		public string NewSource { get; private set; }
-
-		public static VerifyCodeFixProviderResult Ok()
+		return new VerifyCodeFixProviderResult
 		{
-			return new VerifyCodeFixProviderResult
-			{
-				Success = true
-			};
-		}
+			Success = true
+		};
+	}
 
-		public static VerifyCodeFixProviderResult Fail(string message)
+	public static VerifyCodeFixProviderResult Fail(string message)
+	{
+		return new VerifyCodeFixProviderResult
 		{
-			return new VerifyCodeFixProviderResult
-			{
-				Success = false,
-				ErrorMessage = message
-			};
-		}
+			Success = false,
+			ErrorMessage = message
+		};
+	}
 
-		internal static VerifyCodeFixProviderResult Fail(string newSource, string actualSource)
+	internal static VerifyCodeFixProviderResult Fail(string newSource, string actualSource)
+	{
+		return new VerifyCodeFixProviderResult
 		{
-			return new VerifyCodeFixProviderResult
-			{
-				Success = false,
-				NewSource = newSource,
-				ActualSource = actualSource
-			};
-		}
+			Success = false,
+			NewSource = newSource,
+			ActualSource = actualSource
+		};
 	}
 }

@@ -4,59 +4,58 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
-namespace System.IO.Abstractions.Analyzers.Analyzers.FileSystemTypeAnalyzers
+namespace System.IO.Abstractions.Analyzers.Analyzers.FileSystemTypeAnalyzers;
+
+[DiagnosticAnalyzer(LanguageNames.CSharp)]
+public class FileInfoAnalyzer : BaseFileSystemNodeAnalyzer
 {
-	[DiagnosticAnalyzer(LanguageNames.CSharp)]
-	public class FileInfoAnalyzer : BaseFileSystemNodeAnalyzer
+	/// <summary>
+	/// Diagnostic Identifier
+	/// </summary>
+	[UsedImplicitly]
+	public const string DiagnosticId = Constants.Io0004;
+
+	/// <summary>
+	/// Diagnostic Title
+	/// </summary>
+	private const string Title = "Replace FileInfo class with IFileSystem.FileInfo for improved testability";
+
+	/// <summary>
+	/// Diagnostic Message Format
+	/// </summary>
+	public const string MessageFormat = Title;
+
+	/// <summary>
+	/// Diagnostic Description
+	/// </summary>
+	private const string Description = Title;
+
+	private const string Link = "http://bit.ly/2OAA4tM";
+
+	/// <summary>
+	/// Правило
+	/// </summary>
+	private static readonly DiagnosticDescriptor Rule = new DiagnosticDescriptor(DiagnosticId,
+		Title,
+		MessageFormat,
+		Category,
+		DiagnosticSeverity.Warning,
+		true,
+		Description,
+		Link);
+
+	/// <inheritdoc />
+	public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rule);
+
+	/// <inheritdoc />
+	protected override void Analyze(SyntaxNodeAnalysisContext context, ExpressionSyntax syntax)
 	{
-		/// <summary>
-		/// Diagnostic Identifier
-		/// </summary>
-		[UsedImplicitly]
-		public const string DiagnosticId = Constants.Io0004;
+		context.ReportDiagnostic(Diagnostic.Create(Rule, syntax.GetLocation()));
+	}
 
-		/// <summary>
-		/// Diagnostic Title
-		/// </summary>
-		private const string Title = "Replace FileInfo class with IFileSystem.FileInfo for improved testability";
-
-		/// <summary>
-		/// Diagnostic Message Format
-		/// </summary>
-		public const string MessageFormat = Title;
-
-		/// <summary>
-		/// Diagnostic Description
-		/// </summary>
-		private const string Description = Title;
-
-		private const string Link = "http://bit.ly/2OAA4tM";
-
-		/// <summary>
-		/// Правило
-		/// </summary>
-		private static readonly DiagnosticDescriptor Rule = new DiagnosticDescriptor(DiagnosticId,
-			Title,
-			MessageFormat,
-			Category,
-			DiagnosticSeverity.Warning,
-			true,
-			Description,
-			Link);
-
-		/// <inheritdoc />
-		public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rule);
-
-		/// <inheritdoc />
-		protected override void Analyze(SyntaxNodeAnalysisContext context, ExpressionSyntax syntax)
-		{
-			context.ReportDiagnostic(Diagnostic.Create(Rule, syntax.GetLocation()));
-		}
-
-		/// <inheritdoc />
-		protected override Type GetFileSystemType()
-		{
-			return typeof(FileInfo);
-		}
+	/// <inheritdoc />
+	protected override Type GetFileSystemType()
+	{
+		return typeof(FileInfo);
 	}
 }

@@ -1,42 +1,41 @@
 using Microsoft.CodeAnalysis.Diagnostics;
 
-namespace System.IO.Abstractions.Analyzers.Analyzers
+namespace System.IO.Abstractions.Analyzers.Analyzers;
+
+/// <inheritdoc />
+public abstract class BaseFileSystemAnalyzer : DiagnosticAnalyzer
 {
+	/// <summary>
+	/// Diagnostic Analyzer Category
+	/// </summary>
+	protected const string Category = Constants.FileSystemNameSpace;
+
 	/// <inheritdoc />
-	public abstract class BaseFileSystemAnalyzer : DiagnosticAnalyzer
+	public override void Initialize(AnalysisContext context)
 	{
-		/// <summary>
-		/// Diagnostic Analyzer Category
-		/// </summary>
-		protected const string Category = Constants.FileSystemNameSpace;
+		context.EnableConcurrentExecution();
 
-		/// <inheritdoc />
-		public override void Initialize(AnalysisContext context)
+		context.RegisterCompilationStartAction(compilationStartContext =>
 		{
-			context.EnableConcurrentExecution();
+			var fileSystemContext = new FileSystemContext(compilationStartContext.Compilation);
 
-			context.RegisterCompilationStartAction(compilationStartContext =>
+			if (ShouldAnalyze(fileSystemContext))
 			{
-				var fileSystemContext = new FileSystemContext(compilationStartContext.Compilation);
+				AnalyzeCompilation(compilationStartContext, fileSystemContext);
+			}
+		});
+	}
 
-				if (ShouldAnalyze(fileSystemContext))
-				{
-					AnalyzeCompilation(compilationStartContext, fileSystemContext);
-				}
-			});
-		}
+	/// <summary>
+	/// Analysis
+	/// </summary>
+	/// <param name="compilationStartContext"> Compilation Start Analysis Context </param>
+	/// <param name="fileSystemContext"> FileSystem Context </param>
+	protected abstract void AnalyzeCompilation(CompilationStartAnalysisContext compilationStartContext,
+												FileSystemContext fileSystemContext);
 
-		/// <summary>
-		/// Analysis
-		/// </summary>
-		/// <param name="compilationStartContext"> Compilation Start Analysis Context </param>
-		/// <param name="fileSystemContext"> FileSystem Context </param>
-		protected abstract void AnalyzeCompilation(CompilationStartAnalysisContext compilationStartContext,
-													FileSystemContext fileSystemContext);
-
-		private static bool ShouldAnalyze(FileSystemContext fileSystemContext)
-		{
-			return fileSystemContext.HasReference;
-		}
+	private static bool ShouldAnalyze(FileSystemContext fileSystemContext)
+	{
+		return fileSystemContext.HasReference;
 	}
 }

@@ -6,42 +6,41 @@ using System.Threading.Tasks;
 using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-namespace System.IO.Abstractions.Analyzers.CodeFixes
+namespace System.IO.Abstractions.Analyzers.CodeFixes;
+
+public abstract class BaseInvokeCodeFix : CodeFixProvider
 {
-	public abstract class BaseInvokeCodeFix : CodeFixProvider
+	protected abstract string DiagnosticId { get; }
+
+	protected abstract string Title { get; }
+
+	public override ImmutableArray<string> FixableDiagnosticIds => ImmutableArray.Create(DiagnosticId);
+
+	public sealed override FixAllProvider GetFixAllProvider()
 	{
-		protected abstract string DiagnosticId { get; }
+		return WellKnownFixAllProviders.BatchFixer;
+	}
 
-		protected abstract string Title { get; }
+	public sealed override async Task RegisterCodeFixesAsync(CodeFixContext context)
+	{
+		var root = await context.Document.GetSyntaxRootAsync(context.CancellationToken).ConfigureAwait(false);
 
-		public override ImmutableArray<string> FixableDiagnosticIds => ImmutableArray.Create(DiagnosticId);
+		var classDeclaration = root.FindNode(context.Span).FirstAncestorOrSelf<ClassDeclarationSyntax>();
 
-		public sealed override FixAllProvider GetFixAllProvider()
+		if (RoslynClassFileSystem.HasFileSystemField(classDeclaration))
 		{
-			return WellKnownFixAllProviders.BatchFixer;
-		}
+			var invocation = root.FindNode(context.Span)
+				.DescendantNodesAndSelf()
+				.OfType<InvocationExpressionSyntax>()
+				.FirstOrDefault();
 
-		public sealed override async Task RegisterCodeFixesAsync(CodeFixContext context)
-		{
-			var root = await context.Document.GetSyntaxRootAsync(context.CancellationToken).ConfigureAwait(false);
+			var field = RoslynClassFileSystem.GetFileSystemFieldFromClass(classDeclaration);
 
-			var classDeclaration = root.FindNode(context.Span).FirstAncestorOrSelf<ClassDeclarationSyntax>();
-
-			if (RoslynClassFileSystem.HasFileSystemField(classDeclaration))
-			{
-				var invocation = root.FindNode(context.Span)
-					.DescendantNodesAndSelf()
-					.OfType<InvocationExpressionSyntax>()
-					.FirstOrDefault();
-
-				var field = RoslynClassFileSystem.GetFileSystemFieldFromClass(classDeclaration);
-
-				context.RegisterCodeFix(new FileSystemInvokeCodeAction(Title,
-						context.Document,
-						invocation,
-						field),
-					context.Diagnostics);
-			}
+			context.RegisterCodeFix(new FileSystemInvokeCodeAction(Title,
+					context.Document,
+					invocation,
+					field),
+				context.Diagnostics);
 		}
 	}
 }

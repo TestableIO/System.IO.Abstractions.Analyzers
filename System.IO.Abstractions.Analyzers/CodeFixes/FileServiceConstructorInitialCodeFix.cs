@@ -7,41 +7,40 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-namespace System.IO.Abstractions.Analyzers.CodeFixes
+namespace System.IO.Abstractions.Analyzers.CodeFixes;
+
+[Shared]
+[ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(FileServiceConstructorInitialCodeFix))]
+public class FileServiceConstructorInitialCodeFix : CodeFixProvider
 {
-	[Shared]
-	[ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(FileServiceConstructorInitialCodeFix))]
-	public class FileServiceConstructorInitialCodeFix : CodeFixProvider
+	private const string Title = "Create FileSystem in constructor and using System.IO.Abstractions";
+
+	public sealed override ImmutableArray<string> FixableDiagnosticIds =>
+		ImmutableArray.Create(Constants.Io0002,
+			Constants.Io0003,
+			Constants.Io0004,
+			Constants.Io0005,
+			Constants.Io0006,
+			Constants.Io0007);
+
+	public sealed override FixAllProvider GetFixAllProvider()
 	{
-		private const string Title = "Create FileSystem in constructor and using System.IO.Abstractions";
+		return WellKnownFixAllProviders.BatchFixer;
+	}
 
-		public sealed override ImmutableArray<string> FixableDiagnosticIds =>
-			ImmutableArray.Create(Constants.Io0002,
-				Constants.Io0003,
-				Constants.Io0004,
-				Constants.Io0005,
-				Constants.Io0006,
-				Constants.Io0007);
+	public sealed override async Task RegisterCodeFixesAsync(CodeFixContext context)
+	{
+		var root = await context.Document.GetSyntaxRootAsync(context.CancellationToken).ConfigureAwait(false);
+		var classDeclarationSyntax = root.FindNode(context.Span).FirstAncestorOrSelf<ClassDeclarationSyntax>();
+		var constructor = RoslynClassFileSystem.GetConstructor(classDeclarationSyntax);
 
-		public sealed override FixAllProvider GetFixAllProvider()
+		if (!RoslynClassFileSystem.HasFileSystemField(classDeclarationSyntax)
+			|| constructor != null && !RoslynClassFileSystem.ConstructorHasFileSystemParameter(constructor))
 		{
-			return WellKnownFixAllProviders.BatchFixer;
-		}
-
-		public sealed override async Task RegisterCodeFixesAsync(CodeFixContext context)
-		{
-			var root = await context.Document.GetSyntaxRootAsync(context.CancellationToken).ConfigureAwait(false);
-			var classDeclarationSyntax = root.FindNode(context.Span).FirstAncestorOrSelf<ClassDeclarationSyntax>();
-			var constructor = RoslynClassFileSystem.GetConstructor(classDeclarationSyntax);
-
-			if (!RoslynClassFileSystem.HasFileSystemField(classDeclarationSyntax)
-				|| constructor != null && !RoslynClassFileSystem.ConstructorHasFileSystemParameter(constructor))
-			{
-				context.RegisterCodeFix(new FileServiceConstructorInitialCodeAction(Title,
-						context.Document,
-						classDeclarationSyntax),
-					context.Diagnostics);
-			}
+			context.RegisterCodeFix(new FileServiceConstructorInitialCodeAction(Title,
+					context.Document,
+					classDeclarationSyntax),
+				context.Diagnostics);
 		}
 	}
 }

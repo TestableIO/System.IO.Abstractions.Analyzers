@@ -31,7 +31,10 @@ public class DirectoryInfoAnalyzerTests : CSharpDiagnosticAnalyzerTest<Directory
 			Id = DirectoryInfoAnalyzer.DiagnosticId,
 			Message = DirectoryInfoAnalyzer.MessageFormat,
 			Severity = DiagnosticSeverity.Warning,
-			Locations = new[] { new DiagnosticResultLocation("Test0.cs", diagnosticLine, diagnosticColumn) }
+			Locations = new[]
+			{
+				new DiagnosticResultLocation("Test0.cs", diagnosticLine, diagnosticColumn)
+			}
 		};
 
 		VerifyDiagnostic(source, expectedDiagnostic);

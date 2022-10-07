@@ -34,8 +34,5 @@ public abstract class BaseFileSystemAnalyzer : DiagnosticAnalyzer
 	protected abstract void AnalyzeCompilation(CompilationStartAnalysisContext compilationStartContext,
 												FileSystemContext fileSystemContext);
 
-	private static bool ShouldAnalyze(FileSystemContext fileSystemContext)
-	{
-		return fileSystemContext.HasReference;
-	}
+	private static bool ShouldAnalyze(FileSystemContext fileSystemContext) => fileSystemContext.HasReference;
 }

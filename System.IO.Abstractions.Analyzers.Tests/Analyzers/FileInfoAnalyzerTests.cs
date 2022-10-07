@@ -29,7 +29,10 @@ public class FileInfoAnalyzerTests : CSharpDiagnosticAnalyzerTest<FileInfoAnalyz
 			Id = FileInfoAnalyzer.DiagnosticId,
 			Message = FileInfoAnalyzer.MessageFormat,
 			Severity = DiagnosticSeverity.Warning,
-			Locations = new[] { new DiagnosticResultLocation("Test0.cs", diagnosticLine, diagnosticColumn) }
+			Locations = new[]
+			{
+				new DiagnosticResultLocation("Test0.cs", diagnosticLine, diagnosticColumn)
+			}
 		};
 
 		VerifyDiagnostic(source, expectedDiagnostic);

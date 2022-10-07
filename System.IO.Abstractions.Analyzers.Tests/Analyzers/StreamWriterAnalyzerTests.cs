@@ -29,7 +29,10 @@ public class StreamWriterAnalyzerTests : CSharpDiagnosticAnalyzerTest<StreamWrit
 			Id = StreamWriterAnalyzer.DiagnosticId,
 			Message = StreamWriterAnalyzer.MessageFormat,
 			Severity = DiagnosticSeverity.Warning,
-			Locations = new[] { new DiagnosticResultLocation("Test0.cs", diagnosticLine, diagnosticColumn) }
+			Locations = new[]
+			{
+				new DiagnosticResultLocation("Test0.cs", diagnosticLine, diagnosticColumn)
+			}
 		};
 
 		VerifyDiagnostic(source, expectedDiagnostic);

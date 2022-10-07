@@ -10,30 +10,21 @@ internal struct VerifyCodeFixProviderResult
 
 	public string NewSource { get; private set; }
 
-	public static VerifyCodeFixProviderResult Ok()
+	public static VerifyCodeFixProviderResult Ok() => new()
 	{
-		return new VerifyCodeFixProviderResult
-		{
-			Success = true
-		};
-	}
+		Success = true
+	};
 
-	public static VerifyCodeFixProviderResult Fail(string message)
+	public static VerifyCodeFixProviderResult Fail(string message) => new()
 	{
-		return new VerifyCodeFixProviderResult
-		{
-			Success = false,
-			ErrorMessage = message
-		};
-	}
+		Success = false,
+		ErrorMessage = message
+	};
 
-	internal static VerifyCodeFixProviderResult Fail(string newSource, string actualSource)
+	internal static VerifyCodeFixProviderResult Fail(string newSource, string actualSource) => new()
 	{
-		return new VerifyCodeFixProviderResult
-		{
-			Success = false,
-			NewSource = newSource,
-			ActualSource = actualSource
-		};
-	}
+		Success = false,
+		NewSource = newSource,
+		ActualSource = actualSource
+	};
 }

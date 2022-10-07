@@ -34,7 +34,7 @@ public class StreamWriterAnalyzer : BaseFileSystemNodeAnalyzer
 	/// <summary>
 	/// Правило
 	/// </summary>
-	private static readonly DiagnosticDescriptor Rule = new DiagnosticDescriptor(DiagnosticId,
+	private static readonly DiagnosticDescriptor Rule = new(DiagnosticId,
 		Title,
 		MessageFormat,
 		Category,
@@ -49,12 +49,11 @@ public class StreamWriterAnalyzer : BaseFileSystemNodeAnalyzer
 	protected override void Analyze(SyntaxNodeAnalysisContext context, ExpressionSyntax syntax)
 	{
 		if (IsFirstConstructorParameterOfType<string>(context, syntax))
+		{
 			context.ReportDiagnostic(Diagnostic.Create(Rule, syntax.GetLocation()));
+		}
 	}
 
 	/// <inheritdoc />
-	protected override Type GetFileSystemType()
-	{
-		return typeof(StreamWriter);
-	}
+	protected override Type GetFileSystemType() => typeof(StreamWriter);
 }

@@ -11,22 +11,18 @@ public abstract class CSharpDiagnosticAnalyzerTest<T> : FileReaderTest
 	where T : DiagnosticAnalyzer, new()
 {
 	/// <inheritdoc />
-	public override string Filepath => _diagnosticAnalyzer.GetType().Name;
+	public override string Filepath =>
+		_diagnosticAnalyzer.GetType()
+			.Name;
 
 	/// <inheritdoc />
 	public override string PathToTestData => "./TestData/Analyzer/";
 
 	private readonly DiagnosticAnalyzer _diagnosticAnalyzer;
 
-	protected CSharpDiagnosticAnalyzerTest()
-	{
-		_diagnosticAnalyzer = new T();
-	}
+	protected CSharpDiagnosticAnalyzerTest() => _diagnosticAnalyzer = new T();
 
-	protected virtual IEnumerable<MetadataReference> GetAdditionalReferences()
-	{
-		return Enumerable.Empty<MetadataReference>();
-	}
+	protected virtual IEnumerable<MetadataReference> GetAdditionalReferences() => Enumerable.Empty<MetadataReference>();
 
 	/// <summary>
 	/// Called to test a C# DiagnosticAnalyzer when applied on the single inputted
@@ -38,20 +34,23 @@ public abstract class CSharpDiagnosticAnalyzerTest<T> : FileReaderTest
 	/// DiagnosticResults that should appear after the analyzer
 	/// is run on the source
 	/// </param>
-	protected void VerifyDiagnostic(string source, DiagnosticResult[] expected)
+	protected void VerifyDiagnostic(string source, DiagnosticResult[] expected) => VerifyDiagnostic(new[]
 	{
-		VerifyDiagnostic(new[] { source }, expected);
-	}
+		source
+	}, expected);
 
-	protected void VerifyDiagnostic(string source, DiagnosticResult expected)
+	protected void VerifyDiagnostic(string source, DiagnosticResult expected) => VerifyDiagnostic(new[]
 	{
-		VerifyDiagnostic(new[] { source }, new[] { expected });
-	}
+		source
+	}, new[]
+	{
+		expected
+	});
 
-	protected void VerifyNoDiagnosticTriggered(string source)
+	protected void VerifyNoDiagnosticTriggered(string source) => VerifyDiagnostic(new[]
 	{
-		VerifyDiagnostic(new[] { source }, new DiagnosticResult[0]);
-	}
+		source
+	}, new DiagnosticResult[0]);
 
 	/// <summary>
 	/// Called to test a C# DiagnosticAnalyzer when applied on the inputted strings as

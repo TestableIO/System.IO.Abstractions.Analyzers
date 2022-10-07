@@ -16,16 +16,15 @@ public abstract class BaseInvokeCodeFix : CodeFixProvider
 
 	public override ImmutableArray<string> FixableDiagnosticIds => ImmutableArray.Create(DiagnosticId);
 
-	public sealed override FixAllProvider GetFixAllProvider()
-	{
-		return WellKnownFixAllProviders.BatchFixer;
-	}
+	public override sealed FixAllProvider GetFixAllProvider() => WellKnownFixAllProviders.BatchFixer;
 
-	public sealed override async Task RegisterCodeFixesAsync(CodeFixContext context)
+	public override async sealed Task RegisterCodeFixesAsync(CodeFixContext context)
 	{
-		var root = await context.Document.GetSyntaxRootAsync(context.CancellationToken).ConfigureAwait(false);
+		var root = await context.Document.GetSyntaxRootAsync(context.CancellationToken)
+			.ConfigureAwait(false);
 
-		var classDeclaration = root.FindNode(context.Span).FirstAncestorOrSelf<ClassDeclarationSyntax>();
+		var classDeclaration = root.FindNode(context.Span)
+			.FirstAncestorOrSelf<ClassDeclarationSyntax>();
 
 		if (RoslynClassFileSystem.HasFileSystemField(classDeclaration))
 		{

@@ -16,29 +16,31 @@ public class FileInfoCodeFix : CodeFixProvider
 {
 	private const string Title = "Use IFileInfoFactory instead creation FileInfo for improved testability";
 
-	public override ImmutableArray<string> FixableDiagnosticIds =>
-		ImmutableArray.Create(Constants.Io0004);
+	public override ImmutableArray<string> FixableDiagnosticIds => ImmutableArray.Create(Constants.Io0004);
 
-	public sealed override FixAllProvider GetFixAllProvider()
-	{
-		return WellKnownFixAllProviders.BatchFixer;
-	}
+	public override sealed FixAllProvider GetFixAllProvider() => WellKnownFixAllProviders.BatchFixer;
 
 	public override async Task RegisterCodeFixesAsync(CodeFixContext context)
 	{
-		var root = await context.Document.GetSyntaxRootAsync(context.CancellationToken).ConfigureAwait(false);
-		var classDeclarationSyntax = root.FindNode(context.Span).FirstAncestorOrSelf<ClassDeclarationSyntax>();
+		var root = await context.Document.GetSyntaxRootAsync(context.CancellationToken)
+			.ConfigureAwait(false);
+
+		var classDeclarationSyntax = root.FindNode(context.Span)
+			.FirstAncestorOrSelf<ClassDeclarationSyntax>();
 
 		if (RoslynClassFileSystem.HasFileSystemField(classDeclarationSyntax))
 		{
-			var creationExpressionSyntax = root.FindNode(context.Span).FirstAncestorOrSelf<ObjectCreationExpressionSyntax>();
+			var creationExpressionSyntax = root.FindNode(context.Span)
+				.FirstAncestorOrSelf<ObjectCreationExpressionSyntax>();
 
 			var fieldDeclarationSyntax = classDeclarationSyntax
 				.Members
 				.OfType<FieldDeclarationSyntax>()
 				.FirstOrDefault(x =>
-					x.Declaration.Type.NormalizeWhitespace().ToFullString()
-					== RoslynClassFileSystem.GetFileSystemType().ToFullString());
+					x.Declaration.Type.NormalizeWhitespace()
+						.ToFullString()
+					== RoslynClassFileSystem.GetFileSystemType()
+						.ToFullString());
 
 			context.RegisterCodeFix(new FileInfoCodeAction(Title,
 					context.Document,

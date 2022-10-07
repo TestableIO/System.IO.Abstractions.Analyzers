@@ -23,13 +23,18 @@ internal static class CodeFixProviderTestExtensions
 	/// <returns> A Document with the changes from the CodeAction </returns>
 	public static Document ApplyFix(this Document document, CodeAction codeAction)
 	{
-		var operations = codeAction.GetOperationsAsync(CancellationToken.None).GetAwaiter().GetResult();
-		var solution = operations.OfType<ApplyChangesOperation>().Single().ChangedSolution;
+		var operations = codeAction.GetOperationsAsync(CancellationToken.None)
+			.GetAwaiter()
+			.GetResult();
+
+		var solution = operations.OfType<ApplyChangesOperation>()
+			.Single()
+			.ChangedSolution;
 
 		return solution.GetDocument(document.Id);
 	}
 
-#region [Actual comparisons and verifications]
+	#region [Actual comparisons and verifications]
 
 	/// <summary>
 	/// General verifier for codefixes.
@@ -73,7 +78,12 @@ internal static class CodeFixProviderTestExtensions
 														IEnumerable<MetadataReference> additionalReferences = null)
 	{
 		var document = DiagnosticAnalyzerTestExtensions.CreateDocument(oldSource, language, additionalReferences);
-		var analyzerDiagnostics = analyzer.GetSortedDiagnosticsFromDocuments(new[] { document });
+
+		var analyzerDiagnostics = analyzer.GetSortedDiagnosticsFromDocuments(new[]
+		{
+			document
+		});
+
 		var compilerDiagnostics = document.GetCompilerDiagnostics();
 		var attempts = analyzerDiagnostics.Length;
 
@@ -81,7 +91,10 @@ internal static class CodeFixProviderTestExtensions
 		{
 			var actions = new List<CodeAction>();
 			var context = new CodeFixContext(document, analyzerDiagnostics[0], (a, d) => actions.Add(a), CancellationToken.None);
-			codeFixProvider.RegisterCodeFixesAsync(context).GetAwaiter().GetResult();
+
+			codeFixProvider.RegisterCodeFixesAsync(context)
+				.GetAwaiter()
+				.GetResult();
 
 			if (!actions.Any())
 			{
@@ -96,7 +109,11 @@ internal static class CodeFixProviderTestExtensions
 			}
 
 			document = document.ApplyFix(actions.ElementAt(0));
-			analyzerDiagnostics = analyzer.GetSortedDiagnosticsFromDocuments(new[] { document });
+
+			analyzerDiagnostics = analyzer.GetSortedDiagnosticsFromDocuments(new[]
+			{
+				document
+			});
 
 			var newCompilerDiagnostics = GetNewDiagnostics(compilerDiagnostics, document.GetCompilerDiagnostics());
 
@@ -104,7 +121,9 @@ internal static class CodeFixProviderTestExtensions
 			if (!allowNewCompilerDiagnostics && newCompilerDiagnostics.Any())
 			{
 				// Format and get the compiler diagnostics again so that the locations make sense in the output
-				document = document.WithSyntaxRoot(Formatter.Format(document.GetSyntaxRootAsync().GetAwaiter().GetResult(),
+				document = document.WithSyntaxRoot(Formatter.Format(document.GetSyntaxRootAsync()
+						.GetAwaiter()
+						.GetResult(),
 					Formatter.Annotation,
 					document.Project.Solution.Workspace));
 
@@ -129,11 +148,8 @@ internal static class CodeFixProviderTestExtensions
 			: VerifyCodeFixProviderResult.Fail(newSource, actual);
 	}
 
-	private static string GetNewCompilerDiagnosticsIntroducedMessage(Document document, IEnumerable<Diagnostic> newCompilerDiagnostics)
-	{
-		return
-			$"Fix introduced new compiler diagnostics:{Environment.NewLine}{string.Join("{Environment.NewLine}", newCompilerDiagnostics.Select(d => d.ToString()))}{Environment.NewLine}{Environment.NewLine}New document:{Environment.NewLine}{document.GetSyntaxRootAsync().GetAwaiter().GetResult().ToFullString()}{Environment.NewLine}";
-	}
+	private static string GetNewCompilerDiagnosticsIntroducedMessage(Document document, IEnumerable<Diagnostic> newCompilerDiagnostics) =>
+		$"Fix introduced new compiler diagnostics:{Environment.NewLine}{string.Join("{Environment.NewLine}", newCompilerDiagnostics.Select(d => d.ToString()))}{Environment.NewLine}{Environment.NewLine}New document:{Environment.NewLine}{document.GetSyntaxRootAsync().GetAwaiter().GetResult().ToFullString()}{Environment.NewLine}";
 
 	/// <summary>
 	/// Get the existing compiler diagnostics on the inputted document.
@@ -143,10 +159,10 @@ internal static class CodeFixProviderTestExtensions
 	/// on
 	/// </param>
 	/// <returns> The compiler diagnostics that were found in the code </returns>
-	private static IEnumerable<Diagnostic> GetCompilerDiagnostics(this Document document)
-	{
-		return document.GetSemanticModelAsync().GetAwaiter().GetResult().GetDiagnostics();
-	}
+	private static IEnumerable<Diagnostic> GetCompilerDiagnostics(this Document document) => document.GetSemanticModelAsync()
+		.GetAwaiter()
+		.GetResult()
+		.GetDiagnostics();
 
 	/// <summary>
 	/// Given a document, turn it into a string based on the syntax root
@@ -155,11 +171,18 @@ internal static class CodeFixProviderTestExtensions
 	/// <returns> A string containing the syntax of the Document after formatting </returns>
 	public static string GetStringFromDocument(this Document document)
 	{
-		var simplifiedDoc = Simplifier.ReduceAsync(document, Simplifier.Annotation).GetAwaiter().GetResult();
-		var root = simplifiedDoc.GetSyntaxRootAsync().GetAwaiter().GetResult();
+		var simplifiedDoc = Simplifier.ReduceAsync(document, Simplifier.Annotation)
+			.GetAwaiter()
+			.GetResult();
+
+		var root = simplifiedDoc.GetSyntaxRootAsync()
+			.GetAwaiter()
+			.GetResult();
+
 		root = Formatter.Format(root, Formatter.Annotation, simplifiedDoc.Project.Solution.Workspace);
 
-		return root.GetText().ToString();
+		return root.GetText()
+			.ToString();
 	}
 
 	/// <summary>
@@ -184,15 +207,22 @@ internal static class CodeFixProviderTestExtensions
 	private static IEnumerable<Diagnostic> GetNewDiagnostics(IEnumerable<Diagnostic> diagnostics,
 															IEnumerable<Diagnostic> newDiagnostics)
 	{
-		var oldArray = diagnostics.OrderBy(d => d.Location.SourceSpan.Start).ToArray();
-		var newArray = newDiagnostics.OrderBy(d => d.Location.SourceSpan.Start).ToArray();
+		var oldArray = diagnostics.OrderBy(d => d.Location.SourceSpan.Start)
+			.ToArray();
+
+		var newArray = newDiagnostics.OrderBy(d => d.Location.SourceSpan.Start)
+			.ToArray();
 
 		var oldIndex = 0;
 		var newIndex = 0;
 
 		while (newIndex < newArray.Length)
 		{
-			if (oldIndex < oldArray.Length && oldArray[oldIndex].Id == newArray[newIndex].Id)
+			if (oldIndex < oldArray.Length
+				&& oldArray[oldIndex]
+					.Id
+				== newArray[newIndex]
+					.Id)
 			{
 				++oldIndex;
 				++newIndex;
@@ -203,5 +233,5 @@ internal static class CodeFixProviderTestExtensions
 		}
 	}
 
-#endregion
+	#endregion
 }

@@ -33,12 +33,15 @@ public class FileStreamCodeAction : CodeAction
 
 	protected override async Task<Document> GetChangedDocumentAsync(CancellationToken cancellationToken)
 	{
-		var editor = await DocumentEditor.CreateAsync(_document, cancellationToken).ConfigureAwait(false);
+		var editor = await DocumentEditor.CreateAsync(_document, cancellationToken)
+			.ConfigureAwait(false);
+
 		var arguments = _creationExpressionSyntax.ArgumentList.Arguments.Select(x => x.ToFullString());
 
 		editor.ReplaceNode(_creationExpressionSyntax,
 			SF.ParseExpression($"{_field.Declaration.Variables.ToFullString()}.FileStream.Create({string.Join(",", arguments)})"));
 
-		return await Formatter.FormatAsync(editor.GetChangedDocument(), cancellationToken: cancellationToken).ConfigureAwait(false);
+		return await Formatter.FormatAsync(editor.GetChangedDocument(), cancellationToken: cancellationToken)
+			.ConfigureAwait(false);
 	}
 }

@@ -35,7 +35,7 @@ public class FileAnalyzer : BaseFileSystemNodeAnalyzer
 	/// <summary>
 	/// Правило
 	/// </summary>
-	private static readonly DiagnosticDescriptor Rule = new DiagnosticDescriptor(DiagnosticId,
+	private static readonly DiagnosticDescriptor Rule = new(DiagnosticId,
 		Title,
 		MessageFormat,
 		Category,
@@ -48,14 +48,9 @@ public class FileAnalyzer : BaseFileSystemNodeAnalyzer
 	public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rule);
 
 	/// <inheritdoc />
-	protected override void Analyze(SyntaxNodeAnalysisContext context, ExpressionSyntax invocation)
-	{
+	protected override void Analyze(SyntaxNodeAnalysisContext context, ExpressionSyntax invocation) =>
 		context.ReportDiagnostic(Diagnostic.Create(Rule, invocation.GetLocation()));
-	}
 
 	/// <inheritdoc />
-	protected override Type GetFileSystemType()
-	{
-		return typeof(File);
-	}
+	protected override Type GetFileSystemType() => typeof(File);
 }

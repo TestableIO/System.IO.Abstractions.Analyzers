@@ -32,7 +32,8 @@ public class FileServiceInterfaceInjectionCodeAction : CodeAction
 
 	protected override async Task<Document> GetChangedDocumentAsync(CancellationToken cancellationToken)
 	{
-		var editor = await DocumentEditor.CreateAsync(_document, cancellationToken).ConfigureAwait(false);
+		var editor = await DocumentEditor.CreateAsync(_document, cancellationToken)
+			.ConfigureAwait(false);
 
 		if (!RoslynClassFileSystem.HasFileSystemField(_class))
 		{
@@ -71,15 +72,14 @@ public class FileServiceInterfaceInjectionCodeAction : CodeAction
 			editor.InsertAfter(systemIo, RoslynClassFileSystem.GetFileSystemUsing());
 		}
 
-		return await Formatter.FormatAsync(editor.GetChangedDocument(), cancellationToken: cancellationToken).ConfigureAwait(false);
+		return await Formatter.FormatAsync(editor.GetChangedDocument(), cancellationToken: cancellationToken)
+			.ConfigureAwait(false);
 	}
 
-	private static ExpressionStatementSyntax CreateAssignmentExpression(string field, string parameter)
-	{
-		return SF.ExpressionStatement(SF.AssignmentExpression(SyntaxKind.SimpleAssignmentExpression,
+	private static ExpressionStatementSyntax CreateAssignmentExpression(string field, string parameter) => SF.ExpressionStatement(
+		SF.AssignmentExpression(SyntaxKind.SimpleAssignmentExpression,
 			SF.IdentifierName(field),
 			SF.IdentifierName(parameter)));
-	}
 
 	private static void ConstructorAddParameter(ClassDeclarationSyntax classDeclaration, SyntaxEditor editor)
 	{

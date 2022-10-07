@@ -6,17 +6,14 @@ internal struct VerifyDiagnosticAnalyzerResult
 
 	public string ErrorMessage { get; private set; }
 
-	public static VerifyDiagnosticAnalyzerResult Ok()
+	public static VerifyDiagnosticAnalyzerResult Ok() => new()
 	{
-		return new VerifyDiagnosticAnalyzerResult { Success = true };
-	}
+		Success = true
+	};
 
-	public static VerifyDiagnosticAnalyzerResult Fail(string message)
+	public static VerifyDiagnosticAnalyzerResult Fail(string message) => new()
 	{
-		return new VerifyDiagnosticAnalyzerResult
-		{
-			Success = false,
-			ErrorMessage = message
-		};
-	}
+		Success = false,
+		ErrorMessage = message
+	};
 }

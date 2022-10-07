@@ -12,20 +12,19 @@ public abstract class CSharpCodeFixProviderTest<TDiagnosticAnalyzer, TCodeFixPro
 	where TDiagnosticAnalyzer : DiagnosticAnalyzer, new()
 	where TCodeFixProvider : CodeFixProvider, new()
 {
-#region To be implemented by Test classes
+	#region To be implemented by Test classes
 
 	/// <inheritdoc />
-	public override string Filepath => _codeFixProvider.GetType().Name;
+	public override string Filepath =>
+		_codeFixProvider.GetType()
+			.Name;
 
 	/// <inheritdoc />
 	public override string PathToTestData => "./TestData/CodeFix/";
 
-	protected virtual IEnumerable<MetadataReference> GetAdditionalReferences()
-	{
-		return Enumerable.Empty<MetadataReference>();
-	}
+	protected virtual IEnumerable<MetadataReference> GetAdditionalReferences() => Enumerable.Empty<MetadataReference>();
 
-#endregion
+	#endregion
 
 	private readonly TCodeFixProvider _codeFixProvider;
 
@@ -33,8 +32,8 @@ public abstract class CSharpCodeFixProviderTest<TDiagnosticAnalyzer, TCodeFixPro
 
 	protected CSharpCodeFixProviderTest()
 	{
-		_diagnosticAnalyzer = new TDiagnosticAnalyzer();
-		_codeFixProvider = new TCodeFixProvider();
+		_diagnosticAnalyzer = new();
+		_codeFixProvider = new();
 	}
 
 	/// <summary>

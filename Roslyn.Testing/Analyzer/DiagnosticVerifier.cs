@@ -37,7 +37,7 @@ internal static class DiagnosticAnalyzerTestExtensions
 
 	internal static string TestProjectName = "TestProject";
 
-#region  [Get Diagnostics]
+	#region [Get Diagnostics]
 
 	/// <summary>
 	/// Given classes in the form of strings, their language, and an
@@ -54,10 +54,8 @@ internal static class DiagnosticAnalyzerTestExtensions
 	/// </returns>
 	public static Diagnostic[] GetSortedDiagnostics(this DiagnosticAnalyzer analyzer,
 													string[] sources,
-													string language, IEnumerable<MetadataReference> references = null)
-	{
-		return GetSortedDiagnosticsFromDocuments(analyzer, GetDocuments(sources, language, references));
-	}
+													string language, IEnumerable<MetadataReference> references = null) =>
+		GetSortedDiagnosticsFromDocuments(analyzer, GetDocuments(sources, language, references));
 
 	/// <summary>
 	/// Given an analyzer and a document to apply it to, run the analyzer and gather an
@@ -85,9 +83,14 @@ internal static class DiagnosticAnalyzerTestExtensions
 		foreach (var project in projects)
 		{
 			var compilationWithAnalyzers =
-				project.GetCompilationAsync().GetAwaiter().GetResult().WithAnalyzers(ImmutableArray.Create(analyzer));
+				project.GetCompilationAsync()
+					.GetAwaiter()
+					.GetResult()
+					.WithAnalyzers(ImmutableArray.Create(analyzer));
 
-			var diags = compilationWithAnalyzers.GetAnalyzerDiagnosticsAsync().GetAwaiter().GetResult();
+			var diags = compilationWithAnalyzers.GetAnalyzerDiagnosticsAsync()
+				.GetAwaiter()
+				.GetResult();
 
 			foreach (var diag in diags)
 			{
@@ -98,7 +101,9 @@ internal static class DiagnosticAnalyzerTestExtensions
 				{
 					foreach (var document in documents)
 					{
-						var tree = document.GetSyntaxTreeAsync().GetAwaiter().GetResult();
+						var tree = document.GetSyntaxTreeAsync()
+							.GetAwaiter()
+							.GetResult();
 
 						if (tree == diag.Location.SourceTree)
 						{
@@ -120,14 +125,13 @@ internal static class DiagnosticAnalyzerTestExtensions
 	/// </summary>
 	/// <param name="diagnostics"> The list of Diagnostics to be sorted </param>
 	/// <returns> An IEnumerable containing the Diagnostics in order of Location </returns>
-	private static Diagnostic[] SortDiagnostics(IEnumerable<Diagnostic> diagnostics)
-	{
-		return diagnostics.OrderBy(d => d.Location.SourceSpan.Start).ToArray();
-	}
+	private static Diagnostic[] SortDiagnostics(IEnumerable<Diagnostic> diagnostics) => diagnostics
+		.OrderBy(d => d.Location.SourceSpan.Start)
+		.ToArray();
 
-#endregion
+	#endregion
 
-#region [Set up compilation and documents]
+	#region [Set up compilation and documents]
 
 	/// <summary>
 	/// Given an array of strings as sources and a language, turn them into a project
@@ -165,10 +169,12 @@ internal static class DiagnosticAnalyzerTestExtensions
 	/// <param name="language"> The language the source code is in </param>
 	/// <param name="references"></param>
 	/// <returns> A Document created from the source string </returns>
-	public static Document CreateDocument(string source, string language, IEnumerable<MetadataReference> references = null)
-	{
-		return CreateProject(new[] { source }, language, references).Documents.First();
-	}
+	public static Document CreateDocument(string source, string language, IEnumerable<MetadataReference> references = null) =>
+		CreateProject(new[]
+			{
+				source
+			}, language, references)
+			.Documents.First();
 
 	/// <summary>
 	/// Create a project using the inputted strings as sources.
@@ -183,7 +189,10 @@ internal static class DiagnosticAnalyzerTestExtensions
 	private static Project CreateProject(string[] sources, string language, IEnumerable<MetadataReference> references = null)
 	{
 		var fileNamePrefix = DefaultFilePathPrefix;
-		var fileExt = language == LanguageNames.CSharp ? CSharpDefaultFileExt : VisualBasicDefaultExt;
+
+		var fileExt = language == LanguageNames.CSharp
+			? CSharpDefaultFileExt
+			: VisualBasicDefaultExt;
 
 		var projectId = ProjectId.CreateNewId(TestProjectName);
 
@@ -214,9 +223,9 @@ internal static class DiagnosticAnalyzerTestExtensions
 		return solution.GetProject(projectId);
 	}
 
-#endregion
+	#endregion
 
-#region [Actual comparisons and verifications]
+	#region [Actual comparisons and verifications]
 
 	/// <summary>
 	/// Checks each of the actual Diagnostics found and compares them with the
@@ -341,9 +350,9 @@ internal static class DiagnosticAnalyzerTestExtensions
 		var actualSpan = actual.GetLineSpan();
 
 		var isInExpectedFile = actualSpan.Path == expected.Path
-								|| actualSpan.Path != null
-								&& actualSpan.Path.Contains("Test0.")
-								&& expected.Path.Contains("Test.");
+								|| (actualSpan.Path != null
+									&& actualSpan.Path.Contains("Test0.")
+									&& expected.Path.Contains("Test."));
 
 		if (!isInExpectedFile)
 		{
@@ -380,77 +389,50 @@ internal static class DiagnosticAnalyzerTestExtensions
 	}
 
 	private static string GetMismatchNumberOfDiagnosticsMessage(int expectedCount, int actualCount,
-																string diagnosticsOutput)
-	{
-		return
-			$"Mismatch between number of diagnostics returned, expected \"{expectedCount}\" actual \"{actualCount}\"{Environment.NewLine}{Environment.NewLine}Diagnostics:{Environment.NewLine}{diagnosticsOutput}{Environment.NewLine}";
-	}
+																string diagnosticsOutput) =>
+		$"Mismatch between number of diagnostics returned, expected \"{expectedCount}\" actual \"{actualCount}\"{Environment.NewLine}{Environment.NewLine}Diagnostics:{Environment.NewLine}{diagnosticsOutput}{Environment.NewLine}";
 
-	private static string GetExpectedDiagnosticWithNoLocation(DiagnosticAnalyzer analyzer, Diagnostic actual)
-	{
-		return
-			$"Expected:\nA project diagnostic with No location\nActual:\n{FormatDiagnostics(analyzer, new[] { actual })}";
-	}
+	private static string GetExpectedDiagnosticWithNoLocation(DiagnosticAnalyzer analyzer, Diagnostic actual) =>
+		$"Expected:\nA project diagnostic with No location\nActual:\n{FormatDiagnostics(analyzer, new[] { actual })}";
 
 	private static string GetNotExpectedLocation(DiagnosticAnalyzer analyzer,
 												Diagnostic actual,
 												DiagnosticResult expected,
-												Location[] additionalLocations)
-	{
-		return
-			$"Expected {expected.Locations.Length - 1} additional locations but got {additionalLocations.Length} for Diagnostic:{Environment.NewLine}    {FormatDiagnostics(analyzer, new[] { actual })}{Environment.NewLine}";
-	}
+												Location[] additionalLocations) =>
+		$"Expected {expected.Locations.Length - 1} additional locations but got {additionalLocations.Length} for Diagnostic:{Environment.NewLine}    {FormatDiagnostics(analyzer, new[] { actual })}{Environment.NewLine}";
 
 	private static string GetNoExpectedDiagnosticId(DiagnosticAnalyzer analyzer,
 													Diagnostic actual,
-													DiagnosticResult expected)
-	{
-		return
-			$"Expected diagnostic id to be \"{expected.Id}\" was \"{actual.Id}\"{Environment.NewLine}{Environment.NewLine}Diagnostic:{Environment.NewLine}    {FormatDiagnostics(analyzer, new[] { actual })}{Environment.NewLine}";
-	}
+													DiagnosticResult expected) =>
+		$"Expected diagnostic id to be \"{expected.Id}\" was \"{actual.Id}\"{Environment.NewLine}{Environment.NewLine}Diagnostic:{Environment.NewLine}    {FormatDiagnostics(analyzer, new[] { actual })}{Environment.NewLine}";
 
 	private static string GetNotExpectedSeverityMessage(DiagnosticAnalyzer analyzer,
 														Diagnostic actual,
-														DiagnosticResult expected)
-	{
-		return
-			$"Expected diagnostic severity to be \"{expected.Severity}\" was \"{actual.Severity}\"{Environment.NewLine}{Environment.NewLine}Diagnostic:{Environment.NewLine}    {FormatDiagnostics(analyzer, new[] { actual })}{Environment.NewLine}";
-	}
+														DiagnosticResult expected) =>
+		$"Expected diagnostic severity to be \"{expected.Severity}\" was \"{actual.Severity}\"{Environment.NewLine}{Environment.NewLine}Diagnostic:{Environment.NewLine}    {FormatDiagnostics(analyzer, new[] { actual })}{Environment.NewLine}";
 
 	private static string GetNotExcpectedMessage(DiagnosticAnalyzer analyzer,
 												Diagnostic actual,
-												DiagnosticResult expected)
-	{
-		return
-			$"Expected diagnostic message to be \"{expected.Message}\" was \"{actual.GetMessage()}\"{Environment.NewLine}{Environment.NewLine}Diagnostic:{Environment.NewLine}    {FormatDiagnostics(analyzer, new[] { actual })}{Environment.NewLine}";
-	}
+												DiagnosticResult expected) =>
+		$"Expected diagnostic message to be \"{expected.Message}\" was \"{actual.GetMessage()}\"{Environment.NewLine}{Environment.NewLine}Diagnostic:{Environment.NewLine}    {FormatDiagnostics(analyzer, new[] { actual })}{Environment.NewLine}";
 
 	private static string GetNotInExpectedColumn(DiagnosticAnalyzer analyzer,
 												Diagnostic diagnostic,
 												DiagnosticResultLocation expected,
-												LinePosition actualLinePosition)
-	{
-		return
-			$"Expected diagnostic to start at column \"{expected.Column}\" was actually at column \"{actualLinePosition.Character + 1}\"{Environment.NewLine}{Environment.NewLine}Diagnostic:{Environment.NewLine}    {FormatDiagnostics(analyzer, new[] { diagnostic })}{Environment.NewLine}";
-	}
+												LinePosition actualLinePosition) =>
+		$"Expected diagnostic to start at column \"{expected.Column}\" was actually at column \"{actualLinePosition.Character + 1}\"{Environment.NewLine}{Environment.NewLine}Diagnostic:{Environment.NewLine}    {FormatDiagnostics(analyzer, new[] { diagnostic })}{Environment.NewLine}";
 
 	private static string GetNotInExpectedLineMessage(DiagnosticAnalyzer analyzer,
 													Diagnostic diagnostic,
 													DiagnosticResultLocation expected,
-													LinePosition actualLinePosition)
-	{
-		return
-			$"Expected diagnostic to be on line \"{expected.Line}\" was actually on line \"{actualLinePosition.Line + 1}\"{Environment.NewLine}{Environment.NewLine}Diagnostic:{Environment.NewLine}    {FormatDiagnostics(analyzer, new[] { diagnostic })}{Environment.NewLine}";
-	}
+													LinePosition actualLinePosition) =>
+		$"Expected diagnostic to be on line \"{expected.Line}\" was actually on line \"{actualLinePosition.Line + 1}\"{Environment.NewLine}{Environment.NewLine}Diagnostic:{Environment.NewLine}    {FormatDiagnostics(analyzer, new[] { diagnostic })}{Environment.NewLine}";
 
 	private static string GetNotInExpectedFileMessage(DiagnosticAnalyzer analyzer,
 													Diagnostic diagnostic,
 													DiagnosticResultLocation expected,
-													FileLinePositionSpan actualSpan)
-	{
-		return
-			$"Expected diagnostic to be in file \"{expected.Path}\" was actually in file \"{actualSpan.Path}\"{Environment.NewLine}{Environment.NewLine}Diagnostic:{Environment.NewLine}    {FormatDiagnostics(analyzer, new[] { diagnostic })}{Environment.NewLine}";
-	}
+													FileLinePositionSpan actualSpan) =>
+		$"Expected diagnostic to be in file \"{expected.Path}\" was actually in file \"{actualSpan.Path}\"{Environment.NewLine}{Environment.NewLine}Diagnostic:{Environment.NewLine}    {FormatDiagnostics(analyzer, new[] { diagnostic })}{Environment.NewLine}";
 
 	/// <summary>
 	/// Helper method to format a Diagnostic into an easily readable string
@@ -471,9 +453,13 @@ internal static class DiagnosticAnalyzerTestExtensions
 
 			foreach (var rule in rules)
 			{
-				if (rule != null && rule.Id == diagnostics[i].Id)
+				if (rule != null
+					&& rule.Id
+					== diagnostics[i]
+						.Id)
 				{
-					var location = diagnostics[i].Location;
+					var location = diagnostics[i]
+						.Location;
 
 					if (location == Location.None)
 					{
@@ -485,14 +471,17 @@ internal static class DiagnosticAnalyzerTestExtensions
 							var msg =
 								$"Test base does not currently handle diagnostics in metadata locations. Diagnostic in metadata: {diagnostics[i]}{Environment.NewLine}";
 
-							throw new Exception(msg);
+							throw new(msg);
 						}
 
-						var resultMethodName = diagnostics[i].Location.SourceTree.FilePath.EndsWith(".cs")
+						var resultMethodName = diagnostics[i]
+							.Location.SourceTree.FilePath.EndsWith(".cs")
 							? "GetCSharpResultAt"
 							: "GetBasicResultAt";
 
-						var linePosition = diagnostics[i].Location.GetLineSpan().StartLinePosition;
+						var linePosition = diagnostics[i]
+							.Location.GetLineSpan()
+							.StartLinePosition;
 
 						builder.AppendFormat("{0}({1}, {2}, {3}.{4})",
 							resultMethodName,
@@ -517,5 +506,5 @@ internal static class DiagnosticAnalyzerTestExtensions
 		return builder.ToString();
 	}
 
-#endregion
+	#endregion
 }

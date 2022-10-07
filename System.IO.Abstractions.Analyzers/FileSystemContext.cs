@@ -4,10 +4,7 @@ namespace System.IO.Abstractions.Analyzers;
 
 public class FileSystemContext
 {
-	public FileSystemContext(Compilation compilation)
-	{
-		FileSystemType = compilation.GetTypeByMetadataName(Constants.FileSystem);
-	}
+	public FileSystemContext(Compilation compilation) => FileSystemType = compilation.GetTypeByMetadataName(Constants.FileSystem);
 
 	public bool HasReference => FileSystemType != null;
 

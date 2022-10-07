@@ -15,7 +15,7 @@ public class FileServiceInterfaceInjectionCodeFix : CodeFixProvider
 {
 	private const string Title = "Inject IFileSystem and using System.IO.Abstractions";
 
-	public sealed override ImmutableArray<string> FixableDiagnosticIds =>
+	public override sealed ImmutableArray<string> FixableDiagnosticIds =>
 		ImmutableArray.Create(Constants.Io0002,
 			Constants.Io0003,
 			Constants.Io0004,
@@ -23,20 +23,21 @@ public class FileServiceInterfaceInjectionCodeFix : CodeFixProvider
 			Constants.Io0006,
 			Constants.Io0007);
 
-	public sealed override FixAllProvider GetFixAllProvider()
-	{
-		return WellKnownFixAllProviders.BatchFixer;
-	}
+	public override sealed FixAllProvider GetFixAllProvider() => WellKnownFixAllProviders.BatchFixer;
 
-	public sealed override async Task RegisterCodeFixesAsync(CodeFixContext context)
+	public override async sealed Task RegisterCodeFixesAsync(CodeFixContext context)
 	{
-		var root = await context.Document.GetSyntaxRootAsync(context.CancellationToken).ConfigureAwait(false);
-		var classDeclarationSyntax = root.FindNode(context.Span).FirstAncestorOrSelf<ClassDeclarationSyntax>();
+		var root = await context.Document.GetSyntaxRootAsync(context.CancellationToken)
+			.ConfigureAwait(false);
+
+		var classDeclarationSyntax = root.FindNode(context.Span)
+			.FirstAncestorOrSelf<ClassDeclarationSyntax>();
+
 		var constructor = RoslynClassFileSystem.GetConstructor(classDeclarationSyntax);
 
 		if (!RoslynClassFileSystem.HasFileSystemField(classDeclarationSyntax)
-			|| constructor != null && !RoslynClassFileSystem.ConstructorHasFileSystemParameter(constructor)
-			|| constructor != null && !RoslynClassFileSystem.ConstructorHasAssignmentExpression(constructor))
+			|| (constructor != null && !RoslynClassFileSystem.ConstructorHasFileSystemParameter(constructor))
+			|| (constructor != null && !RoslynClassFileSystem.ConstructorHasAssignmentExpression(constructor)))
 		{
 			context.RegisterCodeFix(new FileServiceInterfaceInjectionCodeAction(Title,
 					context.Document,

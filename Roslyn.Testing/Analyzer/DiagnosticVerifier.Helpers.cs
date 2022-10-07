@@ -38,7 +38,7 @@ public abstract class DiagnosticVerifier
 
 	internal static string TestProjectName = "TestProject";
 
-#region  Get Diagnostics
+	#region Get Diagnostics
 
 	/// <summary>
 	/// Given classes in the form of strings, their language, and an
@@ -55,10 +55,8 @@ public abstract class DiagnosticVerifier
 	/// </returns>
 	[UsedImplicitly]
 	private static Diagnostic[] GetSortedDiagnostics(string[] sources, string language, ImmutableArray<DiagnosticAnalyzer> analyzers,
-													IEnumerable<MetadataReference> references = null)
-	{
-		return GetSortedDiagnosticsFromDocuments(analyzers, GetDocuments(sources, language, references));
-	}
+													IEnumerable<MetadataReference> references = null) =>
+		GetSortedDiagnosticsFromDocuments(analyzers, GetDocuments(sources, language, references));
 
 	/// <summary>
 	/// Given an analyzer and a document to apply it to, run the analyzer and gather an
@@ -84,8 +82,14 @@ public abstract class DiagnosticVerifier
 
 		foreach (var project in projects)
 		{
-			var compilationWithAnalyzers = project.GetCompilationAsync().GetAwaiter().GetResult().WithAnalyzers(analyzers);
-			var diags = compilationWithAnalyzers.GetAnalyzerDiagnosticsAsync().GetAwaiter().GetResult();
+			var compilationWithAnalyzers = project.GetCompilationAsync()
+				.GetAwaiter()
+				.GetResult()
+				.WithAnalyzers(analyzers);
+
+			var diags = compilationWithAnalyzers.GetAnalyzerDiagnosticsAsync()
+				.GetAwaiter()
+				.GetResult();
 
 			foreach (var diag in diags)
 			{
@@ -97,7 +101,10 @@ public abstract class DiagnosticVerifier
 					for (var i = 0; i < documents.Length; i++)
 					{
 						var document = documents[i];
-						var tree = document.GetSyntaxTreeAsync().GetAwaiter().GetResult();
+
+						var tree = document.GetSyntaxTreeAsync()
+							.GetAwaiter()
+							.GetResult();
 
 						if (tree == diag.Location.SourceTree)
 						{
@@ -119,14 +126,13 @@ public abstract class DiagnosticVerifier
 	/// </summary>
 	/// <param name="diagnostics"> The list of Diagnostics to be sorted </param>
 	/// <returns> An IEnumerable containing the Diagnostics in order of Location </returns>
-	private static Diagnostic[] SortDiagnostics(IEnumerable<Diagnostic> diagnostics)
-	{
-		return diagnostics.OrderBy(d => d.Location.SourceSpan.Start).ToArray();
-	}
+	private static Diagnostic[] SortDiagnostics(IEnumerable<Diagnostic> diagnostics) => diagnostics
+		.OrderBy(d => d.Location.SourceSpan.Start)
+		.ToArray();
 
-#endregion
+	#endregion
 
-#region Set up compilation and documents
+	#region Set up compilation and documents
 
 	/// <summary>
 	/// Given an array of strings as sources and a language, turn them into a project
@@ -165,10 +171,11 @@ public abstract class DiagnosticVerifier
 	/// <param name="references"></param>
 	/// <returns> A Document created from the source string </returns>
 	protected static Document CreateDocument(string source, string language = LanguageNames.CSharp,
-											IEnumerable<MetadataReference> references = null)
-	{
-		return CreateProject(new[] { source }, language, references).Documents.First();
-	}
+											IEnumerable<MetadataReference> references = null) => CreateProject(new[]
+		{
+			source
+		}, language, references)
+		.Documents.First();
 
 	/// <summary>
 	/// Create a project using the inputted strings as sources.
@@ -184,7 +191,10 @@ public abstract class DiagnosticVerifier
 										IEnumerable<MetadataReference> references = null)
 	{
 		var fileNamePrefix = DefaultFilePathPrefix;
-		var fileExt = language == LanguageNames.CSharp ? CSharpDefaultFileExt : VisualBasicDefaultExt;
+
+		var fileExt = language == LanguageNames.CSharp
+			? CSharpDefaultFileExt
+			: VisualBasicDefaultExt;
 
 		var projectId = ProjectId.CreateNewId(TestProjectName);
 
@@ -215,5 +225,5 @@ public abstract class DiagnosticVerifier
 		return solution.GetProject(projectId);
 	}
 
-#endregion
+	#endregion
 }

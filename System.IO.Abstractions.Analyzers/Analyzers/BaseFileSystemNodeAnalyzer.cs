@@ -11,7 +11,7 @@ public abstract class BaseFileSystemNodeAnalyzer : BaseFileSystemAnalyzer
 	protected override void AnalyzeCompilation(CompilationStartAnalysisContext compilationStartContext,
 												FileSystemContext fileSystemContext)
 	{
-		if (IsNotUsedSystemIo())
+		if (DoesNotUsedSystemIo())
 		{
 			return;
 		}
@@ -44,16 +44,26 @@ public abstract class BaseFileSystemNodeAnalyzer : BaseFileSystemAnalyzer
 
 	protected abstract Type GetFileSystemType();
 
-	private bool IsNotUsedSystemIo() => typeof(Path).Namespace
-										!= GetFileSystemType()
-											.Namespace;
+	private bool DoesNotUsedSystemIo()
+	{
+		var systemIoNamespace = typeof(Path).Namespace;
+
+		return systemIoNamespace != null
+				&& !systemIoNamespace.Equals(GetFileSystemType()
+					.Namespace);
+	}
 
 	private bool IsTypesEquals(TypeInfo typeInfo)
 	{
-		var fileSystemType = GetFileSystemType();
-		var namespaceSymbol = typeInfo.Type.ContainingNamespace;
+		if (typeInfo.Type is null)
+		{
+			return false;
+		}
 
-		return typeInfo.Type.Name == fileSystemType.Name
+		var namespaceSymbol = typeInfo.Type.ContainingNamespace;
+		var fileSystemType = GetFileSystemType();
+
+		return typeInfo.Type.Name.Equals(fileSystemType.Name, StringComparison.Ordinal)
 				&& (namespaceSymbol.IsGlobalNamespace || namespaceSymbol.ToString() == fileSystemType.Namespace);
 	}
 
@@ -73,22 +83,25 @@ public abstract class BaseFileSystemNodeAnalyzer : BaseFileSystemAnalyzer
 		if (symbolInfo.Symbol is ISymbol symbol)
 		{
 			return IsSymbolFromAbstractions(symbol);
-		} else if (symbolInfo.CandidateSymbols.Length > 0)
-		{
-			return symbolInfo.CandidateSymbols.All(IsSymbolFromAbstractions);
 		}
 
-		return false;
+		return symbolInfo.CandidateSymbols.Length > 0 && symbolInfo.CandidateSymbols.All(IsSymbolFromAbstractions);
 	}
 
 	private static bool IsSymbolFromAbstractions(ISymbol symbol)
 	{
-		var namespaceSymbol
-			= ((symbol as IPropertySymbol)?.Type ?? (symbol as IFieldSymbol)?.Type)?.ContainingNamespace
-			?? (symbol as IMethodSymbol)?.ContainingNamespace;
+		var namespaceSymbol = symbol switch
+		{
+			IPropertySymbol propertySymbol => propertySymbol.Type.ContainingNamespace,
+			IFieldSymbol fieldSymbol => fieldSymbol.Type.ContainingNamespace,
+			IMethodSymbol methodSymbol => methodSymbol.ContainingNamespace,
+			var _ => null
+		};
 
-		return namespaceSymbol != null
-				&& !namespaceSymbol.IsGlobalNamespace
+		return namespaceSymbol is
+				{
+					IsGlobalNamespace: false
+				}
 				&& namespaceSymbol.ToString()
 					.StartsWith(Constants.FileSystemNameSpace, StringComparison.Ordinal);
 	}

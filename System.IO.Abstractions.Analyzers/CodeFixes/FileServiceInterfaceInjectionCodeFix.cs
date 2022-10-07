@@ -15,6 +15,12 @@ public class FileServiceInterfaceInjectionCodeFix : CodeFixProvider
 {
 	private const string Title = "Inject IFileSystem and using System.IO.Abstractions";
 
+	[ImportingConstructor]
+	[Obsolete("This exported object must be obtained through the MEF export provider.", true)]
+	public FileServiceInterfaceInjectionCodeFix()
+	{
+	}
+
 	public override sealed ImmutableArray<string> FixableDiagnosticIds =>
 		ImmutableArray.Create(Constants.Io0002,
 			Constants.Io0003,

@@ -8,6 +8,12 @@ namespace System.IO.Abstractions.Analyzers.CodeFixes;
 [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(DirectoryCodeFix))]
 public class DirectoryCodeFix : BaseInvokeCodeFix
 {
+	[ImportingConstructor]
+	[Obsolete("This exported object must be obtained through the MEF export provider.", true)]
+	public DirectoryCodeFix()
+	{
+	}
+
 	protected override string DiagnosticId => Constants.Io0003;
 
 	protected override string Title => "Use IFileSystem.Directory for improved testability";

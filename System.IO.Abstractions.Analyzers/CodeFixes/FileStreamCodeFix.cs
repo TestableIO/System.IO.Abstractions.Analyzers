@@ -16,6 +16,12 @@ public class FileStreamCodeFix : CodeFixProvider
 {
 	private const string Title = "Use IFileStreamFactory instead creation FileStream for improved testability";
 
+	[ImportingConstructor]
+	[Obsolete("This exported object must be obtained through the MEF export provider.", true)]
+	public FileStreamCodeFix()
+	{
+	}
+
 	public override ImmutableArray<string> FixableDiagnosticIds => ImmutableArray.Create(Constants.Io0005);
 
 	public override sealed FixAllProvider GetFixAllProvider() => WellKnownFixAllProviders.BatchFixer;

@@ -8,6 +8,12 @@ namespace System.IO.Abstractions.Analyzers.CodeFixes;
 [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(PathCodeFix))]
 public class PathCodeFix : BaseInvokeCodeFix
 {
+	[ImportingConstructor]
+	[Obsolete("This exported object must be obtained through the MEF export provider.", true)]
+	public PathCodeFix()
+	{
+	}
+
 	protected override string DiagnosticId => Constants.Io0006;
 
 	protected override string Title => "Use IFileSystem.Path for improved testability";

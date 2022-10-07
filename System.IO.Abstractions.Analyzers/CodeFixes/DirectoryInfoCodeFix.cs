@@ -16,6 +16,12 @@ public class DirectoryInfoCodeFix : CodeFixProvider
 {
 	private const string Title = "Use IDirectoryInfoFactory instead creation DirectoryInfo for improved testability";
 
+	[ImportingConstructor]
+	[Obsolete("This exported object must be obtained through the MEF export provider.", true)]
+	public DirectoryInfoCodeFix()
+	{
+	}
+
 	public override ImmutableArray<string> FixableDiagnosticIds => ImmutableArray.Create(Constants.Io0007);
 
 	public override sealed FixAllProvider GetFixAllProvider() => WellKnownFixAllProviders.BatchFixer;

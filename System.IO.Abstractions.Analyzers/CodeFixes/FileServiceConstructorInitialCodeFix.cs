@@ -15,6 +15,12 @@ public class FileServiceConstructorInitialCodeFix : CodeFixProvider
 {
 	private const string Title = "Create FileSystem in constructor and using System.IO.Abstractions";
 
+	[ImportingConstructor]
+	[Obsolete("This exported object must be obtained through the MEF export provider.", true)]
+	public FileServiceConstructorInitialCodeFix()
+	{
+	}
+
 	public override sealed ImmutableArray<string> FixableDiagnosticIds =>
 		ImmutableArray.Create(Constants.Io0002,
 			Constants.Io0003,

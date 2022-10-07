@@ -6,7 +6,7 @@ public class FileSystemContext
 {
 	public FileSystemContext(Compilation compilation) => FileSystemType = compilation.GetTypeByMetadataName(Constants.FileSystem);
 
-	public bool HasReference => FileSystemType != null;
+	public bool HasReference => FileSystemType is not null;
 
-	public INamedTypeSymbol FileSystemType { get; }
+	private INamedTypeSymbol FileSystemType { get; }
 }

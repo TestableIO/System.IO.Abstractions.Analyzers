@@ -20,7 +20,7 @@ public abstract class BaseFileSystemAnalyzer : DiagnosticAnalyzer
 		{
 			var fileSystemContext = new FileSystemContext(compilationStartContext.Compilation);
 
-			if (ShouldAnalyze(fileSystemContext))
+			if (fileSystemContext.HasReference)
 			{
 				AnalyzeCompilation(compilationStartContext, fileSystemContext);
 			}
@@ -34,6 +34,4 @@ public abstract class BaseFileSystemAnalyzer : DiagnosticAnalyzer
 	/// <param name="fileSystemContext"> FileSystem Context </param>
 	protected abstract void AnalyzeCompilation(CompilationStartAnalysisContext compilationStartContext,
 												FileSystemContext fileSystemContext);
-
-	private static bool ShouldAnalyze(FileSystemContext fileSystemContext) => fileSystemContext.HasReference;
 }

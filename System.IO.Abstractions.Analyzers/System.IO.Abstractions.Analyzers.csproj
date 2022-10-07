@@ -6,11 +6,11 @@
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 		<LangVersion>latest</LangVersion>
 		<DevelopmentDependency>true</DevelopmentDependency>
+		<NoWarn>RS0016</NoWarn>
 	</PropertyGroup>
 	<PropertyGroup>
 		<PackageId>TestableIO.System.IO.Abstractions.Analyzers</PackageId>
 		<Title>$(PackageId)</Title>
-		<DevelopmentDependency>True</DevelopmentDependency>
 		<PackageVersion>13.2.47</PackageVersion>
 		<Authors>inyutin_maxim</Authors>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
@@ -23,7 +23,6 @@
 		<Copyright>Copyright © System-IO-Abstractions</Copyright>
 		<PackageTags>TestableIO.System.IO.Abstractions.Analyzers, analyzers, System.IO.Abstractions, Roslyn</PackageTags>
 		<NoPackageAnalysis>true</NoPackageAnalysis>
-		<LangVersion>latest</LangVersion>
 	</PropertyGroup>
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
 	  <Optimize>false</Optimize>

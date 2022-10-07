@@ -23,6 +23,11 @@ public abstract class BaseInvokeCodeFix : CodeFixProvider
 		var root = await context.Document.GetSyntaxRootAsync(context.CancellationToken)
 			.ConfigureAwait(false);
 
+		if (root == null)
+		{
+			return;
+		}
+
 		var classDeclaration = root.FindNode(context.Span)
 			.FirstAncestorOrSelf<ClassDeclarationSyntax>();
 

@@ -6,6 +6,9 @@ using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace System.IO.Abstractions.Analyzers.Analyzers.FileSystemTypeAnalyzers;
 
+/// <summary>
+/// Search method invocation from Path class in code
+/// </summary>
 [DiagnosticAnalyzer(LanguageNames.CSharp)]
 public class PathAnalyzer : BaseFileSystemNodeAnalyzer
 {
@@ -33,7 +36,7 @@ public class PathAnalyzer : BaseFileSystemNodeAnalyzer
 	private const string Link = "http://bit.ly/2ODMkKc";
 
 	/// <summary>
-	/// Правило
+	/// Diagnostic rule
 	/// </summary>
 	private static readonly DiagnosticDescriptor Rule = new(DiagnosticId,
 		Title,

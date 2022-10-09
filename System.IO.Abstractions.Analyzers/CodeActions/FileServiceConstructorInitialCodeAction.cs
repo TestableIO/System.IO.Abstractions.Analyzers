@@ -12,6 +12,9 @@ using SF = Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
 
 namespace System.IO.Abstractions.Analyzers.CodeActions;
 
+/// <summary>
+/// Code action to add IFileSystem as a property to a class.
+/// </summary>
 public class FileServiceConstructorInitialCodeAction : CodeAction
 {
 	private readonly ClassDeclarationSyntax _class;
@@ -25,10 +28,13 @@ public class FileServiceConstructorInitialCodeAction : CodeAction
 		Title = title;
 	}
 
+	/// <inheritdoc />
 	public override string Title { get; }
 
+	/// <inheritdoc />
 	public override string EquivalenceKey => Title;
 
+	/// <inheritdoc />
 	protected override async Task<Document> GetChangedDocumentAsync(CancellationToken cancellationToken)
 	{
 		var editor = await DocumentEditor.CreateAsync(_document, cancellationToken)

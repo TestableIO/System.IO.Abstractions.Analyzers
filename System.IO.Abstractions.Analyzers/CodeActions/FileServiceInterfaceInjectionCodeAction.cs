@@ -12,7 +12,9 @@ using SF = Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
 
 namespace System.IO.Abstractions.Analyzers.CodeActions;
 
-/// <inheritdoc />
+/// <summary>
+/// Code action to replace FileSystem invocation to IFileSystem service.
+/// </summary>
 public class FileServiceInterfaceInjectionCodeAction : CodeAction
 {
 	private readonly ClassDeclarationSyntax _class;
@@ -26,10 +28,13 @@ public class FileServiceInterfaceInjectionCodeAction : CodeAction
 		Title = title;
 	}
 
+	/// <inheritdoc />
 	public override string Title { get; }
 
+	/// <inheritdoc />
 	public override string EquivalenceKey => Title;
 
+	/// <inheritdoc />
 	protected override async Task<Document> GetChangedDocumentAsync(CancellationToken cancellationToken)
 	{
 		var editor = await DocumentEditor.CreateAsync(_document, cancellationToken)

@@ -6,8 +6,10 @@ using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace System.IO.Abstractions.Analyzers.Analyzers;
 
+/// <inheritdoc />
 public abstract class BaseFileSystemNodeAnalyzer : BaseFileSystemAnalyzer
 {
+	/// <inheritdoc />
 	protected override void AnalyzeCompilation(CompilationStartAnalysisContext compilationStartContext,
 												FileSystemContext fileSystemContext)
 	{

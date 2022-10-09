@@ -6,6 +6,9 @@ using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace System.IO.Abstractions.Analyzers.Analyzers.FileSystemTypeAnalyzers;
 
+/// <summary>
+/// Search StreamWriter in Code
+/// </summary>
 [DiagnosticAnalyzer(LanguageNames.CSharp)]
 public class StreamWriterAnalyzer : BaseFileSystemNodeAnalyzer
 {
@@ -32,7 +35,7 @@ public class StreamWriterAnalyzer : BaseFileSystemNodeAnalyzer
 	private const string Description = Title;
 
 	/// <summary>
-	/// Правило
+	/// Diagnostic rule
 	/// </summary>
 	private static readonly DiagnosticDescriptor Rule = new(DiagnosticId,
 		Title,

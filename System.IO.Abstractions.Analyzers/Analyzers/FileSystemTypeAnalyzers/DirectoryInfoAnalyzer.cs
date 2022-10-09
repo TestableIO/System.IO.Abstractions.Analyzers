@@ -6,6 +6,9 @@ using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace System.IO.Abstractions.Analyzers.Analyzers.FileSystemTypeAnalyzers;
 
+/// <summary>
+/// Search method invocation from DirectoryInfo class in code
+/// </summary>
 [DiagnosticAnalyzer(LanguageNames.CSharp)]
 public class DirectoryInfoAnalyzer : BaseFileSystemNodeAnalyzer
 {
@@ -33,7 +36,7 @@ public class DirectoryInfoAnalyzer : BaseFileSystemNodeAnalyzer
 	private const string Link = "http://bit.ly/2OCAmQF";
 
 	/// <summary>
-	/// Правило
+	/// Diagnostic rule
 	/// </summary>
 	private static readonly DiagnosticDescriptor Rule = new(DiagnosticId,
 		Title,

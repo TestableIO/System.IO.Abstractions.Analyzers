@@ -10,6 +10,9 @@ using SF = Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
 
 namespace System.IO.Abstractions.Analyzers.CodeActions;
 
+/// <summary>
+/// Code action to replace a <see cref="FileInfo"/> with a IFileSystem.FileInfo.
+/// </summary>
 public class FileInfoCodeAction : CodeAction
 {
 	private readonly ObjectCreationExpressionSyntax _creationExpressionSyntax;
@@ -27,10 +30,13 @@ public class FileInfoCodeAction : CodeAction
 		_field = field;
 	}
 
+	/// <inheritdoc />
 	public override string Title { get; }
 
+	/// <inheritdoc />
 	public override string EquivalenceKey => Title;
 
+	/// <inheritdoc />
 	protected override async Task<Document> GetChangedDocumentAsync(CancellationToken cancellationToken)
 	{
 		var editor = await DocumentEditor.CreateAsync(_document, cancellationToken)

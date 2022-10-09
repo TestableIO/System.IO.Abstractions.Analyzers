@@ -9,6 +9,9 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace System.IO.Abstractions.Analyzers.CodeFixes;
 
+/// <summary>
+/// Code fix provider for injection IFileSystem in controller constructor.
+/// </summary>
 [Shared]
 [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(FileServiceConstructorInitialCodeFix))]
 public class FileServiceConstructorInitialCodeFix : CodeFixProvider
@@ -21,6 +24,7 @@ public class FileServiceConstructorInitialCodeFix : CodeFixProvider
 	{
 	}
 
+	/// <inheritdoc />
 	public override sealed ImmutableArray<string> FixableDiagnosticIds =>
 		ImmutableArray.Create(Constants.Io0002,
 			Constants.Io0003,
@@ -29,8 +33,10 @@ public class FileServiceConstructorInitialCodeFix : CodeFixProvider
 			Constants.Io0006,
 			Constants.Io0007);
 
+	/// <inheritdoc />
 	public override sealed FixAllProvider GetFixAllProvider() => WellKnownFixAllProviders.BatchFixer;
 
+	/// <inheritdoc />
 	public override async sealed Task RegisterCodeFixesAsync(CodeFixContext context)
 	{
 		var root = await context.Document.GetSyntaxRootAsync(context.CancellationToken)

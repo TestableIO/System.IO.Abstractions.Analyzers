@@ -9,6 +9,9 @@ using SF = Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
 
 namespace System.IO.Abstractions.Analyzers.CodeActions;
 
+/// <summary>
+/// Code action to replace with a IFileSystem call.
+/// </summary>
 public class FileSystemInvokeCodeAction : CodeAction
 {
 	private readonly Document _document;
@@ -26,10 +29,13 @@ public class FileSystemInvokeCodeAction : CodeAction
 		_field = field;
 	}
 
+	/// <inheritdoc />
 	public override string Title { get; }
 
+	/// <inheritdoc />
 	public override string EquivalenceKey => Title;
 
+	/// <inheritdoc />
 	protected override async Task<Document> GetChangedDocumentAsync(CancellationToken cancellationToken)
 	{
 		var editor = await DocumentEditor.CreateAsync(_document, cancellationToken)

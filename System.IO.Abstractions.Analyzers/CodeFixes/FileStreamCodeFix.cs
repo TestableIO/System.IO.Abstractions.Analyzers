@@ -1,5 +1,6 @@
 using System.Collections.Immutable;
 using System.Composition;
+using System.IO.Abstractions.Analyzers.Analyzers.FileSystemTypeAnalyzers;
 using System.IO.Abstractions.Analyzers.CodeActions;
 using System.IO.Abstractions.Analyzers.RoslynToken;
 using System.Linq;
@@ -10,6 +11,9 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace System.IO.Abstractions.Analyzers.CodeFixes;
 
+/// <summary>
+/// Code fix provider for <see cref="FileStreamAnalyzer"/>.
+/// </summary>
 [Shared]
 [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(FileStreamCodeFix))]
 public class FileStreamCodeFix : CodeFixProvider
@@ -22,10 +26,13 @@ public class FileStreamCodeFix : CodeFixProvider
 	{
 	}
 
+	/// <inheritdoc />
 	public override ImmutableArray<string> FixableDiagnosticIds => ImmutableArray.Create(Constants.Io0005);
 
+	/// <inheritdoc />
 	public override sealed FixAllProvider GetFixAllProvider() => WellKnownFixAllProviders.BatchFixer;
 
+	/// <inheritdoc />
 	public override async Task RegisterCodeFixesAsync(CodeFixContext context)
 	{
 		var root = await context.Document.GetSyntaxRootAsync(context.CancellationToken)

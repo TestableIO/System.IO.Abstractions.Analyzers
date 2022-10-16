@@ -70,8 +70,11 @@ public class FileServiceConstructorInitialCodeAction : CodeAction
 
 		if (systemIo == null)
 		{
-			editor.InsertBefore(compilationUnitSyntax.Usings.FirstOrDefault(),
-				RoslynClassFileSystem.GetFileSystemUsing());
+			if (compilationUnitSyntax.Usings.Any())
+			{
+				editor.InsertBefore(compilationUnitSyntax.Usings.FirstOrDefault()!,
+					RoslynClassFileSystem.GetFileSystemUsing());
+			}
 		} else
 		{
 			editor.InsertAfter(systemIo, RoslynClassFileSystem.GetFileSystemUsing());

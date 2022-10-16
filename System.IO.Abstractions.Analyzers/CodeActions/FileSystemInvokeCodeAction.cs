@@ -41,9 +41,12 @@ public class FileSystemInvokeCodeAction : CodeAction
 		var editor = await DocumentEditor.CreateAsync(_document, cancellationToken)
 			.ConfigureAwait(false);
 
-		editor.ReplaceNode(_invocation,
-			SF.ParseExpression(
-				$"{_field.Declaration.Variables.FirstOrDefault().Identifier.Text}.{_invocation.NormalizeWhitespace().ToFullString()}"));
+		if (_field.Declaration.Variables.Any())
+		{
+			editor.ReplaceNode(_invocation,
+				SF.ParseExpression(
+					$"{_field.Declaration.Variables.FirstOrDefault()?.Identifier.Text}.{_invocation.NormalizeWhitespace().ToFullString()}"));
+		}
 
 		return await Formatter.FormatAsync(editor.GetChangedDocument(), cancellationToken: cancellationToken)
 			.ConfigureAwait(false);

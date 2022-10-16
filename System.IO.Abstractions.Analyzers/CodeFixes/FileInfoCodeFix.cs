@@ -38,28 +38,30 @@ public class FileInfoCodeFix : CodeFixProvider
 		var root = await context.Document.GetSyntaxRootAsync(context.CancellationToken)
 			.ConfigureAwait(false);
 
-		var classDeclarationSyntax = root.FindNode(context.Span)
+		var classDeclarationSyntax = root?.FindNode(context.Span)
 			.FirstAncestorOrSelf<ClassDeclarationSyntax>();
 
-		if (RoslynClassFileSystem.HasFileSystemField(classDeclarationSyntax))
+		if (classDeclarationSyntax is null || !RoslynClassFileSystem.HasFileSystemField(classDeclarationSyntax))
 		{
-			var creationExpressionSyntax = root.FindNode(context.Span)
-				.FirstAncestorOrSelf<ObjectCreationExpressionSyntax>();
-
-			var fieldDeclarationSyntax = classDeclarationSyntax
-				.Members
-				.OfType<FieldDeclarationSyntax>()
-				.FirstOrDefault(x =>
-					x.Declaration.Type.NormalizeWhitespace()
-						.ToFullString()
-					== RoslynClassFileSystem.GetFileSystemType()
-						.ToFullString());
-
-			context.RegisterCodeFix(new FileInfoCodeAction(Title,
-					context.Document,
-					creationExpressionSyntax,
-					fieldDeclarationSyntax),
-				context.Diagnostics);
+			return;
 		}
+
+		var creationExpressionSyntax = root.FindNode(context.Span)
+			.FirstAncestorOrSelf<ObjectCreationExpressionSyntax>();
+
+		var fieldDeclarationSyntax = classDeclarationSyntax
+			.Members
+			.OfType<FieldDeclarationSyntax>()
+			.FirstOrDefault(x =>
+				x.Declaration.Type.NormalizeWhitespace()
+					.ToFullString()
+				== RoslynClassFileSystem.GetFileSystemType()
+					.ToFullString());
+
+		context.RegisterCodeFix(new FileInfoCodeAction(Title,
+				context.Document,
+				creationExpressionSyntax,
+				fieldDeclarationSyntax),
+			context.Diagnostics);
 	}
 }

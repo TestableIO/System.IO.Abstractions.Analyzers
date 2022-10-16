@@ -14,7 +14,7 @@ namespace Roslyn.Testing.Analyzer;
 
 internal static class DiagnosticAnalyzerTestExtensions
 {
-	private static readonly MetadataReference CorlibReference =
+	private static readonly MetadataReference CoreLibraryReference =
 		MetadataReference.CreateFromFile(typeof(object).Assembly.Location);
 
 	private static readonly MetadataReference SystemCoreReference =
@@ -26,7 +26,7 @@ internal static class DiagnosticAnalyzerTestExtensions
 	private static readonly MetadataReference CodeAnalysisReference =
 		MetadataReference.CreateFromFile(typeof(Compilation).Assembly.Location);
 
-	private static readonly MetadataReference SystemDiagReference =
+	private static readonly MetadataReference SystemDiagnosticReference =
 		MetadataReference.CreateFromFile(typeof(Process).Assembly.Location);
 
 	internal static string DefaultFilePathPrefix = "Test";
@@ -41,7 +41,7 @@ internal static class DiagnosticAnalyzerTestExtensions
 
 	/// <summary>
 	/// Given classes in the form of strings, their language, and an
-	/// IDiagnosticAnlayzer to apply to it, return the diagnostics found in the string
+	/// IDiagnosticAnalyzer to apply to it, return the diagnostics found in the string
 	/// after converting it to a document.
 	/// </summary>
 	/// <param name="sources"> Classes in the form of strings </param>
@@ -199,11 +199,11 @@ internal static class DiagnosticAnalyzerTestExtensions
 		var solution = new AdhocWorkspace()
 			.CurrentSolution
 			.AddProject(projectId, TestProjectName, TestProjectName, language)
-			.AddMetadataReference(projectId, CorlibReference)
+			.AddMetadataReference(projectId, CoreLibraryReference)
 			.AddMetadataReference(projectId, SystemCoreReference)
 			.AddMetadataReference(projectId, CSharpSymbolsReference)
 			.AddMetadataReference(projectId, CodeAnalysisReference)
-			.AddMetadataReference(projectId, SystemDiagReference);
+			.AddMetadataReference(projectId, SystemDiagnosticReference);
 
 		if (references != null)
 		{

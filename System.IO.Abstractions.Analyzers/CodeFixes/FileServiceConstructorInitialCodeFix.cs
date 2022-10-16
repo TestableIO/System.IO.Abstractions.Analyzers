@@ -42,6 +42,11 @@ public class FileServiceConstructorInitialCodeFix : CodeFixProvider
 		var root = await context.Document.GetSyntaxRootAsync(context.CancellationToken)
 			.ConfigureAwait(false);
 
+		if (root == null)
+		{
+			return;
+		}
+
 		var classDeclarationSyntax = root.FindNode(context.Span)
 			.FirstAncestorOrSelf<ClassDeclarationSyntax>();
 

@@ -1,6 +1,5 @@
 using System.Collections.Immutable;
 using System.Composition;
-using System.IO.Abstractions.Analyzers.Analyzers.FileSystemTypeAnalyzers;
 using System.IO.Abstractions.Analyzers.CodeActions;
 using System.IO.Abstractions.Analyzers.RoslynToken;
 using System.Linq;
@@ -12,7 +11,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 namespace System.IO.Abstractions.Analyzers.CodeFixes;
 
 /// <summary>
-/// Code fix provider for <see cref="FileStreamAnalyzer"/>.
+/// Code fix provider for <see cref="System.IO.Abstractions.Analyzers.Analyzers.FileSystemTypeAnalyzers.FileStreamAnalyzer"/>.
 /// </summary>
 [Shared]
 [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(FileStreamCodeFix))]
@@ -38,28 +37,30 @@ public class FileStreamCodeFix : CodeFixProvider
 		var root = await context.Document.GetSyntaxRootAsync(context.CancellationToken)
 			.ConfigureAwait(false);
 
-		var classDeclarationSyntax = root.FindNode(context.Span)
+		var classDeclarationSyntax = root?.FindNode(context.Span)
 			.FirstAncestorOrSelf<ClassDeclarationSyntax>();
 
-		if (RoslynClassFileSystem.HasFileSystemField(classDeclarationSyntax))
+		if (classDeclarationSyntax is null || !RoslynClassFileSystem.HasFileSystemField(classDeclarationSyntax))
 		{
-			var creationExpressionSyntax = root.FindNode(context.Span)
-				.FirstAncestorOrSelf<ObjectCreationExpressionSyntax>();
-
-			var fieldDeclarationSyntax = classDeclarationSyntax
-				.Members
-				.OfType<FieldDeclarationSyntax>()
-				.FirstOrDefault(x =>
-					x.Declaration.Type.NormalizeWhitespace()
-						.ToFullString()
-					== RoslynClassFileSystem.GetFileSystemType()
-						.ToFullString());
-
-			context.RegisterCodeFix(new FileStreamCodeAction(Title,
-					context.Document,
-					creationExpressionSyntax,
-					fieldDeclarationSyntax),
-				context.Diagnostics);
+			return;
 		}
+
+		var creationExpressionSyntax = root.FindNode(context.Span)
+			.FirstAncestorOrSelf<ObjectCreationExpressionSyntax>();
+
+		var fieldDeclarationSyntax = classDeclarationSyntax
+			.Members
+			.OfType<FieldDeclarationSyntax>()
+			.FirstOrDefault(x =>
+				x.Declaration.Type.NormalizeWhitespace()
+					.ToFullString()
+				== RoslynClassFileSystem.GetFileSystemType()
+					.ToFullString());
+
+		context.RegisterCodeFix(new FileStreamCodeAction(Title,
+				context.Document,
+				creationExpressionSyntax,
+				fieldDeclarationSyntax),
+			context.Diagnostics);
 	}
 }

@@ -42,6 +42,11 @@ public class FileInfoCodeAction : CodeAction
 		var editor = await DocumentEditor.CreateAsync(_document, cancellationToken)
 			.ConfigureAwait(false);
 
+		if (_creationExpressionSyntax.ArgumentList == null)
+		{
+			return _document;
+		}
+
 		var arguments = _creationExpressionSyntax.ArgumentList.Arguments.Select(x => x.ToFullString());
 
 		editor.ReplaceNode(_creationExpressionSyntax,

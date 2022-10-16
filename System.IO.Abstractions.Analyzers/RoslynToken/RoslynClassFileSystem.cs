@@ -45,7 +45,8 @@ public static class RoslynClassFileSystem
 			SF.Token(SyntaxKind.ReadOnlyKeyword)));
 
 	public static bool ConstructorHasFileSystemParameter(BaseMethodDeclarationSyntax constructor) => constructor.ParameterList.Parameters
-		.Any(x => x.Type.NormalizeWhitespace()
+		.Any(x => x.Type != null
+				&& x.Type.NormalizeWhitespace()
 					.ToFullString()
 				== GetFileSystemType()
 					.NormalizeWhitespace()
@@ -54,7 +55,8 @@ public static class RoslynClassFileSystem
 	public static ParameterSyntax GetFileSystemParameterFromConstructor(ConstructorDeclarationSyntax constructor) => constructor
 		.ParameterList.Parameters
 		.FirstOrDefault(x =>
-			x.Type.NormalizeWhitespace()
+			x.Type != null
+			&& x.Type.NormalizeWhitespace()
 				.ToFullString()
 			== GetFileSystemType()
 				.NormalizeWhitespace()
@@ -72,23 +74,12 @@ public static class RoslynClassFileSystem
 		.WithType(GetFileSystemType())
 		.NormalizeWhitespace();
 
-	public static CompilationUnitSyntax GetCompilationUnit(SyntaxNode node)
+	public static CompilationUnitSyntax GetCompilationUnit(SyntaxNode node) => node switch
 	{
-		switch (node)
-		{
-			case null:
-
-				return null;
-
-			case CompilationUnitSyntax compilationUnitSyntax:
-
-				return compilationUnitSyntax;
-
-			default:
-
-				return GetCompilationUnit(node.Parent);
-		}
-	}
+		null => null,
+		CompilationUnitSyntax compilationUnitSyntax => compilationUnitSyntax,
+		var _ => GetCompilationUnit(node.Parent)
+	};
 
 	public static bool ConstructorHasAssignmentExpression(BaseMethodDeclarationSyntax constructor,
 														string field = Constants.FieldFileSystemName)

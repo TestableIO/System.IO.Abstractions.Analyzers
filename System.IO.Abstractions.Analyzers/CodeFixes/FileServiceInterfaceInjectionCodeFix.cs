@@ -42,7 +42,7 @@ public class FileServiceInterfaceInjectionCodeFix : CodeFixProvider
 		var root = await context.Document.GetSyntaxRootAsync(context.CancellationToken)
 			.ConfigureAwait(false);
 
-		var classDeclarationSyntax = root.FindNode(context.Span)
+		var classDeclarationSyntax = root?.FindNode(context.Span)
 			.FirstAncestorOrSelf<ClassDeclarationSyntax>();
 
 		var constructor = RoslynClassFileSystem.GetConstructor(classDeclarationSyntax);

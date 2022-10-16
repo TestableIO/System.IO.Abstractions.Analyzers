@@ -44,8 +44,7 @@ public class FileStreamCodeAction : CodeAction
 
 		if (_creationExpressionSyntax.ArgumentList == null)
 		{
-			return await Formatter.FormatAsync(editor.GetChangedDocument(), cancellationToken: cancellationToken)
-				.ConfigureAwait(false);
+			return _document;
 		}
 
 		var arguments = _creationExpressionSyntax.ArgumentList.Arguments.Select(x => x.ToFullString());

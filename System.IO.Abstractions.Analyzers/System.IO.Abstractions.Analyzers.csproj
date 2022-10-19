@@ -19,7 +19,7 @@
 		<RepositoryUrl>https://github.com/TestableIO/System.IO.Abstractions.Analyzers.git</RepositoryUrl>
 		<PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
 		<Description>TestableIO.System.IO.Abstractions.Analyzers</Description>
-		<PackageReleaseNotes>https://github.com/TestableIO/System.IO.Abstractions.Analyzers/releases/tag/v12.2.19</PackageReleaseNotes>
+		<PackageReleaseNotes>https://github.com/TestableIO/System.IO.Abstractions.Analyzers/releases/tag/v$(PackageVersion)</PackageReleaseNotes>
 		<Copyright>Copyright © System-IO-Abstractions</Copyright>
 		<PackageTags>TestableIO.System.IO.Abstractions.Analyzers, analyzers, System.IO.Abstractions, Roslyn</PackageTags>
 		<NoPackageAnalysis>true</NoPackageAnalysis>

@@ -23,6 +23,7 @@
 		<Copyright>Copyright © System-IO-Abstractions</Copyright>
 		<PackageTags>TestableIO.System.IO.Abstractions.Analyzers, analyzers, System.IO.Abstractions, Roslyn</PackageTags>
 		<NoPackageAnalysis>true</NoPackageAnalysis>
+		<PackageIcon>icon_256x256.png</PackageIcon>
 	</PropertyGroup>
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
 	  <Optimize>false</Optimize>
@@ -38,5 +39,8 @@
 	<ItemGroup>
 		<None Update="tools\*.ps1" CopyToOutputDirectory="Always" Pack="true" PackagePath="" />
 		<None Include="$(OutputPath)\$(AssemblyName).dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
+	</ItemGroup>
+	<ItemGroup>
+		<None Include="..\icon_256x256.png" Pack="true" PackagePath="\" />
 	</ItemGroup>
 </Project>

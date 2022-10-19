@@ -4,7 +4,7 @@
 ``` bash
 > dotnet add package System.IO.Abstractions
 ```
-2. Add to project nuget package `TestableIO.System.IO.Abstractions.Analyzers` [![](https://img.shields.io/nuget/v/Roslyn.System.IO.Abstractions.Analyzers.svg)](https://www.nuget.org/packages/TestableIO.System.IO.Abstractions.Analyzers)
+2. Add to project nuget package `TestableIO.System.IO.Abstractions.Analyzers` [![](https://img.shields.io/nuget/v/TestableIO.System.IO.Abstractions.Analyzers.svg)](https://www.nuget.org/packages/TestableIO.System.IO.Abstractions.Analyzers)
 ``` bash
 > dotnet add package TestableIO.System.IO.Abstractions.Analyzers
 ```

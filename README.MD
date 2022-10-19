@@ -16,7 +16,7 @@
 # Contibuting
 
 - Send your `Pull Request`
-- Add new [issue](https://github.com/TestableIO/System.IO.Abstractions.Analyzer/issues/new)
+- Add new [issue](https://github.com/TestableIO/System.IO.Abstractions.Analyzers/issues/new)
 
 # Sponsors
 - [![Donate_To_Card](https://img.shields.io/badge/Donate_To_Card-donate-red.svg)](https://money.alfabank.ru/p2p/web/transfer/minyutin)

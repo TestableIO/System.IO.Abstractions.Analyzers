@@ -4,9 +4,9 @@
 ``` bash
 > dotnet add package System.IO.Abstractions
 ```
-2. Add to project nuget package `Roslyn.System.IO.Abstractions.Analyzers` [![](https://img.shields.io/nuget/v/Roslyn.System.IO.Abstractions.Analyzers.svg)](https://www.nuget.org/packages/Roslyn.System.IO.Abstractions.Analyzers)
+2. Add to project nuget package `TestableIO.System.IO.Abstractions.Analyzers` [![](https://img.shields.io/nuget/v/Roslyn.System.IO.Abstractions.Analyzers.svg)](https://www.nuget.org/packages/TestableIO.System.IO.Abstractions.Analyzers)
 ``` bash
-> dotnet add package Roslyn.System.IO.Abstractions.Analyzers
+> dotnet add package TestableIO.System.IO.Abstractions.Analyzers
 ```
 
 # Contacts
@@ -16,7 +16,7 @@
 # Contibuting
 
 - Send your `Pull Request`
-- Add new [issue](https://github.com/System-IO-Abstractions/System.IO.Abstractions.Analyzers/issues/new)
+- Add new [issue](https://github.com/TestableIO/System.IO.Abstractions.Analyzer/issues/new)
 
 # Sponsors
 - [![Donate_To_Card](https://img.shields.io/badge/Donate_To_Card-donate-red.svg)](https://money.alfabank.ru/p2p/web/transfer/minyutin)

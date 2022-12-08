@@ -1,8 +1,8 @@
 # Usage
 
-1. Add to project nuget package `System.IO.Abstractions` [![](https://img.shields.io/nuget/v/System.IO.Abstractions.svg)](https://www.nuget.org/packages/System.IO.Abstractions)
+1. Add to project nuget package `TestableIO.System.IO.Abstractions` [![](https://img.shields.io/nuget/v/TestableIO.System.IO.Abstractions.svg)](https://www.nuget.org/packages/TestableIO.System.IO.Abstractions)
 ``` bash
-> dotnet add package System.IO.Abstractions
+> dotnet add package TestableIO.System.IO.Abstractions
 ```
 2. Add to project nuget package `TestableIO.System.IO.Abstractions.Analyzers` [![](https://img.shields.io/nuget/v/TestableIO.System.IO.Abstractions.Analyzers.svg)](https://www.nuget.org/packages/TestableIO.System.IO.Abstractions.Analyzers)
 ``` bash

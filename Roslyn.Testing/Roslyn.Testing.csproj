@@ -8,7 +8,7 @@
     <ItemGroup>
       <PackageReference Include="JetBrains.Annotations" Version="2022.1.0" />
       <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="4.1.0" />
-      <PackageReference Include="Shouldly" Version="4.1.0" />
+      <PackageReference Include="Shouldly" Version="4.2.1" />
     </ItemGroup>
 
 </Project>

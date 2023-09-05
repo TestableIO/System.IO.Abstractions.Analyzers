@@ -13,7 +13,7 @@
 
 - [![Telegram Chat](https://img.shields.io/badge/Chat-Telegram-0F80C1.svg)](https://t.me/System_IO_Abstractions_Analyzer)
 
-# Contibuting
+# Contributing
 
 - Send your `Pull Request`
 - Add new [issue](https://github.com/TestableIO/System.IO.Abstractions.Analyzers/issues/new)

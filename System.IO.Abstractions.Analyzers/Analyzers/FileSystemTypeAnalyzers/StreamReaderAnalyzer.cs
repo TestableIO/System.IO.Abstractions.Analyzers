@@ -1,7 +1,6 @@
 using System.Collections.Immutable;
 using JetBrains.Annotations;
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace System.IO.Abstractions.Analyzers.Analyzers.FileSystemTypeAnalyzers;
@@ -49,11 +48,11 @@ public class StreamReaderAnalyzer : BaseFileSystemNodeAnalyzer
 	public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rule);
 
 	/// <inheritdoc />
-	protected override void Analyze(SyntaxNodeAnalysisContext context, ExpressionSyntax syntax)
+	protected override void Analyze(OperationAnalysisContext context, IOperation operation)
 	{
-		if (IsFirstConstructorParameterOfType<string>(context, syntax))
+		if (IsFirstConstructorParameterOfType<string>(context, operation))
 		{
-			context.ReportDiagnostic(Diagnostic.Create(Rule, syntax.GetLocation()));
+			context.ReportDiagnostic(Diagnostic.Create(Rule, operation.Syntax.GetLocation()));
 		}
 	}
 

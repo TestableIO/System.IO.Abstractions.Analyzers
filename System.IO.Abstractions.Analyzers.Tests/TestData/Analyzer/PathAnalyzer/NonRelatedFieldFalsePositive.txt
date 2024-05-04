@@ -1,0 +1,12 @@
+namespace SomeNameSpace
+{
+	public class NonRelatedFieldFalsePositive
+	{
+		private const string Path = "Some/Path/To/Something";
+
+		public string SomeMethod()
+		{
+			return Path.Replace('/', '_');
+		}
+	}
+}

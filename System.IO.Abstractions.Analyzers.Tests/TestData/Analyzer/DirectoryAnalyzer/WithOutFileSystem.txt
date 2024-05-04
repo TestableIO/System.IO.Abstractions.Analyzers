@@ -12,7 +12,7 @@ namespace SomeNameSpace
 		{
 			const string path = "C:\\temp";
 
-			Directory.Remove(path);
+			Directory.Delete(path);
 		}
 	}
 }

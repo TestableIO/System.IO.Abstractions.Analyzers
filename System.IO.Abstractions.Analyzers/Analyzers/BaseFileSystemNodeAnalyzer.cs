@@ -1,8 +1,7 @@
 using System.Linq;
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
+using Microsoft.CodeAnalysis.Operations;
 
 namespace System.IO.Abstractions.Analyzers.Analyzers;
 
@@ -10,108 +9,50 @@ namespace System.IO.Abstractions.Analyzers.Analyzers;
 public abstract class BaseFileSystemNodeAnalyzer : BaseFileSystemAnalyzer
 {
 	/// <inheritdoc />
-	protected override void AnalyzeCompilation(CompilationStartAnalysisContext compilationStartContext,
-												FileSystemContext fileSystemContext)
+	protected override void AnalyzeCompilation(CompilationStartAnalysisContext compilationStartContext)
 	{
-		if (DoesNotUsedSystemIo())
-		{
-			return;
-		}
-
-		compilationStartContext.RegisterSyntaxNodeAction(syntaxContext =>
+		compilationStartContext.RegisterOperationAction(operationContext =>
 			{
-				var invocation = (InvocationExpressionSyntax) syntaxContext.Node;
+				var invocationOperation = (IInvocationOperation) operationContext.Operation;
 
-				if (IsStaticInvocationStartWith(invocation) && !IsInvocationFromAbstractions(syntaxContext, invocation))
+				if (IsFileSystemType(invocationOperation.TargetMethod.ContainingType, GetFileSystemTypeSymbol(compilationStartContext.Compilation)))
 				{
-					Analyze(syntaxContext, invocation);
+					Analyze(operationContext, invocationOperation);
 				}
 			},
-			SyntaxKind.InvocationExpression);
+			OperationKind.Invocation);
 
-		compilationStartContext.RegisterSyntaxNodeAction(syntaxContext =>
+		compilationStartContext.RegisterOperationAction(operationContext =>
 			{
-				var creationExpressionSyntax = (ObjectCreationExpressionSyntax) syntaxContext.Node;
-				var typeInfo = syntaxContext.SemanticModel.GetTypeInfo(creationExpressionSyntax);
+				var objectCreationOperation = (IObjectCreationOperation) operationContext.Operation;
 
-				if (IsTypesEquals(typeInfo))
+				if (IsFileSystemType(objectCreationOperation.Type, GetFileSystemTypeSymbol(compilationStartContext.Compilation)))
 				{
-					Analyze(syntaxContext, creationExpressionSyntax);
+					Analyze(operationContext, objectCreationOperation);
 				}
 			},
-			SyntaxKind.ObjectCreationExpression);
+			OperationKind.ObjectCreation);
 	}
 
-	protected abstract void Analyze(SyntaxNodeAnalysisContext context, ExpressionSyntax invocation);
+	protected abstract void Analyze(OperationAnalysisContext context, IOperation operation);
 
 	protected abstract Type GetFileSystemType();
 
-	private bool DoesNotUsedSystemIo()
-	{
-		var systemIoNamespace = typeof(Path).Namespace;
+	private INamedTypeSymbol GetFileSystemTypeSymbol(Compilation compilation) => compilation.GetTypeByMetadataName(GetFileSystemType().FullName);
 
-		return systemIoNamespace != null
-				&& !systemIoNamespace.Equals(GetFileSystemType()
-					.Namespace);
-	}
-
-	private bool IsTypesEquals(TypeInfo typeInfo)
+	private static bool IsFileSystemType(ITypeSymbol typeSymbol, INamedTypeSymbol fileSystemType)
 	{
-		if (typeInfo.Type is null)
+		if (typeSymbol is null)
 		{
 			return false;
 		}
 
-		var namespaceSymbol = typeInfo.Type.ContainingNamespace;
-		var fileSystemType = GetFileSystemType();
-
-		return typeInfo.Type.Name.Equals(fileSystemType.Name, StringComparison.Ordinal)
-				&& (namespaceSymbol.IsGlobalNamespace || namespaceSymbol.ToString() == fileSystemType.Namespace);
+		return typeSymbol.Equals(fileSystemType, SymbolEqualityComparer.Default);
 	}
 
-	private bool IsStaticInvocationStartWith(InvocationExpressionSyntax invocation) => invocation.IsKind(SyntaxKind.InvocationExpression)
-																						&& invocation.Expression.NormalizeWhitespace()
-																							.ToFullString()
-																							.StartsWith(GetFileSystemType()
-																									.Name
-																								+ ".", StringComparison.Ordinal);
-
-	private static bool IsInvocationFromAbstractions(SyntaxNodeAnalysisContext context, InvocationExpressionSyntax invocation) =>
-		(invocation?.Expression as MemberAccessExpressionSyntax)?.Expression is ExpressionSyntax invokedMember
-		&& IsSymbolFromAbstractions(context.SemanticModel.GetSymbolInfo(invokedMember));
-
-	private static bool IsSymbolFromAbstractions(SymbolInfo symbolInfo)
+	protected static bool IsFirstConstructorParameterOfType<T>(OperationAnalysisContext context, IOperation operation)
 	{
-		if (symbolInfo.Symbol is ISymbol symbol)
-		{
-			return IsSymbolFromAbstractions(symbol);
-		}
-
-		return symbolInfo.CandidateSymbols.Length > 0 && symbolInfo.CandidateSymbols.All(IsSymbolFromAbstractions);
+		var parameterTypeSymbol = context.Compilation.GetTypeByMetadataName(typeof(T).FullName);
+		return (operation as IObjectCreationOperation)?.Arguments.FirstOrDefault()?.Parameter?.Type?.Equals(parameterTypeSymbol, SymbolEqualityComparer.Default) ?? false;
 	}
-
-	private static bool IsSymbolFromAbstractions(ISymbol symbol)
-	{
-		var namespaceSymbol = symbol switch
-		{
-			IPropertySymbol propertySymbol => propertySymbol.Type.ContainingNamespace,
-			IFieldSymbol fieldSymbol => fieldSymbol.Type.ContainingNamespace,
-			IMethodSymbol methodSymbol => methodSymbol.ContainingNamespace,
-			var _ => null
-		};
-
-		return namespaceSymbol is
-				{
-					IsGlobalNamespace: false
-				}
-				&& namespaceSymbol.ToString()
-					.StartsWith(Constants.FileSystemNameSpace, StringComparison.Ordinal);
-	}
-
-	protected static bool IsFirstConstructorParameterOfType<T>(SyntaxNodeAnalysisContext context, ExpressionSyntax syntax) =>
-		(syntax as ObjectCreationExpressionSyntax)?.ArgumentList?.Arguments.FirstOrDefault() is ArgumentSyntax firstArgument
-		&& (context.SemanticModel.GetSymbolInfo(firstArgument.Expression)
-			.Symbol as ILocalSymbol)?.Type is ITypeSymbol argumentType
-		&& argumentType.ContainingNamespace.Name == typeof(T).Namespace
-		&& argumentType.Name == typeof(T).Name;
 }

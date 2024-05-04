@@ -51,7 +51,7 @@ public class DirectoryInfoCodeAction : CodeAction
 
 		editor.ReplaceNode(_creationExpressionSyntax,
 			SF.ParseExpression(
-				$"{_field.Declaration.Variables.ToFullString()}.DirectoryInfo.FromDirectoryName({string.Join(",", arguments)})"));
+				$"{_field.Declaration.Variables.ToFullString()}.DirectoryInfo.New({string.Join(",", arguments)})"));
 
 		return await Formatter.FormatAsync(editor.GetChangedDocument(), cancellationToken: cancellationToken)
 			.ConfigureAwait(false);

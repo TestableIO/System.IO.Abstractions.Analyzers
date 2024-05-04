@@ -50,7 +50,7 @@ public class FileInfoCodeAction : CodeAction
 		var arguments = _creationExpressionSyntax.ArgumentList.Arguments.Select(x => x.ToFullString());
 
 		editor.ReplaceNode(_creationExpressionSyntax,
-			SF.ParseExpression($"{_field.Declaration.Variables.ToFullString()}.FileInfo.FromFileName({string.Join(",", arguments)})"));
+			SF.ParseExpression($"{_field.Declaration.Variables.ToFullString()}.FileInfo.New({string.Join(",", arguments)})"));
 
 		return await Formatter.FormatAsync(editor.GetChangedDocument(), cancellationToken: cancellationToken)
 			.ConfigureAwait(false);

@@ -1,3 +1,4 @@
+using System.IO;
 using System.IO.Abstractions;
 
 namespace SomeNameSpace
@@ -15,7 +16,7 @@ namespace SomeNameSpace
 		{
 			const string filePath = "C:\\temp.txt";
 
-			FileInfo fileInf = new FileInfo(filePath);
+			var fileInf = new FileInfo(filePath);
 		}
 	}
 }

@@ -13,6 +13,7 @@ public class PathAnalyzerTests : CSharpDiagnosticAnalyzerTest<PathAnalyzer>
 	[InlineData("Valid.txt")]
 	[InlineData("UsingStaticFalsePositive.txt")]
 	[InlineData("UsingStaticLinqFalsePositive.txt")]
+	[InlineData("NonRelatedFieldFalsePositive.txt")]
 	public void Analyzer_is_not_triggered(string filename)
 	{
 		var source = ReadFile(filename);

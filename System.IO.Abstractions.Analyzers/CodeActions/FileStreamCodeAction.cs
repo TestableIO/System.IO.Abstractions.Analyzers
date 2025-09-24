@@ -50,7 +50,7 @@ public class FileStreamCodeAction : CodeAction
 		var arguments = _creationExpressionSyntax.ArgumentList.Arguments.Select(x => x.ToFullString());
 
 		editor.ReplaceNode(_creationExpressionSyntax,
-			SF.ParseExpression($"{_field.Declaration.Variables.ToFullString()}.FileStream.Create({string.Join(",", arguments)})"));
+			SF.ParseExpression($"{_field.Declaration.Variables.ToFullString()}.FileStream.New({string.Join(",", arguments)})"));
 
 		return await Formatter.FormatAsync(editor.GetChangedDocument(), cancellationToken: cancellationToken)
 			.ConfigureAwait(false);

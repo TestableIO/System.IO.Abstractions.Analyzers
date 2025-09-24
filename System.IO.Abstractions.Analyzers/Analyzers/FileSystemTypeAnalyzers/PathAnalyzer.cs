@@ -1,7 +1,6 @@
 using System.Collections.Immutable;
 using JetBrains.Annotations;
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace System.IO.Abstractions.Analyzers.Analyzers.FileSystemTypeAnalyzers;
@@ -51,8 +50,8 @@ public class PathAnalyzer : BaseFileSystemNodeAnalyzer
 	public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rule);
 
 	/// <inheritdoc />
-	protected override void Analyze(SyntaxNodeAnalysisContext context, ExpressionSyntax invocation) =>
-		context.ReportDiagnostic(Diagnostic.Create(Rule, invocation.GetLocation()));
+	protected override void Analyze(OperationAnalysisContext context, IOperation operation) =>
+		context.ReportDiagnostic(Diagnostic.Create(Rule, operation.Syntax.GetLocation()));
 
 	/// <inheritdoc />
 	protected override Type GetFileSystemType() => typeof(Path);

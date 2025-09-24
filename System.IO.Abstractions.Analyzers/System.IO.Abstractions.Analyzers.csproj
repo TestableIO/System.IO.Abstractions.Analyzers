@@ -6,7 +6,8 @@
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 		<LangVersion>latest</LangVersion>
 		<DevelopmentDependency>true</DevelopmentDependency>
-		<NoWarn>RS0016</NoWarn>
+		<NoWarn>RS0016;RS1035</NoWarn>
+		<EnforceExtendedAnalyzerRules>true</EnforceExtendedAnalyzerRules>
 	</PropertyGroup>
 	<PropertyGroup>
 		<PackageId>TestableIO.System.IO.Abstractions.Analyzers</PackageId>
@@ -29,12 +30,12 @@
 	  <Optimize>false</Optimize>
 	</PropertyGroup>
 	<ItemGroup>
-		<PackageReference Include="JetBrains.Annotations" Version="2023.3.0" PrivateAssets="all" />
-		<PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="3.3.3" PrivateAssets="all" />
-		<PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="4.1.0" PrivateAssets="all" />
+		<PackageReference Include="JetBrains.Annotations" Version="2025.2.2" PrivateAssets="all" />
+		<PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="3.11.0" PrivateAssets="all" />
+		<PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="4.14.0" PrivateAssets="all" />
 		<PackageReference Update="NETStandard.Library" PrivateAssets="all" />
-		<PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="6.0.0" PrivateAssets="all"/>
-		<PackageReference Include="Roslyn.Diagnostics.Analyzers" Version="3.3.3" PrivateAssets="all" />
+		<PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="9.0.0" PrivateAssets="all" />
+		<PackageReference Include="Roslyn.Diagnostics.Analyzers" Version="3.3.4" PrivateAssets="all" />
 	</ItemGroup>
 	<ItemGroup>
 		<None Update="tools\*.ps1" CopyToOutputDirectory="Always" Pack="true" PackagePath="" />

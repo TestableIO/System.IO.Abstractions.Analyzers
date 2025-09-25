@@ -34,7 +34,8 @@ public static class RoslynClassFileSystem
 	public static UsingDirectiveSyntax GetSystemIoUsing(CompilationUnitSyntax unit) => GetUsing(unit, typeof(Path).Namespace);
 
 	public static UsingDirectiveSyntax GetUsing(CompilationUnitSyntax unit, string usingName) => unit.Usings.FirstOrDefault(x =>
-		x.Name.NormalizeWhitespace()
+		x.Name is not null
+		&& x.Name.NormalizeWhitespace()
 			.ToFullString()
 			.Equals(usingName, StringComparison.Ordinal));
 
@@ -45,7 +46,7 @@ public static class RoslynClassFileSystem
 			SF.Token(SyntaxKind.ReadOnlyKeyword)));
 
 	public static bool ConstructorHasFileSystemParameter(BaseMethodDeclarationSyntax constructor) => constructor.ParameterList.Parameters
-		.Any(x => x.Type != null
+		.Any(x => x.Type is not null
 				&& x.Type.NormalizeWhitespace()
 					.ToFullString()
 				== GetFileSystemType()
@@ -55,7 +56,7 @@ public static class RoslynClassFileSystem
 	public static ParameterSyntax GetFileSystemParameterFromConstructor(ConstructorDeclarationSyntax constructor) => constructor
 		.ParameterList.Parameters
 		.FirstOrDefault(x =>
-			x.Type != null
+			x.Type is not null
 			&& x.Type.NormalizeWhitespace()
 				.ToFullString()
 			== GetFileSystemType()
@@ -84,7 +85,7 @@ public static class RoslynClassFileSystem
 	public static bool ConstructorHasAssignmentExpression(BaseMethodDeclarationSyntax constructor,
 														string field = Constants.FieldFileSystemName)
 	{
-		if (constructor.Body == null)
+		if (constructor.Body is null)
 		{
 			return false;
 		}

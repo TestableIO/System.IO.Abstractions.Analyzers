@@ -44,7 +44,7 @@ public class FileServiceConstructorInitialCodeFix : CodeFixProvider
 		var root = await context.Document.GetSyntaxRootAsync(context.CancellationToken)
 			.ConfigureAwait(false);
 
-		if (root == null)
+		if (root is null)
 		{
 			return;
 		}
@@ -55,7 +55,7 @@ public class FileServiceConstructorInitialCodeFix : CodeFixProvider
 		var constructor = RoslynClassFileSystem.GetConstructor(classDeclarationSyntax);
 
 		if (!RoslynClassFileSystem.HasFileSystemField(classDeclarationSyntax)
-			|| (constructor != null && !RoslynClassFileSystem.ConstructorHasFileSystemParameter(constructor)))
+			|| (constructor is not null && !RoslynClassFileSystem.ConstructorHasFileSystemParameter(constructor)))
 		{
 			context.RegisterCodeFix(new FileServiceConstructorInitialCodeAction(Title,
 					context.Document,

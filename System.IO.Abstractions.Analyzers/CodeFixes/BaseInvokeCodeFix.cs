@@ -35,7 +35,7 @@ public abstract class BaseInvokeCodeFix : CodeFixProvider
 		var root = await context.Document.GetSyntaxRootAsync(context.CancellationToken)
 			.ConfigureAwait(false);
 
-		if (root == null)
+		if (root is null)
 		{
 			return;
 		}

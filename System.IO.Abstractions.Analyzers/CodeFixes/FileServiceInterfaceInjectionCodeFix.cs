@@ -50,8 +50,8 @@ public class FileServiceInterfaceInjectionCodeFix : CodeFixProvider
 		var constructor = RoslynClassFileSystem.GetConstructor(classDeclarationSyntax);
 
 		if (!RoslynClassFileSystem.HasFileSystemField(classDeclarationSyntax)
-			|| (constructor != null && !RoslynClassFileSystem.ConstructorHasFileSystemParameter(constructor))
-			|| (constructor != null && !RoslynClassFileSystem.ConstructorHasAssignmentExpression(constructor)))
+			|| (constructor is not null && !RoslynClassFileSystem.ConstructorHasFileSystemParameter(constructor))
+			|| (constructor is not null && !RoslynClassFileSystem.ConstructorHasAssignmentExpression(constructor)))
 		{
 			context.RegisterCodeFix(new FileServiceInterfaceInjectionCodeAction(Title,
 					context.Document,

@@ -206,7 +206,7 @@ public abstract class DiagnosticVerifier
 			.AddMetadataReference(projectId, CodeAnalysisReference)
 			.AddMetadataReference(projectId, SystemDiagReference);
 
-		if (references != null)
+		if (references is not null)
 		{
 			solution = solution.AddMetadataReferences(projectId, references);
 		}

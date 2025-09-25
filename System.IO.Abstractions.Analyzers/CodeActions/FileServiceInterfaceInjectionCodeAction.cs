@@ -58,14 +58,14 @@ public class FileServiceInterfaceInjectionCodeAction : CodeAction
 
 		var fileSystem = RoslynClassFileSystem.GetUsing(compilationUnitSyntax, Constants.FileSystemNameSpace);
 
-		if (fileSystem != null)
+		if (fileSystem is not null)
 		{
 			return editor.GetChangedDocument();
 		}
 
 		var systemIo = RoslynClassFileSystem.GetSystemIoUsing(compilationUnitSyntax);
 
-		if (systemIo == null)
+		if (systemIo is null)
 		{
 			if (compilationUnitSyntax.Usings.Any())
 			{

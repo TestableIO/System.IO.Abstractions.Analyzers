@@ -203,7 +203,7 @@ internal static class DiagnosticAnalyzerTestExtensions
 			.AddMetadataReference(projectId, CodeAnalysisReference)
 			.AddMetadataReference(projectId, SystemDiagnosticReference);
 
-		if (references != null)
+		if (references is not null)
 		{
 			solution = solution.AddMetadataReferences(projectId, references);
 		}
@@ -348,7 +348,7 @@ internal static class DiagnosticAnalyzerTestExtensions
 		var actualSpan = actual.GetLineSpan();
 
 		var isInExpectedFile = actualSpan.Path == expected.Path
-								|| (actualSpan.Path != null
+								|| (actualSpan.Path is not null
 									&& actualSpan.Path.Contains("Test0.")
 									&& expected.Path.Contains("Test."));
 
@@ -448,7 +448,7 @@ internal static class DiagnosticAnalyzerTestExtensions
 
 			foreach (var rule in rules)
 			{
-				if (rule != null
+				if (rule is not null
 					&& rule.Id
 					== diagnostics[i]
 						.Id)

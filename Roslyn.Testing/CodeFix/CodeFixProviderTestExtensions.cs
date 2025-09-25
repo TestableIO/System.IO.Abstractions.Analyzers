@@ -100,7 +100,7 @@ internal static class CodeFixProviderTestExtensions
 				break;
 			}
 
-			if (codeFixIndex != null)
+			if (codeFixIndex is not null)
 			{
 				document = document.ApplyFix(actions.ElementAt((int) codeFixIndex));
 

@@ -42,7 +42,7 @@ public class FileInfoCodeAction : CodeAction
 		var editor = await DocumentEditor.CreateAsync(_document, cancellationToken)
 			.ConfigureAwait(false);
 
-		if (_creationExpressionSyntax.ArgumentList == null)
+		if (_creationExpressionSyntax.ArgumentList is null)
 		{
 			return _document;
 		}

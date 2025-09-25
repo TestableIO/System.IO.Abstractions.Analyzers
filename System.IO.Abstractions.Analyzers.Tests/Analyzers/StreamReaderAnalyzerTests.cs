@@ -29,10 +29,7 @@ public class StreamReaderAnalyzerTests : CSharpDiagnosticAnalyzerTest<StreamRead
 			Id = StreamReaderAnalyzer.DiagnosticId,
 			Message = StreamReaderAnalyzer.MessageFormat,
 			Severity = DiagnosticSeverity.Warning,
-			Locations = new[]
-			{
-				new DiagnosticResultLocation("Test0.cs", diagnosticLine, diagnosticColumn)
-			}
+			Locations = [new("Test0.cs", diagnosticLine, diagnosticColumn)]
 		};
 
 		VerifyDiagnostic(source, expectedDiagnostic);
@@ -45,8 +42,8 @@ public class StreamReaderAnalyzerTests : CSharpDiagnosticAnalyzerTest<StreamRead
 		VerifyNoDiagnosticTriggered(source);
 	}
 
-	protected override IEnumerable<MetadataReference> GetAdditionalReferences() => new[]
-	{
+	protected override IEnumerable<MetadataReference> GetAdditionalReferences() =>
+	[
 		MetadataReference.CreateFromFile(typeof(IFileSystem).Assembly.Location)
-	};
+	];
 }

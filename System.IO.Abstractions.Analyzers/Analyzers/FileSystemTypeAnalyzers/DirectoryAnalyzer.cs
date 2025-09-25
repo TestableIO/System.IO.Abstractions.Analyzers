@@ -43,11 +43,11 @@ public class DirectoryAnalyzer : BaseFileSystemNodeAnalyzer
 		Category,
 		DiagnosticSeverity.Warning,
 		true,
-		Description,
+		$"{Description}.",
 		Link);
 
 	/// <inheritdoc />
-	public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rule);
+	public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => [Rule];
 
 	/// <inheritdoc />
 	protected override void Analyze(OperationAnalysisContext context, IOperation operation) =>

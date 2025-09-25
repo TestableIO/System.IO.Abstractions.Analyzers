@@ -15,6 +15,7 @@ namespace Roslyn.Testing.Analyzer;
 /// Class for turning strings into documents and getting the diagnostics on them
 /// All methods are static
 /// </summary>
+[PublicAPI]
 public abstract class DiagnosticVerifier
 {
 	private static readonly MetadataReference CorlibReference = MetadataReference.CreateFromFile(typeof(object).Assembly.Location);
@@ -171,10 +172,9 @@ public abstract class DiagnosticVerifier
 	/// <param name="references"></param>
 	/// <returns> A Document created from the source string </returns>
 	protected static Document CreateDocument(string source, string language = LanguageNames.CSharp,
-											IEnumerable<MetadataReference> references = null) => CreateProject(new[]
-		{
+											IEnumerable<MetadataReference> references = null) => CreateProject([
 			source
-		}, language, references)
+		], language, references)
 		.Documents.First();
 
 	/// <summary>

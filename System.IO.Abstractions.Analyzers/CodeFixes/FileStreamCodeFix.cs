@@ -26,10 +26,10 @@ public class FileStreamCodeFix : CodeFixProvider
 	}
 
 	/// <inheritdoc />
-	public override ImmutableArray<string> FixableDiagnosticIds => ImmutableArray.Create(Constants.Io0005);
+	public override ImmutableArray<string> FixableDiagnosticIds => [Constants.Io0005];
 
 	/// <inheritdoc />
-	public override sealed FixAllProvider GetFixAllProvider() => WellKnownFixAllProviders.BatchFixer;
+	public sealed override FixAllProvider GetFixAllProvider() => WellKnownFixAllProviders.BatchFixer;
 
 	/// <inheritdoc />
 	public override async Task RegisterCodeFixesAsync(CodeFixContext context)

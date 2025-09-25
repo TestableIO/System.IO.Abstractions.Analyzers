@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.Immutable;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using JetBrains.Annotations;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -12,6 +12,7 @@ using Roslyn.Testing.Model;
 
 namespace Roslyn.Testing.Analyzer;
 
+[PublicAPI]
 internal static class DiagnosticAnalyzerTestExtensions
 {
 	private static readonly MetadataReference CoreLibraryReference =
@@ -29,13 +30,13 @@ internal static class DiagnosticAnalyzerTestExtensions
 	private static readonly MetadataReference SystemDiagnosticReference =
 		MetadataReference.CreateFromFile(typeof(Process).Assembly.Location);
 
-	internal static string DefaultFilePathPrefix = "Test";
+	private const string DefaultFilePathPrefix = "Test";
 
-	internal static string CSharpDefaultFileExt = "cs";
+	private const string CSharpDefaultFileExt = "cs";
 
-	internal static string VisualBasicDefaultExt = "vb";
+	private const string VisualBasicDefaultExt = "vb";
 
-	internal static string TestProjectName = "TestProject";
+	private const string TestProjectName = "TestProject";
 
 	#region [Get Diagnostics]
 
@@ -86,7 +87,7 @@ internal static class DiagnosticAnalyzerTestExtensions
 				project.GetCompilationAsync()
 					.GetAwaiter()
 					.GetResult()
-					.WithAnalyzers(ImmutableArray.Create(analyzer));
+					.WithAnalyzers([analyzer]);
 
 			var diags = compilationWithAnalyzers.GetAnalyzerDiagnosticsAsync()
 				.GetAwaiter()
@@ -170,10 +171,9 @@ internal static class DiagnosticAnalyzerTestExtensions
 	/// <param name="references"></param>
 	/// <returns> A Document created from the source string </returns>
 	public static Document CreateDocument(string source, string language, IEnumerable<MetadataReference> references = null) =>
-		CreateProject(new[]
-			{
+		CreateProject([
 				source
-			}, language, references)
+			], language, references)
 			.Documents.First();
 
 	/// <summary>
@@ -375,14 +375,11 @@ internal static class DiagnosticAnalyzerTestExtensions
 		}
 
 		// Only check column position if there is an actual column position in the real diagnostic
-		if (actualLinePosition.Character > 0)
+		if (actualLinePosition.Character > 0 && actualLinePosition.Character + 1 != expected.Column)
 		{
-			if (actualLinePosition.Character + 1 != expected.Column)
-			{
-				var msg = GetNotInExpectedColumn(analyzer, diagnostic, expected, actualLinePosition);
+			var msg = GetNotInExpectedColumn(analyzer, diagnostic, expected, actualLinePosition);
 
-				return VerifyDiagnosticAnalyzerResult.Fail(msg);
-			}
+			return VerifyDiagnosticAnalyzerResult.Fail(msg);
 		}
 
 		return VerifyDiagnosticAnalyzerResult.Ok();
@@ -393,46 +390,46 @@ internal static class DiagnosticAnalyzerTestExtensions
 		$"Mismatch between number of diagnostics returned, expected \"{expectedCount}\" actual \"{actualCount}\"{Environment.NewLine}{Environment.NewLine}Diagnostics:{Environment.NewLine}{diagnosticsOutput}{Environment.NewLine}";
 
 	private static string GetExpectedDiagnosticWithNoLocation(DiagnosticAnalyzer analyzer, Diagnostic actual) =>
-		$"Expected:\nA project diagnostic with No location\nActual:\n{FormatDiagnostics(analyzer, new[] { actual })}";
+		$"Expected:\nA project diagnostic with No location\nActual:\n{FormatDiagnostics(analyzer, [actual])}";
 
 	private static string GetNotExpectedLocation(DiagnosticAnalyzer analyzer,
 												Diagnostic actual,
 												DiagnosticResult expected,
 												Location[] additionalLocations) =>
-		$"Expected {expected.Locations.Length - 1} additional locations but got {additionalLocations.Length} for Diagnostic:{Environment.NewLine}    {FormatDiagnostics(analyzer, new[] { actual })}{Environment.NewLine}";
+		$"Expected {expected.Locations.Length - 1} additional locations but got {additionalLocations.Length} for Diagnostic:{Environment.NewLine}    {FormatDiagnostics(analyzer, [actual])}{Environment.NewLine}";
 
 	private static string GetNoExpectedDiagnosticId(DiagnosticAnalyzer analyzer,
 													Diagnostic actual,
 													DiagnosticResult expected) =>
-		$"Expected diagnostic id to be \"{expected.Id}\" was \"{actual.Id}\"{Environment.NewLine}{Environment.NewLine}Diagnostic:{Environment.NewLine}    {FormatDiagnostics(analyzer, new[] { actual })}{Environment.NewLine}";
+		$"Expected diagnostic id to be \"{expected.Id}\" was \"{actual.Id}\"{Environment.NewLine}{Environment.NewLine}Diagnostic:{Environment.NewLine}    {FormatDiagnostics(analyzer, [actual])}{Environment.NewLine}";
 
 	private static string GetNotExpectedSeverityMessage(DiagnosticAnalyzer analyzer,
 														Diagnostic actual,
 														DiagnosticResult expected) =>
-		$"Expected diagnostic severity to be \"{expected.Severity}\" was \"{actual.Severity}\"{Environment.NewLine}{Environment.NewLine}Diagnostic:{Environment.NewLine}    {FormatDiagnostics(analyzer, new[] { actual })}{Environment.NewLine}";
+		$"Expected diagnostic severity to be \"{expected.Severity}\" was \"{actual.Severity}\"{Environment.NewLine}{Environment.NewLine}Diagnostic:{Environment.NewLine}    {FormatDiagnostics(analyzer, [actual])}{Environment.NewLine}";
 
 	private static string GetNotExcpectedMessage(DiagnosticAnalyzer analyzer,
 												Diagnostic actual,
 												DiagnosticResult expected) =>
-		$"Expected diagnostic message to be \"{expected.Message}\" was \"{actual.GetMessage()}\"{Environment.NewLine}{Environment.NewLine}Diagnostic:{Environment.NewLine}    {FormatDiagnostics(analyzer, new[] { actual })}{Environment.NewLine}";
+		$"Expected diagnostic message to be \"{expected.Message}\" was \"{actual.GetMessage()}\"{Environment.NewLine}{Environment.NewLine}Diagnostic:{Environment.NewLine}    {FormatDiagnostics(analyzer, [actual])}{Environment.NewLine}";
 
 	private static string GetNotInExpectedColumn(DiagnosticAnalyzer analyzer,
 												Diagnostic diagnostic,
 												DiagnosticResultLocation expected,
 												LinePosition actualLinePosition) =>
-		$"Expected diagnostic to start at column \"{expected.Column}\" was actually at column \"{actualLinePosition.Character + 1}\"{Environment.NewLine}{Environment.NewLine}Diagnostic:{Environment.NewLine}    {FormatDiagnostics(analyzer, new[] { diagnostic })}{Environment.NewLine}";
+		$"Expected diagnostic to start at column \"{expected.Column}\" was actually at column \"{actualLinePosition.Character + 1}\"{Environment.NewLine}{Environment.NewLine}Diagnostic:{Environment.NewLine}    {FormatDiagnostics(analyzer, [diagnostic])}{Environment.NewLine}";
 
 	private static string GetNotInExpectedLineMessage(DiagnosticAnalyzer analyzer,
 													Diagnostic diagnostic,
 													DiagnosticResultLocation expected,
 													LinePosition actualLinePosition) =>
-		$"Expected diagnostic to be on line \"{expected.Line}\" was actually on line \"{actualLinePosition.Line + 1}\"{Environment.NewLine}{Environment.NewLine}Diagnostic:{Environment.NewLine}    {FormatDiagnostics(analyzer, new[] { diagnostic })}{Environment.NewLine}";
+		$"Expected diagnostic to be on line \"{expected.Line}\" was actually on line \"{actualLinePosition.Line + 1}\"{Environment.NewLine}{Environment.NewLine}Diagnostic:{Environment.NewLine}    {FormatDiagnostics(analyzer, [diagnostic])}{Environment.NewLine}";
 
 	private static string GetNotInExpectedFileMessage(DiagnosticAnalyzer analyzer,
 													Diagnostic diagnostic,
 													DiagnosticResultLocation expected,
 													FileLinePositionSpan actualSpan) =>
-		$"Expected diagnostic to be in file \"{expected.Path}\" was actually in file \"{actualSpan.Path}\"{Environment.NewLine}{Environment.NewLine}Diagnostic:{Environment.NewLine}    {FormatDiagnostics(analyzer, new[] { diagnostic })}{Environment.NewLine}";
+		$"Expected diagnostic to be in file \"{expected.Path}\" was actually in file \"{actualSpan.Path}\"{Environment.NewLine}{Environment.NewLine}Diagnostic:{Environment.NewLine}    {FormatDiagnostics(analyzer, [diagnostic])}{Environment.NewLine}";
 
 	/// <summary>
 	/// Helper method to format a Diagnostic into an easily readable string

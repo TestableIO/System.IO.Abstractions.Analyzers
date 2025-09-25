@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using JetBrains.Annotations;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeActions;
 using Microsoft.CodeAnalysis.CodeFixes;
@@ -12,6 +13,7 @@ using Roslyn.Testing.Analyzer;
 
 namespace Roslyn.Testing.CodeFix;
 
+[PublicAPI]
 internal static class CodeFixProviderTestExtensions
 {
 	/// <summary>
@@ -79,10 +81,9 @@ internal static class CodeFixProviderTestExtensions
 	{
 		var document = DiagnosticAnalyzerTestExtensions.CreateDocument(oldSource, language, additionalReferences);
 
-		var analyzerDiagnostics = analyzer.GetSortedDiagnosticsFromDocuments(new[]
-		{
+		var analyzerDiagnostics = analyzer.GetSortedDiagnosticsFromDocuments([
 			document
-		});
+		]);
 
 		var compilerDiagnostics = document.GetCompilerDiagnostics();
 		var attempts = analyzerDiagnostics.Length;
@@ -110,10 +111,9 @@ internal static class CodeFixProviderTestExtensions
 
 			document = document.ApplyFix(actions.ElementAt(0));
 
-			analyzerDiagnostics = analyzer.GetSortedDiagnosticsFromDocuments(new[]
-			{
+			analyzerDiagnostics = analyzer.GetSortedDiagnosticsFromDocuments([
 				document
-			});
+			]);
 
 			var newCompilerDiagnostics = GetNewDiagnostics(compilerDiagnostics, document.GetCompilerDiagnostics());
 

@@ -24,13 +24,13 @@ public abstract class BaseInvokeCodeFix : CodeFixProvider
 	protected abstract string Title { get; }
 
 	/// <inheritdoc />
-	public override ImmutableArray<string> FixableDiagnosticIds => ImmutableArray.Create(DiagnosticId);
+	public override ImmutableArray<string> FixableDiagnosticIds => [DiagnosticId];
 
 	/// <inheritdoc />
-	public override sealed FixAllProvider GetFixAllProvider() => WellKnownFixAllProviders.BatchFixer;
+	public sealed override FixAllProvider GetFixAllProvider() => WellKnownFixAllProviders.BatchFixer;
 
 	/// <inheritdoc />
-	public override async sealed Task RegisterCodeFixesAsync(CodeFixContext context)
+	public sealed override async Task RegisterCodeFixesAsync(CodeFixContext context)
 	{
 		var root = await context.Document.GetSyntaxRootAsync(context.CancellationToken)
 			.ConfigureAwait(false);

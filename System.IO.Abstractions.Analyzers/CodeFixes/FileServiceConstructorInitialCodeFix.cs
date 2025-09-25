@@ -25,19 +25,21 @@ public class FileServiceConstructorInitialCodeFix : CodeFixProvider
 	}
 
 	/// <inheritdoc />
-	public override sealed ImmutableArray<string> FixableDiagnosticIds =>
-		ImmutableArray.Create(Constants.Io0002,
-			Constants.Io0003,
-			Constants.Io0004,
-			Constants.Io0005,
-			Constants.Io0006,
-			Constants.Io0007);
+	public sealed override ImmutableArray<string> FixableDiagnosticIds =>
+	[
+		Constants.Io0002,
+		Constants.Io0003,
+		Constants.Io0004,
+		Constants.Io0005,
+		Constants.Io0006,
+		Constants.Io0007
+	];
 
 	/// <inheritdoc />
-	public override sealed FixAllProvider GetFixAllProvider() => WellKnownFixAllProviders.BatchFixer;
+	public sealed override FixAllProvider GetFixAllProvider() => WellKnownFixAllProviders.BatchFixer;
 
 	/// <inheritdoc />
-	public override async sealed Task RegisterCodeFixesAsync(CodeFixContext context)
+	public sealed override async Task RegisterCodeFixesAsync(CodeFixContext context)
 	{
 		var root = await context.Document.GetSyntaxRootAsync(context.CancellationToken)
 			.ConfigureAwait(false);

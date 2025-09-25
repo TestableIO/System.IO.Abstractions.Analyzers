@@ -27,10 +27,10 @@ public class FileInfoCodeFix : CodeFixProvider
 	}
 
 	/// <inheritdoc />
-	public override ImmutableArray<string> FixableDiagnosticIds => ImmutableArray.Create(Constants.Io0004);
+	public override ImmutableArray<string> FixableDiagnosticIds => [Constants.Io0004];
 
 	/// <inheritdoc />
-	public override sealed FixAllProvider GetFixAllProvider() => WellKnownFixAllProviders.BatchFixer;
+	public sealed override FixAllProvider GetFixAllProvider() => WellKnownFixAllProviders.BatchFixer;
 
 	/// <inheritdoc />
 	public override async Task RegisterCodeFixesAsync(CodeFixContext context)

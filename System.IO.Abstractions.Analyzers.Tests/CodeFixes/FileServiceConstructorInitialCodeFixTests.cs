@@ -20,8 +20,8 @@ public class FileServiceConstructorInitialCodeFixTests :
 		VerifyFix(sourceBeforeFix, sourceAfterFix, 0, true);
 	}
 
-	protected override IEnumerable<MetadataReference> GetAdditionalReferences() => new[]
-	{
+	protected override IEnumerable<MetadataReference> GetAdditionalReferences() =>
+	[
 		MetadataReference.CreateFromFile(typeof(IFileSystem).Assembly.Location)
-	};
+	];
 }

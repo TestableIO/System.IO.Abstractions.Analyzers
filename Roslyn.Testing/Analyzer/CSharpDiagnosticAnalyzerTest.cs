@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
+using JetBrains.Annotations;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
 using Roslyn.Testing.Model;
@@ -7,6 +7,7 @@ using Shouldly;
 
 namespace Roslyn.Testing.Analyzer;
 
+[PublicAPI]
 public abstract class CSharpDiagnosticAnalyzerTest<T> : FileReaderTest
 	where T : DiagnosticAnalyzer, new()
 {
@@ -18,11 +19,9 @@ public abstract class CSharpDiagnosticAnalyzerTest<T> : FileReaderTest
 	/// <inheritdoc />
 	public override string PathToTestData => "./TestData/Analyzer/";
 
-	private readonly DiagnosticAnalyzer _diagnosticAnalyzer;
+	private readonly DiagnosticAnalyzer _diagnosticAnalyzer = new T();
 
-	protected CSharpDiagnosticAnalyzerTest() => _diagnosticAnalyzer = new T();
-
-	protected virtual IEnumerable<MetadataReference> GetAdditionalReferences() => Enumerable.Empty<MetadataReference>();
+	protected virtual IEnumerable<MetadataReference> GetAdditionalReferences() => [];
 
 	/// <summary>
 	/// Called to test a C# DiagnosticAnalyzer when applied on the single inputted
@@ -34,23 +33,19 @@ public abstract class CSharpDiagnosticAnalyzerTest<T> : FileReaderTest
 	/// DiagnosticResults that should appear after the analyzer
 	/// is run on the source
 	/// </param>
-	protected void VerifyDiagnostic(string source, DiagnosticResult[] expected) => VerifyDiagnostic(new[]
-	{
+	protected void VerifyDiagnostic(string source, DiagnosticResult[] expected) => VerifyDiagnostic([
 		source
-	}, expected);
+	], expected);
 
-	protected void VerifyDiagnostic(string source, DiagnosticResult expected) => VerifyDiagnostic(new[]
-	{
+	protected void VerifyDiagnostic(string source, DiagnosticResult expected) => VerifyDiagnostic([
 		source
-	}, new[]
-	{
+	], [
 		expected
-	});
+	]);
 
-	protected void VerifyNoDiagnosticTriggered(string source) => VerifyDiagnostic(new[]
-	{
+	protected void VerifyNoDiagnosticTriggered(string source) => VerifyDiagnostic([
 		source
-	}, new DiagnosticResult[0]);
+	], []);
 
 	/// <summary>
 	/// Called to test a C# DiagnosticAnalyzer when applied on the inputted strings as

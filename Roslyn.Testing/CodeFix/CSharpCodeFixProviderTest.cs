@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -22,19 +21,13 @@ public abstract class CSharpCodeFixProviderTest<TDiagnosticAnalyzer, TCodeFixPro
 	/// <inheritdoc />
 	public override string PathToTestData => "./TestData/CodeFix/";
 
-	protected virtual IEnumerable<MetadataReference> GetAdditionalReferences() => Enumerable.Empty<MetadataReference>();
+	protected virtual IEnumerable<MetadataReference> GetAdditionalReferences() => [];
 
 	#endregion
 
-	private readonly TCodeFixProvider _codeFixProvider;
+	private readonly TCodeFixProvider _codeFixProvider = new();
 
-	private readonly TDiagnosticAnalyzer _diagnosticAnalyzer;
-
-	protected CSharpCodeFixProviderTest()
-	{
-		_diagnosticAnalyzer = new();
-		_codeFixProvider = new();
-	}
+	private readonly TDiagnosticAnalyzer _diagnosticAnalyzer = new();
 
 	/// <summary>
 	/// Called to test a C# codefix when applied on the inputted string as a source

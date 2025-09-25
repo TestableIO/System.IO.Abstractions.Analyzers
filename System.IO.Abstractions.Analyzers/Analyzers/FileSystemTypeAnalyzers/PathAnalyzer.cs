@@ -32,7 +32,7 @@ public class PathAnalyzer : BaseFileSystemNodeAnalyzer
 	/// </summary>
 	private const string Description = Title;
 
-	private const string Link = "http://bit.ly/2ODMkKc";
+	private const string Link = "https://github.com/TestableIO/System.IO.Abstractions.Analyzers/blob/develop/docs/IO0006.MD";
 
 	/// <summary>
 	/// Diagnostic rule
@@ -43,11 +43,11 @@ public class PathAnalyzer : BaseFileSystemNodeAnalyzer
 		Category,
 		DiagnosticSeverity.Warning,
 		true,
-		Description,
+		$"{Description}.",
 		Link);
 
 	/// <inheritdoc />
-	public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rule);
+	public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => [Rule];
 
 	/// <inheritdoc />
 	protected override void Analyze(OperationAnalysisContext context, IOperation operation) =>

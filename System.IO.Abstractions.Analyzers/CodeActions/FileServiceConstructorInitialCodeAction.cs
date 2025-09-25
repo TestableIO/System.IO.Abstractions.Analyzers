@@ -44,10 +44,7 @@ public class FileServiceConstructorInitialCodeAction : CodeAction
 		{
 			editor.InsertMembers(_class,
 				0,
-				new SyntaxNode[]
-				{
-					RoslynClassFileSystem.CreateFileSystemFieldDeclaration()
-				});
+				[RoslynClassFileSystem.CreateFileSystemFieldDeclaration()]);
 		}
 
 		ConstructorAddParameter(_class, editor);

@@ -15,7 +15,8 @@ public abstract class BaseFileSystemNodeAnalyzer : BaseFileSystemAnalyzer
 			{
 				var invocationOperation = (IInvocationOperation) operationContext.Operation;
 
-				if (IsFileSystemType(invocationOperation.TargetMethod.ContainingType, GetFileSystemTypeSymbol(compilationStartContext.Compilation)))
+				if (IsFileSystemType(invocationOperation.TargetMethod.ContainingType,
+						GetFileSystemTypeSymbol(compilationStartContext.Compilation)))
 				{
 					Analyze(operationContext, invocationOperation);
 				}
@@ -38,7 +39,8 @@ public abstract class BaseFileSystemNodeAnalyzer : BaseFileSystemAnalyzer
 
 	protected abstract Type GetFileSystemType();
 
-	private INamedTypeSymbol GetFileSystemTypeSymbol(Compilation compilation) => compilation.GetTypeByMetadataName(GetFileSystemType().FullName);
+	private INamedTypeSymbol GetFileSystemTypeSymbol(Compilation compilation) => compilation.GetTypeByMetadataName(GetFileSystemType()
+		.FullName);
 
 	private static bool IsFileSystemType(ITypeSymbol typeSymbol, INamedTypeSymbol fileSystemType)
 	{
@@ -53,6 +55,9 @@ public abstract class BaseFileSystemNodeAnalyzer : BaseFileSystemAnalyzer
 	protected static bool IsFirstConstructorParameterOfType<T>(OperationAnalysisContext context, IOperation operation)
 	{
 		var parameterTypeSymbol = context.Compilation.GetTypeByMetadataName(typeof(T).FullName);
-		return (operation as IObjectCreationOperation)?.Arguments.FirstOrDefault()?.Parameter?.Type?.Equals(parameterTypeSymbol, SymbolEqualityComparer.Default) ?? false;
+
+		return (operation as IObjectCreationOperation)?.Arguments.FirstOrDefault()
+				?.Parameter?.Type?.Equals(parameterTypeSymbol, SymbolEqualityComparer.Default)
+				?? false;
 	}
 }

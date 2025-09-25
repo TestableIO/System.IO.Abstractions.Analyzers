@@ -171,9 +171,7 @@ internal static class DiagnosticAnalyzerTestExtensions
 	/// <param name="references"></param>
 	/// <returns> A Document created from the source string </returns>
 	public static Document CreateDocument(string source, string language, IEnumerable<MetadataReference> references = null) =>
-		CreateProject([
-				source
-			], language, references)
+		CreateProject([source], language, references)
 			.Documents.First();
 
 	/// <summary>

@@ -172,10 +172,9 @@ public abstract class DiagnosticVerifier
 	/// <param name="references"></param>
 	/// <returns> A Document created from the source string </returns>
 	protected static Document CreateDocument(string source, string language = LanguageNames.CSharp,
-											IEnumerable<MetadataReference> references = null) => CreateProject([
-			source
-		], language, references)
-		.Documents.First();
+											IEnumerable<MetadataReference> references = null) =>
+		CreateProject([source], language, references)
+			.Documents.First();
 
 	/// <summary>
 	/// Create a project using the inputted strings as sources.

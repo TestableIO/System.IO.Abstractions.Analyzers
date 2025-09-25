@@ -33,19 +33,11 @@ public abstract class CSharpDiagnosticAnalyzerTest<T> : FileReaderTest
 	/// DiagnosticResults that should appear after the analyzer
 	/// is run on the source
 	/// </param>
-	protected void VerifyDiagnostic(string source, DiagnosticResult[] expected) => VerifyDiagnostic([
-		source
-	], expected);
+	protected void VerifyDiagnostic(string source, DiagnosticResult[] expected) => VerifyDiagnostic([source], expected);
 
-	protected void VerifyDiagnostic(string source, DiagnosticResult expected) => VerifyDiagnostic([
-		source
-	], [
-		expected
-	]);
+	protected void VerifyDiagnostic(string source, DiagnosticResult expected) => VerifyDiagnostic([source], [expected]);
 
-	protected void VerifyNoDiagnosticTriggered(string source) => VerifyDiagnostic([
-		source
-	], []);
+	protected void VerifyNoDiagnosticTriggered(string source) => VerifyDiagnostic([source], []);
 
 	/// <summary>
 	/// Called to test a C# DiagnosticAnalyzer when applied on the inputted strings as

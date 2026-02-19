@@ -15,7 +15,7 @@ public class StreamWriterAnalyzer : BaseFileSystemNodeAnalyzer
 	/// Diagnostic Identifier
 	/// </summary>
 	[UsedImplicitly]
-	public const string DiagnosticId = "IO0010";
+	public const string DiagnosticId = Constants.IO0010;
 
 	/// <summary>
 	/// Diagnostic Title
@@ -33,6 +33,8 @@ public class StreamWriterAnalyzer : BaseFileSystemNodeAnalyzer
 	/// </summary>
 	private const string Description = Title;
 
+	private const string Link = "https://github.com/TestableIO/System.IO.Abstractions.Analyzers/blob/develop/docs/" + DiagnosticId + ".MD";
+
 	/// <summary>
 	/// Diagnostic rule
 	/// </summary>
@@ -42,7 +44,8 @@ public class StreamWriterAnalyzer : BaseFileSystemNodeAnalyzer
 		Category,
 		DiagnosticSeverity.Warning,
 		true,
-		$"{Description}.");
+		$"{Description}.",
+		Link);
 
 	/// <inheritdoc />
 	public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => [Rule];

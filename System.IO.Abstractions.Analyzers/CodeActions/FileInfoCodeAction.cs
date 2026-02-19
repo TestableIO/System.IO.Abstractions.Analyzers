@@ -13,25 +13,15 @@ namespace System.IO.Abstractions.Analyzers.CodeActions;
 /// <summary>
 /// Code action to replace a <see cref="FileInfo"/> with a IFileSystem.FileInfo.
 /// </summary>
-public class FileInfoCodeAction : CodeAction
+public class FileInfoCodeAction(
+	string title,
+	Document document,
+	ObjectCreationExpressionSyntax creationExpressionSyntax,
+	FieldDeclarationSyntax field)
+	: CodeAction
 {
-	private readonly ObjectCreationExpressionSyntax _creationExpressionSyntax;
-
-	private readonly Document _document;
-
-	private readonly FieldDeclarationSyntax _field;
-
-	public FileInfoCodeAction(string title, Document document, ObjectCreationExpressionSyntax creationExpressionSyntax,
-							FieldDeclarationSyntax field)
-	{
-		Title = title;
-		_document = document;
-		_creationExpressionSyntax = creationExpressionSyntax;
-		_field = field;
-	}
-
 	/// <inheritdoc />
-	public override string Title { get; }
+	public override string Title { get; } = title;
 
 	/// <inheritdoc />
 	public override string EquivalenceKey => Title;
@@ -39,18 +29,18 @@ public class FileInfoCodeAction : CodeAction
 	/// <inheritdoc />
 	protected override async Task<Document> GetChangedDocumentAsync(CancellationToken cancellationToken)
 	{
-		var editor = await DocumentEditor.CreateAsync(_document, cancellationToken)
+		var editor = await DocumentEditor.CreateAsync(document, cancellationToken)
 			.ConfigureAwait(false);
 
-		if (_creationExpressionSyntax.ArgumentList is null)
+		if (creationExpressionSyntax.ArgumentList is null)
 		{
-			return _document;
+			return document;
 		}
 
-		var arguments = _creationExpressionSyntax.ArgumentList.Arguments.Select(x => x.ToFullString());
+		var arguments = creationExpressionSyntax.ArgumentList.Arguments.Select(x => x.ToFullString());
 
-		editor.ReplaceNode(_creationExpressionSyntax,
-			SF.ParseExpression($"{_field.Declaration.Variables.ToFullString()}.FileInfo.New({string.Join(",", arguments)})"));
+		editor.ReplaceNode(creationExpressionSyntax,
+			SF.ParseExpression($"{field.Declaration.Variables.ToFullString()}.FileInfo.New({string.Join(",", arguments)})"));
 
 		return await Formatter.FormatAsync(editor.GetChangedDocument(), cancellationToken: cancellationToken)
 			.ConfigureAwait(false);

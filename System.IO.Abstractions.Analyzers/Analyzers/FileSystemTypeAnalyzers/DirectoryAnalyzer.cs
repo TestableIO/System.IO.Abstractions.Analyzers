@@ -32,7 +32,7 @@ public class DirectoryAnalyzer : BaseFileSystemNodeAnalyzer
 	/// </summary>
 	private const string Description = Title;
 
-	private const string Link = "http://bit.ly/2Oz9iSx";
+	private const string Link = "https://github.com/TestableIO/System.IO.Abstractions.Analyzers/blob/develop/docs/" + DiagnosticId + ".MD";
 
 	/// <summary>
 	/// Diagnostic rule

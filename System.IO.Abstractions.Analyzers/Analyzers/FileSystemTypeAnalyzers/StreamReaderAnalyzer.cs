@@ -15,13 +15,12 @@ public class StreamReaderAnalyzer : BaseFileSystemNodeAnalyzer
 	/// Diagnostic Identifier
 	/// </summary>
 	[UsedImplicitly]
-	public const string DiagnosticId = "IO0011";
+	public const string DiagnosticId = Constants.IO0011;
 
 	/// <summary>
 	/// Diagnostic Title
 	/// </summary>
-	private const string Title = "Replace StreamReader string constructor overload with stream based overload"
-								+ " using a stream from IFileSystem.FileStream for improved testability";
+	private const string Title = "Replace StreamReader string constructor overload with stream based overload using a stream from IFileSystem.FileStream for improved testability";
 
 	/// <summary>
 	/// Diagnostic Message Format
@@ -33,6 +32,8 @@ public class StreamReaderAnalyzer : BaseFileSystemNodeAnalyzer
 	/// </summary>
 	private const string Description = Title;
 
+	private const string Link = "https://github.com/TestableIO/System.IO.Abstractions.Analyzers/blob/develop/docs/" + DiagnosticId + ".MD";
+
 	/// <summary>
 	/// Diagnostic rule
 	/// </summary>
@@ -42,7 +43,8 @@ public class StreamReaderAnalyzer : BaseFileSystemNodeAnalyzer
 		Category,
 		DiagnosticSeverity.Warning,
 		true,
-		$"{Description}.");
+		$"{Description}.",
+		Link);
 
 	/// <inheritdoc />
 	public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => [Rule];

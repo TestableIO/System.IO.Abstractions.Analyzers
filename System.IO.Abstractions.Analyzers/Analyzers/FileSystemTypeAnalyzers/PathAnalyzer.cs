@@ -32,7 +32,7 @@ public class PathAnalyzer : BaseFileSystemNodeAnalyzer
 	/// </summary>
 	private const string Description = Title;
 
-	private const string Link = "https://github.com/TestableIO/System.IO.Abstractions.Analyzers/blob/develop/docs/IO0006.MD";
+	private const string Link = "https://github.com/TestableIO/System.IO.Abstractions.Analyzers/blob/develop/docs/" + DiagnosticId + ".MD";
 
 	/// <summary>
 	/// Diagnostic rule

@@ -12,25 +12,15 @@ namespace System.IO.Abstractions.Analyzers.CodeActions;
 /// <summary>
 /// Code action to replace with a IFileSystem call.
 /// </summary>
-public class FileSystemInvokeCodeAction : CodeAction
+public class FileSystemInvokeCodeAction(
+	string title,
+	Document document,
+	InvocationExpressionSyntax invocation,
+	FieldDeclarationSyntax field)
+	: CodeAction
 {
-	private readonly Document _document;
-
-	private readonly FieldDeclarationSyntax _field;
-
-	private readonly InvocationExpressionSyntax _invocation;
-
-	public FileSystemInvokeCodeAction(string title, Document document, InvocationExpressionSyntax invocation,
-									FieldDeclarationSyntax field)
-	{
-		Title = title;
-		_document = document;
-		_invocation = invocation;
-		_field = field;
-	}
-
 	/// <inheritdoc />
-	public override string Title { get; }
+	public override string Title { get; } = title;
 
 	/// <inheritdoc />
 	public override string EquivalenceKey => Title;
@@ -38,14 +28,14 @@ public class FileSystemInvokeCodeAction : CodeAction
 	/// <inheritdoc />
 	protected override async Task<Document> GetChangedDocumentAsync(CancellationToken cancellationToken)
 	{
-		var editor = await DocumentEditor.CreateAsync(_document, cancellationToken)
+		var editor = await DocumentEditor.CreateAsync(document, cancellationToken)
 			.ConfigureAwait(false);
 
-		if (_field.Declaration.Variables.Any())
+		if (field.Declaration.Variables.Any())
 		{
-			editor.ReplaceNode(_invocation,
+			editor.ReplaceNode(invocation,
 				SF.ParseExpression(
-					$"{_field.Declaration.Variables.FirstOrDefault()?.Identifier.Text}.{_invocation.NormalizeWhitespace().ToFullString()}"));
+					$"{field.Declaration.Variables.FirstOrDefault()?.Identifier.Text}.{invocation.NormalizeWhitespace().ToFullString()}"));
 		}
 
 		return await Formatter.FormatAsync(editor.GetChangedDocument(), cancellationToken: cancellationToken)

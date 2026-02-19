@@ -15,21 +15,10 @@ namespace System.IO.Abstractions.Analyzers.CodeActions;
 /// <summary>
 /// Code action to replace FileSystem invocation to IFileSystem service.
 /// </summary>
-public class FileServiceInterfaceInjectionCodeAction : CodeAction
+public class FileServiceInterfaceInjectionCodeAction(string title, Document document, ClassDeclarationSyntax @class) : CodeAction
 {
-	private readonly ClassDeclarationSyntax _class;
-
-	private readonly Document _document;
-
-	public FileServiceInterfaceInjectionCodeAction(string title, Document document, ClassDeclarationSyntax @class)
-	{
-		_class = @class;
-		_document = document;
-		Title = title;
-	}
-
 	/// <inheritdoc />
-	public override string Title { get; }
+	public override string Title { get; } = title;
 
 	/// <inheritdoc />
 	public override string EquivalenceKey => Title;
@@ -37,19 +26,19 @@ public class FileServiceInterfaceInjectionCodeAction : CodeAction
 	/// <inheritdoc />
 	protected override async Task<Document> GetChangedDocumentAsync(CancellationToken cancellationToken)
 	{
-		var editor = await DocumentEditor.CreateAsync(_document, cancellationToken)
+		var editor = await DocumentEditor.CreateAsync(document, cancellationToken)
 			.ConfigureAwait(false);
 
-		if (!RoslynClassFileSystem.HasFileSystemField(_class))
+		if (!RoslynClassFileSystem.HasFileSystemField(@class))
 		{
-			editor.InsertMembers(_class,
+			editor.InsertMembers(@class,
 				0,
 				[RoslynClassFileSystem.CreateFileSystemFieldDeclaration()]);
 		}
 
-		ConstructorAddParameter(_class, editor);
+		ConstructorAddParameter(@class, editor);
 
-		var compilationUnitSyntax = RoslynClassFileSystem.GetCompilationUnit(_class);
+		var compilationUnitSyntax = RoslynClassFileSystem.GetCompilationUnit(@class);
 
 		if (!compilationUnitSyntax.Usings.Any())
 		{

@@ -47,4 +47,14 @@ public static class Constants
 	/// <see cref="DirectoryInfoAnalyzer" />
 	/// </summary>
 	public const string Io0007 = "IO0007";
+
+	/// <summary>
+	/// <see cref="StreamWriterAnalyzer" />
+	/// </summary>
+	public const string IO0010 = "IO0010";
+
+	/// <summary>
+	/// <see cref="StreamReaderAnalyzer" />
+	/// </summary>
+	public const string IO0011 = "IO0011";
 }

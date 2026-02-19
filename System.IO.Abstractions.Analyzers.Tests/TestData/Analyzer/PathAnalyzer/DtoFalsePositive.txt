@@ -1,0 +1,8 @@
+namespace SomeNameSpace
+{
+	public class View
+	{
+		public string Name { get; set; }
+		public string Format => Path.GetExtension(Name);
+	}
+}

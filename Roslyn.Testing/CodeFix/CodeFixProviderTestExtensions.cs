@@ -77,7 +77,7 @@ internal static class CodeFixProviderTestExtensions
 														string newSource,
 														int? codeFixIndex,
 														bool allowNewCompilerDiagnostics,
-														IEnumerable<MetadataReference> additionalReferences = null)
+														IReadOnlyCollection<MetadataReference> additionalReferences = null)
 	{
 		var document = DiagnosticAnalyzerTestExtensions.CreateDocument(oldSource, language, additionalReferences);
 
@@ -155,7 +155,7 @@ internal static class CodeFixProviderTestExtensions
 	/// on
 	/// </param>
 	/// <returns> The compiler diagnostics that were found in the code </returns>
-	private static IEnumerable<Diagnostic> GetCompilerDiagnostics(this Document document) => document.GetSemanticModelAsync()
+	private static IReadOnlyCollection<Diagnostic> GetCompilerDiagnostics(this Document document) => document.GetSemanticModelAsync()
 		.GetAwaiter()
 		.GetResult()
 		.GetDiagnostics();

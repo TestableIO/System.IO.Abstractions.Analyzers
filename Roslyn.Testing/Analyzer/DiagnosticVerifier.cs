@@ -241,16 +241,18 @@ internal static class DiagnosticAnalyzerTestExtensions
 	/// the code
 	/// </param>
 	public static VerifyDiagnosticAnalyzerResult VerifyDiagnosticResults(this DiagnosticAnalyzer analyzer,
-																		IEnumerable<Diagnostic> actualResults,
+																		IReadOnlyCollection<Diagnostic> actualResults,
 																		DiagnosticResult[] expectedResults)
 	{
 		var expectedCount = expectedResults.Length;
-		var actualCount = actualResults.Count();
+		var diagnostics = actualResults.ToArray();
+		var actualCount = diagnostics.Count();
 
 		if (expectedCount != actualCount)
 		{
-			var diagnosticsOutput = actualResults.Any()
-				? FormatDiagnostics(analyzer, actualResults.ToArray())
+
+			var diagnosticsOutput = diagnostics.Any()
+				? FormatDiagnostics(analyzer, diagnostics)
 				: "    NONE.";
 
 			var msg = GetMismatchNumberOfDiagnosticsMessage(expectedCount, actualCount, diagnosticsOutput);
@@ -263,7 +265,11 @@ internal static class DiagnosticAnalyzerTestExtensions
 			var actual = actualResults.ElementAt(i);
 			var expected = expectedResults[i];
 
-			if (expected.Line == -1 && expected.Column == -1)
+			if (expected is
+				{
+					Line: -1,
+					Column: -1
+				})
 			{
 				if (actual.Location != Location.None)
 				{

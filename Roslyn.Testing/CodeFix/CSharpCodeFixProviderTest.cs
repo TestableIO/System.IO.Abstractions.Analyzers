@@ -21,7 +21,7 @@ public abstract class CSharpCodeFixProviderTest<TDiagnosticAnalyzer, TCodeFixPro
 	/// <inheritdoc />
 	public override string PathToTestData => "./TestData/CodeFix/";
 
-	protected virtual IEnumerable<MetadataReference> GetAdditionalReferences() => [];
+	protected virtual IReadOnlyCollection<MetadataReference> GetAdditionalReferences() => [];
 
 	#endregion
 

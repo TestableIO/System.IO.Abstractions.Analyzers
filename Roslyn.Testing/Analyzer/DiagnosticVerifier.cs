@@ -250,7 +250,6 @@ internal static class DiagnosticAnalyzerTestExtensions
 
 		if (expectedCount != actualCount)
 		{
-
 			var diagnosticsOutput = diagnostics.Any()
 				? FormatDiagnostics(analyzer, diagnostics)
 				: "    NONE.";
@@ -354,8 +353,7 @@ internal static class DiagnosticAnalyzerTestExtensions
 		var actualSpan = actual.GetLineSpan();
 
 		var isInExpectedFile = actualSpan.Path == expected.Path
-								|| (actualSpan.Path is not null
-									&& actualSpan.Path.Contains("Test0.")
+								|| (actualSpan.Path.Contains("Test0.")
 									&& expected.Path.Contains("Test."));
 
 		if (!isInExpectedFile)
@@ -454,53 +452,51 @@ internal static class DiagnosticAnalyzerTestExtensions
 
 			foreach (var rule in rules)
 			{
-				if (rule is not null
-					&& rule.Id
-					== diagnostics[i]
-						.Id)
+				if (rule.Id != diagnostics[i].Id)
 				{
-					var location = diagnostics[i]
-						.Location;
-
-					if (location == Location.None)
-					{
-						builder.AppendFormat("GetGlobalResult({0}.{1})", analyzerType.Name, rule.Id);
-					} else
-					{
-						if (!location.IsInSource)
-						{
-							var msg =
-								$"Test base does not currently handle diagnostics in metadata locations. Diagnostic in metadata: {diagnostics[i]}{Environment.NewLine}";
-
-							throw new(msg);
-						}
-
-						var resultMethodName = diagnostics[i]
-							.Location.SourceTree.FilePath.EndsWith(".cs")
-							? "GetCSharpResultAt"
-							: "GetBasicResultAt";
-
-						var linePosition = diagnostics[i]
-							.Location.GetLineSpan()
-							.StartLinePosition;
-
-						builder.AppendFormat("{0}({1}, {2}, {3}.{4})",
-							resultMethodName,
-							linePosition.Line + 1,
-							linePosition.Character + 1,
-							analyzerType.Name,
-							rule.Id);
-					}
-
-					if (i != diagnostics.Length - 1)
-					{
-						builder.Append(',');
-					}
-
-					builder.AppendLine();
-
-					break;
+					continue;
 				}
+
+				var location = diagnostics[i]
+					.Location;
+
+				if (location == Location.None)
+				{
+					builder.AppendFormat("GetGlobalResult({0}.{1})", analyzerType.Name, rule.Id);
+				} else
+				{
+					if (!location.IsInSource)
+					{
+						var msg =
+							$"Test base does not currently handle diagnostics in metadata locations. Diagnostic in metadata: {diagnostics[i]}{Environment.NewLine}";
+
+						throw new(msg);
+					}
+
+					var resultMethodName = location.SourceTree.FilePath.EndsWith(".cs")
+						? "GetCSharpResultAt"
+						: "GetBasicResultAt";
+
+					var linePosition = diagnostics[i]
+						.Location.GetLineSpan()
+						.StartLinePosition;
+
+					builder.AppendFormat("{0}({1}, {2}, {3}.{4})",
+						resultMethodName,
+						linePosition.Line + 1,
+						linePosition.Character + 1,
+						analyzerType.Name,
+						rule.Id);
+				}
+
+				if (i != diagnostics.Length - 1)
+				{
+					builder.Append(',');
+				}
+
+				builder.AppendLine();
+
+				break;
 			}
 		}
 
